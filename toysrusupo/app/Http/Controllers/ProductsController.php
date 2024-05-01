@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -38,7 +39,7 @@ class ProductsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(ProductRequest $request): RedirectResponse
     {
         $product = $request->validated();        
         Product::create($product);
@@ -69,7 +70,7 @@ class ProductsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product): RedirectResponse
+    public function update(ProductRequest $request, Product $product): RedirectResponse
     {
         $lastPage = session('last_page', 1);
 
@@ -94,5 +95,18 @@ class ProductsController extends Controller
         }
 
         return redirect()->route('products.index', ['page' => $lastPage])->with('success', 'Product deleted successfully.');
+    }
+
+    public function search(Request $request): View|RedirectResponse
+    {
+        $search = $request->search;
+
+        if (empty($search)) {
+            return redirect()->route('products.index');
+        }
+
+        $products = Product::where('id', '=', $search)->paginate();
+
+        return view('products.index', compact('products', 'search'));
     }
 }

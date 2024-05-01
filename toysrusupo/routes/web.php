@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProductsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,10 +16,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome.index');
 Route::get('/home', function () {
     return view('auth.dashboard');
 })->middleware('auth','verified');
-
-
+Route::resource('/products', ProductsController::class);
+Route::get('/search/products', [ProductsController::class, 'search'])->name('search.products');
 

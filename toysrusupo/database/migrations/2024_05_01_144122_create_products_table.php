@@ -22,7 +22,7 @@ return new class extends Migration
             #Stock del producto
             $table->integer('stock');
             #Imagen del producto
-            $table->string('image_url');
+            $table->string('image_url')->nullable();
             #Edad mínima para el producto
             $table->integer('min_age');
             $table->timestamps();
