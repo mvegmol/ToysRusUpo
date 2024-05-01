@@ -11,6 +11,20 @@ class Product extends Model
 
     protected $fillable = ['name', 'description', 'price', 'stock', 'image_url', 'min_age'];
 
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class);
+    }
+
+    public function shoppingCarts()
+    {
+        return $this->belongsToMany(ShoppingCart::class)->withPivot('quantity', 'price');
+    }
+
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class)->withPivot('quantity', 'price');
+    }
 
 
 }

@@ -21,6 +21,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'phone',
+        'role'
     ];
 
     /**
@@ -42,4 +44,20 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function address()
+    {
+        return $this->hasMany(Address::class);
+    }
+
+    public function shoppingCart()
+    {
+        return $this->hasOne(ShoppingCart::class);
+    }
+
 }
