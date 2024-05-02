@@ -7,6 +7,8 @@ use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class ProductsController extends Controller
@@ -16,8 +18,11 @@ class ProductsController extends Controller
      */
     public function index(Request $request): View
     {
+        $search = session('search_id', null);
 
-        if (!$request->has('page') && session()->has('last_page')) {
+        if ($search !== null) {
+            $request->request->set('page', 1);
+        } elseif (!$request->has('page') && session()->has('last_page')) {
             $request->merge(['page' => session('last_page', 1)]);
         }
 
@@ -25,13 +30,18 @@ class ProductsController extends Controller
         session(['last_page' => $page]);
 
         $perPage = Config::get('app.per_page');
-        $products = Product::with('categories')->paginate($perPage);
+
+        $products = Product::with('categories')
+            ->when($search, function ($query) use ($search) {
+                return $query->where('id', '=', $search);
+            })
+            ->paginate($perPage);
 
         foreach ($products as $product) {
             $product->category_names = $product->categories->pluck('name')->join(', ');
         }
 
-        return view('products.index', compact('products'));
+        return view('products.index', compact('products', 'search'));
     }
 
     /**
@@ -53,6 +63,8 @@ class ProductsController extends Controller
         $count = Product::count();
         $perPage = Config::get('app.per_page');
         $lastPage = ceil($count / $perPage);
+
+        session()->forget('search_id');
 
         return redirect()->route('products.index', ['page' => $lastPage])->with('success', 'Product created successfully.');
     }
@@ -78,9 +90,15 @@ class ProductsController extends Controller
      */
     public function update(ProductRequest $request, Product $product): RedirectResponse
     {
-        $lastPage = session('last_page', 1);
-
         $product->update($request->validated());
+        $search = session('search_id', null);
+
+        if ($search == null) {
+            $lastPage = session('last_page', 1);
+        } else {
+            $lastPage = 1;
+        }
+
         return redirect()->route('products.index', ['page' => $lastPage])->with('success', 'Product updated successfully.');
     }
 
@@ -90,14 +108,19 @@ class ProductsController extends Controller
     public function destroy(Product $product): RedirectResponse
     {
         $product->delete();
+        $search = session('search_id', null);
 
-        $count = Product::count();
-        $perPage = Config::get('app.per_page');
-        $totalPages = ceil($count / $perPage);
-        $lastPage = session('last_page', 1);
+        if ($search == null) {
+            $count = Product::count();
+            $perPage = Config::get('app.per_page');
+            $totalPages = ceil($count / $perPage);
+            $lastPage = session('last_page', 1);
 
-        if ($lastPage > $totalPages) {
-            $lastPage = $totalPages;
+            if ($lastPage > $totalPages) {
+                $lastPage = $totalPages;
+            }
+        } else {
+            $lastPage = 1;
         }
 
         return redirect()->route('products.index', ['page' => $lastPage])->with('success', 'Product deleted successfully.');
@@ -108,8 +131,12 @@ class ProductsController extends Controller
         $search = $request->search;
 
         if (empty($search)) {
+            session()->forget('search_id');
+            session()->forget('last_page');
             return redirect()->route('products.index');
         }
+
+        session(['search_id' => $search]);
 
         $products = Product::with('categories')
             ->where('id', '=', $search)

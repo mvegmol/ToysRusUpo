@@ -17,7 +17,11 @@ class CategoriesController extends Controller
     public function index(Request $request): View
     {
 
-        if (!$request->has('page') && session()->has('last_page')) {
+        $search = session('search_id', null);
+
+        if ($search !== null) {
+            $request->request->set('page', 1);
+        } elseif (!$request->has('page') && session()->has('last_page')) {
             $request->merge(['page' => session('last_page', 1)]);
         }
 
@@ -25,8 +29,12 @@ class CategoriesController extends Controller
         session(['last_page' => $page]);
 
         $perPage = Config::get('app.per_page');
-        $categories = Category::paginate($perPage);
-        return view('categories.index', compact('categories'));
+
+        $categories = Category::when($search, function ($query) use ($search) {
+            return $query->where('id', '=', $search);
+        })->paginate($perPage);
+
+        return view('categories.index', compact('categories', 'search'));
     }
 
     /**
@@ -42,12 +50,14 @@ class CategoriesController extends Controller
      */
     public function store(CategoryRequest $request): RedirectResponse
     {
-        $category = $request->validated();        
+        $category = $request->validated();
         Category::create($category);
 
         $count = Category::count();
         $perPage = Config::get('app.per_page');
         $lastPage = ceil($count / $perPage);
+
+        session()->forget('search_id');
 
         return redirect()->route('categories.index', ['page' => $lastPage])->with('success', 'Category created successfully.');
     }
@@ -73,9 +83,15 @@ class CategoriesController extends Controller
      */
     public function update(CategoryRequest $request, Category $category): RedirectResponse
     {
-        $lastPage = session('last_page', 1);
-
         $category->update($request->validated());
+        $search = session('search_id', null);
+
+        if ($search == null) {
+            $lastPage = session('last_page', 1);
+        } else {
+            $lastPage = 1;
+        }
+
         return redirect()->route('categories.index', ['page' => $lastPage])->with('success', 'Category updated successfully.');
     }
 
@@ -85,15 +101,22 @@ class CategoriesController extends Controller
     public function destroy(Category $category): RedirectResponse
     {
         $category->delete();
+        $search = session('search_id', null);
 
-        $count = Category::count();
-        $perPage = Config::get('app.per_page');
-        $totalPages = ceil($count / $perPage);
-        $lastPage = session('last_page', 1);
+        if ($search == null) {
+            $count = Category::count();
+            $perPage = Config::get('app.per_page');
+            $totalPages = ceil($count / $perPage);
+            $lastPage = session('last_page', 1);
 
-        if ($lastPage > $totalPages) {
-            $lastPage = $totalPages;
+            if ($lastPage > $totalPages) {
+                $lastPage = $totalPages;
+            }
+        } else {
+            $lastPage = 1;
         }
+
+
 
         return redirect()->route('categories.index', ['page' => $lastPage])->with('success', 'Category deleted successfully.');
     }
@@ -103,8 +126,12 @@ class CategoriesController extends Controller
         $search = $request->search;
 
         if (empty($search)) {
+            session()->forget('search_id');
+            session()->forget('last_page');
             return redirect()->route('categories.index');
         }
+
+        session(['search_id' => $search]);
 
         $categories = Category::where('id', '=', $search)->paginate();
 
