@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProductsController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,4 +23,6 @@ Route::get('/home', function () {
 })->middleware('auth','verified');
 Route::resource('/products', ProductsController::class);
 Route::get('/search/products', [ProductsController::class, 'search'])->name('search.products');
-
+Route::resource('/orders', OrdersController::class);
+Route::get('users/{user_id}/orders', [OrdersController::class, 'ordersByUser'])->name('orders.by_user');
+Route::post('orders/update-status', [OrdersController::class, 'updateStatus'])->name('orders.update_status');

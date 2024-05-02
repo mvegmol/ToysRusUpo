@@ -20,7 +20,7 @@ return new class extends Migration
             #Dirección de envío
             $table->string('address');
             #Estado del pedido
-            $table->enum(_('status'), ['pending', 'in progress','delivered', 'cancelled'])->default('pending');
+            $table->enum(_('status'), ['pending','accepted' ,'in progress','delivered', 'cancelled'])->default('pending');
             $table->timestamps();
         });
     }
