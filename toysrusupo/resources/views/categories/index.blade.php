@@ -9,7 +9,7 @@
 
                 @component('components.card')
                     @slot('header')
-                        <x-header :title="'Product List'">
+                        <x-header :title="'Category List'">
                             @slot('controls')
                                 <x-back-button route="welcome.index">&larr; Back</x-back-button>
                             @endslot
@@ -18,18 +18,18 @@
 
                     <div class="row py-2">
                         <div class="col-md-6">
-                            <x-add-button route="products.create" entityName="Product" />
+                            <x-add-button route="categories.create" entityName="Category" />
                         </div>
                         <div class="col-md-6">
-                            <x-search-form :actionRoute="'search.products'" :searchQuery="$search ?? ''" />
+                            <x-search-form :actionRoute="'search.categories'" :searchQuery="$search ?? ''" />
                         </div>
                     </div>
 
-                    <x-entity-table :entities="$products" :headers="['Name', 'Description', 'Price ($)', 'Stock', 'Min age', 'Categories']" :fields="['name', 'description', 'price', 'stock', 'min_age', 'category_names']" actionsRoute="products"
-                        entityName="Product" emptyMessage="No Products Found!" />
+                    <x-entity-table :entities="$categories" :headers="['Name', 'Description']" :fields="['name', 'description']" actionsRoute="categories"
+                        entityName="Category" emptyMessage="No Categories Found!" />
 
                     @slot('footer')
-                        {{ $products->links() }}
+                        {{ $categories->links() }}
                     @endslot
                 @endcomponent
 

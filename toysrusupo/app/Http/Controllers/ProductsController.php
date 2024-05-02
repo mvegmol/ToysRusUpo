@@ -24,7 +24,13 @@ class ProductsController extends Controller
         $page = $request->input('page', 1);
         session(['last_page' => $page]);
 
-        $products = Product::paginate(5);
+        $perPage = Config::get('app.per_page');
+        $products = Product::with('categories')->paginate($perPage);
+
+        foreach ($products as $product) {
+            $product->category_names = $product->categories->pluck('name')->join(', ');
+        }
+
         return view('products.index', compact('products'));
     }
 
@@ -41,7 +47,7 @@ class ProductsController extends Controller
      */
     public function store(ProductRequest $request): RedirectResponse
     {
-        $product = $request->validated();        
+        $product = $request->validated();
         Product::create($product);
 
         $count = Product::count();
@@ -105,7 +111,13 @@ class ProductsController extends Controller
             return redirect()->route('products.index');
         }
 
-        $products = Product::where('id', '=', $search)->paginate();
+        $products = Product::with('categories')
+            ->where('id', '=', $search)
+            ->paginate();
+
+        foreach ($products as $product) {
+            $product->category_names = $product->categories->pluck('name')->join(', ');
+        }
 
         return view('products.index', compact('products', 'search'));
     }

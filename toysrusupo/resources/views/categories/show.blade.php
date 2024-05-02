@@ -6,19 +6,16 @@
             <div class="col-md-8">
                 @component('components.card')
                     @slot('header')
-                        <x-header :title="'Product Information'">
+                        <x-header :title="'Category Information'">
                             @slot('controls')
-                                <x-back-button route="products.index">&larr; Back</x-back-button>
+                                <x-back-button route="categories.index">&larr; Back</x-back-button>
                             @endslot
                         </x-header>
                     @endslot
 
                     <x-entity-details :details="[
-                        ['label' => 'Name', 'value' => $product->name],
-                        ['label' => 'Description', 'value' => $product->description],
-                        ['label' => 'Price ($)', 'value' => $product->price],
-                        ['label' => 'Stock', 'value' => $product->stock],
-                        ['label' => 'Minimum age', 'value' => $product->min_age],
+                        ['label' => 'Name', 'value' => $category->name],
+                        ['label' => 'Description', 'value' => $category->description],
                     ]" />
                 @endcomponent
             </div>

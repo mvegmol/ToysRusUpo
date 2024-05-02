@@ -1,1 +1,10 @@
 @import "bootstrap/scss/bootstrap";
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+.full-height {
+    height: 100vh;
+}
+
+.position-ref {
+    position: relative;
+}
