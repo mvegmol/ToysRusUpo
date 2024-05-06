@@ -18,22 +18,23 @@ class CategoryFactory extends Factory
     {
 
         $categoryNames = [
-            'Juguetes educativos',
-            'Peluches',
-            'Juegos de construcción',
-            'Muñecas y accesorios',
-            'Vehículos de juguete',
-            'Juegos de mesa',
-            'Rompecabezas',
-            'Juguetes electrónicos',
-            'Juguetes para bebés',
-            'Figuras de acción',
-            'Disfraces',
-            'Juguetes musicales',
-            'Juguetes de exterior',
-            'Artes y manualidades',
-            'Juguetes científicos'
+            'Educational Toys',
+            'Stuffed Animals',
+            'Building Sets',
+            'Dolls and Accessories',
+            'Toy Vehicles',
+            'Board Games',
+            'Puzzles',
+            'Electronic Toys',
+            'Baby Toys',
+            'Action Figures',
+            'Costumes',
+            'Musical Toys',
+            'Outdoor Toys',
+            'Arts and Crafts',
+            'Scientific Toys'
         ];
+
 
         return [
             'name' => $this->faker->unique()->randomElement($categoryNames),

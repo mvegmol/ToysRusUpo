@@ -22,10 +22,18 @@ Route::get('/', function () {
 Route::get('/home', function () {
     return view('auth.dashboard');
 })->middleware('auth','verified');
+
 Route::resource('/products', ProductsController::class);
 Route::get('/search/products', [ProductsController::class, 'search'])->name('search.products');
+
 Route::resource('/categories', CategoriesController::class);
 Route::get('/search/categories', [CategoriesController::class, 'search'])->name('search.categories');
+Route::get('/categories/{category}/search', [CategoriesController::class, 'searchInCategory'])->name('search.productsInCategory');
+Route::get('/categories/{category}/products', [CategoriesController::class, 'showProducts'])->name('categories.products');
+Route::delete('/categories/{category}/detach/{product}', [CategoriesController::class, 'detachProduct'])->name('categories.detach');
+Route::get('/categories/{category}/add-product-form', [CategoriesController::class, 'addProductForm'])->name('categories.add-product-form');
+Route::post('/categories/{category}/add-product', [CategoriesController::class, 'addProduct'])->name('categories.add-product');
+
 Route::resource('/orders', OrdersController::class);
 Route::resource('/addresses', AddressesController::class);
 Route::get('users/{user_id}/orders', [OrdersController::class, 'ordersByUser'])->name('orders.by_user');

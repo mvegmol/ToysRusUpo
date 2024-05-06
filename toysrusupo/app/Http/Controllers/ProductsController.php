@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductRequest;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -72,8 +73,11 @@ class ProductsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Product $product): View
+    public function show($productId): View
     {
+        $product = Product::with('categories')->findOrFail($productId);
+        $product->category_names = $product->categories->pluck('name')->join(', ');
+
         return view('products.show', compact('product'));
     }
 
@@ -107,6 +111,7 @@ class ProductsController extends Controller
      */
     public function destroy(Product $product): RedirectResponse
     {
+        $product->categories()->detach();
         $product->delete();
         $search = session('search_id', null);
 
@@ -147,5 +152,5 @@ class ProductsController extends Controller
         }
 
         return view('products.index', compact('products', 'search'));
-    }
+    }    
 }

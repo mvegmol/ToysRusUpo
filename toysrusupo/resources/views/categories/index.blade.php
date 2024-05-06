@@ -26,7 +26,7 @@
                     </div>
 
                     <x-entity-table :entities="$categories" :headers="['Name', 'Description']" :fields="['name', 'description']" actionsRoute="categories"
-                        entityName="Category" emptyMessage="No Categories Found!" />
+                        entityName="Category" emptyMessage="No Categories Found!" :showProductsButton="true" />
 
                     @slot('footer')
                         {{ $categories->links() }}

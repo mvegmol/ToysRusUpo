@@ -19,6 +19,7 @@
                         ['label' => 'Price ($)', 'value' => $product->price],
                         ['label' => 'Stock', 'value' => $product->stock],
                         ['label' => 'Minimum age', 'value' => $product->min_age],
+                        ['label' => 'Categories', 'value' => $product->category_names],
                     ]" />
                 @endcomponent
             </div>
