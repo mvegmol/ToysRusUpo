@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignId('user_id')->references('id')->on('users')->constrained()->onDelete('cascade');
             #Precio total del carrito
             $table->float('total_price')->default(0);
+            #Cantidad de productos
+            $table->integer('total_products')->default(0);
             $table->timestamps();
         });
     }

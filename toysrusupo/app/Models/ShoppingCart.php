@@ -9,7 +9,7 @@ class ShoppingCart extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'total_price'];
+    protected $fillable = ['user_id', 'total_price', 'total_products'];
 
 
     public function products()
