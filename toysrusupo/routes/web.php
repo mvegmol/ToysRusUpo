@@ -17,9 +17,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('clients.home');
-})->name('welcome.index');
+Route::get('/', [ProductsController::class,'home'])->name('welcome.index');
 Route::get('/home', function () {
     return view('auth.dashboard');
 })->middleware('auth','verified');

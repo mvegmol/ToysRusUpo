@@ -65,7 +65,12 @@
                                 <i class="bi-cart-fill me-1"></i>
                                 Cart
                                 <span class="badge bg-dark text-white ms-1 rounded-pill">
-                                    {{ Auth::user()->cartQuantity() }}
+                                    @if (Auth::check() && Auth::user()->shoppingCart())
+                                        {{ Auth::user()->cartQuantity() }}
+                                    @else
+                                        0
+                                    @endif
+
                                 </span>
                             </button>
                         </form>
@@ -106,7 +111,7 @@
     <main>
         @yield('content')
     </main>
-    <footer class="py-5 fixed-bottom">
+    <footer class="py-5 ">
         <div class="container">
             <p class="m-0 text-center">Copyright &copy; Toysrusupo 2023</p>
         </div>

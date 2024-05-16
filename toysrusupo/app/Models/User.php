@@ -66,13 +66,13 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->role === 'admin';
     }
     public function cartQuantity()
-{
-    $cart = $this->shoppingCart;
-    if ($cart && $cart->products()->exists()) {
-        // Sumar la cantidad de productos en el carrito
-        return $cart->products->sum('pivot.quantity');
+    {
+        $cart = $this->shoppingCart;
+        if ($cart && $cart->products()->exists()) {
+            // Sumar la cantidad de productos en el carrito
+            return $cart->products->sum('pivot.quantity');
+        }
+        return 0;
     }
-    return 0;
-}
 
 }

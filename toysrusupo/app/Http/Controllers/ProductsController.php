@@ -17,6 +17,36 @@ class ProductsController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    public function home(Request $request): View
+    {
+        $search = session('search_id', null);
+
+        if ($search !== null) {
+            $request->request->set('page', 1);
+        } elseif (!$request->has('page') && session()->has('last_page')) {
+            $request->merge(['page' => session('last_page', 1)]);
+        }
+
+        $page = $request->input('page', 1);
+        session(['last_page' => $page]);
+
+        $perPage = Config::get('app.per_page');
+
+        $products = Product::with('categories')
+            ->when($search, function ($query) use ($search) {
+                return $query->where('id', '=', $search);
+            })
+            ->paginate($perPage);
+
+        foreach ($products as $product) {
+            $product->category_names = $product->categories->pluck('name')->join(', ');
+        }
+
+        return view('clients.home', compact('products', 'search'));
+    }
+
+
     public function index(Request $request): View
     {
         $search = session('search_id', null);
@@ -152,5 +182,6 @@ class ProductsController extends Controller
         }
 
         return view('products.index', compact('products', 'search'));
-    }    
+    }
+
 }
