@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\ShoppingCart;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 
 class ShoppingCartsController extends Controller
@@ -67,8 +68,10 @@ class ShoppingCartsController extends Controller
     }
 
     /**Function to add product to shopping cart */
-    public function addProduct(Request $request, string $product_id,string $cliente_id)
+    public function addProduct(Request $request)
     {
+        $product_id = $request->input('product_id');
+        $cliente_id = Auth::user()->id;
         //Get he user associated with the client_id
         $cliente =User::findOrFail($cliente_id);
         //Get the product associated with the product_id
@@ -81,7 +84,7 @@ class ShoppingCartsController extends Controller
             //Check if the product have stock
             if($product->stock > 0){
                 //Update the stock of the product
-                $product -> stock += 1;
+                $product -> stock -= 1;
                 $product -> save();
                 $carrito = ShoppingCart::where('user_id', $cliente_id)->first();
                  //Chek if the user have a shopping cart
@@ -94,10 +97,10 @@ class ShoppingCartsController extends Controller
 
                 //The client exits,the product has stock and the client has a shopping cart
                 //Check if the product is already in the shopping cart
-                $productInCart = $carrito->products()->where('product_id', $product_id)->first();
+                $productInCart = $carrito->products->where('product_id', $product_id)->first();
                 if($productInCart != null){
                     //if the product is already in the shopping cart, increase the quantity and the total price
-                    $productInCart->products()->updateExistingPivot($product_id, ['quantity' => $productInCart->pivot->quantity + 1,'total_price' => $productInCart->pivot->total_price + $product->price]);
+                    $productInCart->products->updateExistingPivot($product_id, ['quantity' => $productInCart->pivot->quantity + 1,'total_price' => $productInCart->pivot->total_price + $product->price]);
                     //Update the total price and the total products in the shopping cart
                     $carrito->total_price += $product->price;
                     $carrito->total_products += 1;
@@ -127,7 +130,9 @@ class ShoppingCartsController extends Controller
 
     }
 
-    public function incrementProduct(string $product_id,string $cliente_id){
+    public function incrementProduct(Request $request){
+        $product_id = $request->input('product_id');
+        $cliente_id = Auth::user()->id;
         //Get he user associated with the client_id
         $cliente =User::findOrFail($cliente_id);
         //Get the product associated with the product_id
@@ -140,7 +145,7 @@ class ShoppingCartsController extends Controller
             //Increment the quantity of the product in the shopping cart
             $newQuantity = $productInCart->pivot->quantity + 1;
             // Update the quantity and the total price of the product in the shopping cart
-            $carrito->products()->updateExistingPivot($product_id, ['quantity' => $newQuantity,'total_price' => $productInCart->pivot->total_price + $product->price]);
+            $carrito->products->updateExistingPivot($product_id, ['quantity' => $newQuantity,'total_price' => $productInCart->pivot->total_price + $product->price]);
             // Update the total price of the shopping cart
             $carrito->total_price += $product->price;
             // Update the total products in the shopping cart
@@ -158,7 +163,9 @@ class ShoppingCartsController extends Controller
 
     }
 
-    public function decreaseProduct(string $product_id,string $cliente_id){
+    public function decreaseProduct(Request $request){
+        $product_id = $request->input('product_id');
+        $cliente_id = Auth::user()->id;
         //Get he user associated with the client_id
         $cliente =User::findOrFail($cliente_id);
         //Get the product associated with the product_id
@@ -171,7 +178,7 @@ class ShoppingCartsController extends Controller
             //Increment the quantity of the product in the shopping cart
             $newQuantity = $productInCart->pivot->quantity - 1;
             // Update the quantity and the total price of the product in the shopping cart
-            $carrito->products()->updateExistingPivot($product_id, ['quantity' => $newQuantity,'total_price' => $productInCart->pivot->total_price - $product->price]);
+            $carrito->products->updateExistingPivot($product_id, ['quantity' => $newQuantity,'total_price' => $productInCart->pivot->total_price - $product->price]);
             // Update the total price of the shopping cart
             $carrito->total_price -= $product->price;
             // Update the total products in the shopping cart

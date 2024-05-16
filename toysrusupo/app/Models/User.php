@@ -50,6 +50,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Order::class);
     }
 
+
     public function address()
     {
         return $this->hasMany(Address::class);
@@ -57,12 +58,21 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function shoppingCart()
     {
-        return $this->hasOne(ShoppingCart::class);
+        return $this->hasOne(ShoppingCart::class) ;
     }
 
     public function isAdmin()
     {
         return $this->role === 'admin';
     }
+    public function cartQuantity()
+{
+    $cart = $this->shoppingCart;
+    if ($cart && $cart->products()->exists()) {
+        // Sumar la cantidad de productos en el carrito
+        return $cart->products->sum('pivot.quantity');
+    }
+    return 0;
+}
 
 }

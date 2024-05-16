@@ -3,6 +3,7 @@ use App\Http\Controllers\AddressesController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\ShoppingCartsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,3 +39,6 @@ Route::resource('/orders', OrdersController::class);
 Route::resource('/addresses', AddressesController::class);
 Route::get('users/{user_id}/orders', [OrdersController::class, 'ordersByUser'])->name('orders.by_user');
 Route::post('orders/update-status', [OrdersController::class, 'updateStatus'])->name('orders.update_status');
+
+Route::post('/cart/add', [ShoppingCartsController::class, 'addProduct'])->name('cart.add')->middleware('auth');
+

@@ -16,9 +16,9 @@ class Product extends Model
         return $this->belongsToMany(Category::class);
     }
 
-    public function shoppingCarts()
+    public function shoppingCart()
     {
-        return $this->belongsToMany(ShoppingCart::class)->withPivot('quantity', 'price');
+        return $this->belongsToMany(ShoppingCart::class)->withPivot('quantity', 'total_price');
     }
 
     public function orders()
