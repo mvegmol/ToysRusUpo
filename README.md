@@ -1,6 +1,6 @@
 # ToysRusUpo
 
-#Miguel Vega Molina, Carlos Vega Molina, Alejandro Vázquez
+Miguel Vega Molina, Carlos Vega Molina, Alejandro Vázquez Rodríguez
 
 ## Ejecutar el proyecto
 

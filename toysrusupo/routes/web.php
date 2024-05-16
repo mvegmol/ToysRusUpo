@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('clients.home');
 })->name('welcome.index');
 Route::get('/home', function () {
     return view('auth.dashboard');
