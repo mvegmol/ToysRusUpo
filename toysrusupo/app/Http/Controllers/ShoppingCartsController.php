@@ -85,9 +85,6 @@ class ShoppingCartsController extends Controller
     } else {
         // Check if the product has stock
         if ($product->stock > 0) {
-            // Update the stock of the product
-            $product->stock -= 1;
-            $product->save();
 
             // Check if the user has a shopping cart
             $carrito = ShoppingCart::where('user_id', $cliente_id)->first();
@@ -151,9 +148,7 @@ class ShoppingCartsController extends Controller
             $carrito->total_products += 1;
             //Save the changes
             $carrito->save();
-            //Update the stock of the product
-            $product -> stock += 1;
-            $product -> save();
+
             //Redirect to the shopping cart with a success message
             return redirect()->route('carrito.index')->with('success', 'Producto incrementado en el carrito exitosamente.');
         } else {
@@ -184,9 +179,7 @@ class ShoppingCartsController extends Controller
             $carrito->total_products -= 1;
             //Save the changes
             $carrito->save();
-            //Update the stock of the product
-            $product -> stock += 1;
-            $product -> save();
+
 
             //Redirect to the shopping cart with a success message
             return redirect()->route('carrito.index')->with('success', 'Producto incrementado en el carrito exitosamente.');
