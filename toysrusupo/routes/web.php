@@ -40,3 +40,4 @@ Route::post('orders/update-status', [OrdersController::class, 'updateStatus'])->
 
 Route::post('/cart/add', [ShoppingCartsController::class, 'addProduct'])->name('cart.add')->middleware('auth');
 
+Route::get('/cart', [ShoppingCartsController::class, 'show_products'])->name('carts.show_products');

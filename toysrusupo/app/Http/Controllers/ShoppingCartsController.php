@@ -14,9 +14,10 @@ class ShoppingCartsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function show_products()
     {
         //
+        return view('carts.show');
     }
 
     /**

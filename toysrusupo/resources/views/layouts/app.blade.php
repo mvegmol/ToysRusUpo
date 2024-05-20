@@ -12,7 +12,7 @@
 
 <body>
 
-    {{-- <header>
+    <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container px-4 px-lg-5">
                 <a class="navbar-brand" href="{{ route('welcome.index') }}">ToysRus UPO</a>
@@ -68,7 +68,8 @@
                         </ul>
                         @endif @if ((Auth::check() && !Auth::user()->isAdmin()) || !Auth::check())
                             <form class="d-flex">
-                                <button class="btn btn-outline-dark" type="submit">
+                                <a href="{{ route('carts.show_products') }}">
+
                                     <i class="bi-cart-fill me-1"></i>
                                     Cart
                                     <span class="badge bg-dark text-white ms-1 rounded-pill">
@@ -78,7 +79,8 @@
                                             0
                                         @endif
                                     </span>
-                                </button>
+
+                                </a>
                             </form>
                         @endif
                         <!-- Authentication Links -->
@@ -113,7 +115,7 @@
                 </div>
             </div>
         </nav>
-    </header> --}}
+    </header>
 
 
 
