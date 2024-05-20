@@ -12,6 +12,32 @@ Miguel Vega Molina, Carlos Vega Molina, Alejandro Vázquez Rodríguez
 - npm install bootstrap --save-dev
 - npm install sass --save-dev
 - npm install bootstrap-icons
+- php artisan key:generate
+
+## Instalar Tailwind Css
+
+- npm install -D tailwindcss postcss autoprefixer
+- npx tailwindcss init -p
+- En el archivo tailwind.config.js
+
+  // tailwind.config.js
+  module.exports = {
+  content: [
+  './resources/**/*.blade.php',
+  './resources/**/*.js',
+  './resources/**/*.vue',
+  ],
+  theme: {
+  extend: {
+  colors: {
+  primary: {
+  DEFAULT: '#00FA9A', // Verde agua como color primario
+  },
+  },
+  },
+  },
+  plugins: [],
+  };
 
 ## Cuenta del MailTrap
 
