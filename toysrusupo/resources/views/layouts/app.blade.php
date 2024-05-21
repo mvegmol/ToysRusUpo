@@ -106,7 +106,7 @@
                         <span
                             class="absolute left-auto -ml-1 -top-1 rounded-full bg-red-500 px-1 py-0 text-xs text-white">0</span>
                     </span>
-                    <a href="{{ route('carts.show_products') }}">
+                    <a href="{{ Auth::check() ? route('carts.show_products') : route('login') }}">
                         <span class="relative">
                             <svg xmlns="http://www.w3.org/2000/svg" width="25px" height="25px"
                                 class="cursor-pointer fill-[#000] hover:fill-primary inline-block"
