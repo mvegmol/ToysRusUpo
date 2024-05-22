@@ -70,13 +70,13 @@
                             </button>
                             <ul id="toysDropdownMenu" class="absolute hidden bg-white shadow-lg rounded-lg mt-2 w-44">
                                 <li class="border-b border-gray-200">
-                                    <a href="{{ route('categories.index') }}"
+                                    <a href="{{ route('products.index') }}"
                                         class="hover:bg-gray-100 text-gray-600 font-bold text-[17px] block px-4 py-2">
                                         Bestseller
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('categories.index') }}"
+                                    <a href="{{ route('products.index') }}"
                                         class="hover:bg-gray-100 text-gray-600 font-bold text-[17px] block px-4 py-2">
                                         More Follows
                                     </a>
@@ -84,7 +84,7 @@
                             </ul>
                         </li>
                         <li class='group max-lg:border-b max-lg:py-3 relative'>
-                            <a href="{{ route('products.index') }}"
+                            <a href="{{ route('categories.index') }}"
                                 class='hover:text-primary text-gray-600 font-bold text-[17px] lg:hover:fill-primary block'>
                                 Categories
                             </a>
