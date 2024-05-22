@@ -16,8 +16,29 @@ class ShoppingCartsController extends Controller
      */
     public function show_products()
     {
-        //
-        return view('carts.show');
+        // Obtain the authenticated user's ID
+        $cliente_id = Auth::user()->id;
+
+        // Obtain the user's shopping cart
+        $carrito = ShoppingCart::where('user_id', $cliente_id)->first();
+
+        // Check if the shopping cart exists
+        if (!$carrito) {
+            $previousUrl = URL::previous();
+            return redirect()->to($previousUrl)->with('error', 'The shopping cart does not exist.');
+        }
+
+        // Get the products in the cart
+        $productos = $carrito->products;
+
+        // Check if the cart has products
+        if ($productos->isEmpty()) {
+            $previousUrl = URL::previous();
+            return redirect()->to($previousUrl)->with('error', 'The cart has no products.');
+        }
+
+        // Return the view with the products
+        return view('carts.show', compact('productos','carrito'));
     }
 
     /**
@@ -127,67 +148,56 @@ class ShoppingCartsController extends Controller
         }
     }
 
-    public function incrementProduct(Request $request){
+    public function incrementProduct(Request $request)
+    {
         $product_id = $request->input('product_id');
         $cliente_id = Auth::user()->id;
-        //Get he user associated with the client_id
-        $cliente =User::findOrFail($cliente_id);
-        //Get the product associated with the product_id
+        $cliente = User::findOrFail($cliente_id);
         $product = Product::findOrFail($product_id);
-        //Get the shopping cart of the user
         $carrito = ShoppingCart::where('user_id', $cliente_id)->first();
-        //Check if the product is in the shopping cart
         $productInCart = $carrito->products()->where('product_id', $product_id)->first();
+
         if ($productInCart != null) {
-            //Increment the quantity of the product in the shopping cart
             $newQuantity = $productInCart->pivot->quantity + 1;
-            // Update the quantity and the total price of the product in the shopping cart
-            $carrito->products()->updateExistingPivot($product_id, ['quantity' => $newQuantity,'total_price' => $productInCart->pivot->total_price + $product->price]);
-            // Update the total price of the shopping cart
+            $carrito->products()->updateExistingPivot($product_id, [
+                'quantity' => $newQuantity,
+                'total_price' => $productInCart->pivot->total_price + $product->price
+            ]);
             $carrito->total_price += $product->price;
-            // Update the total products in the shopping cart
             $carrito->total_products += 1;
-            //Save the changes
             $carrito->save();
-
-            //Redirect to the shopping cart with a success message
-            return redirect()->route('carrito.index')->with('success', 'Producto incrementado en el carrito exitosamente.');
+            return response()->json(['success' => true, 'quantity' => $newQuantity]);
         } else {
-            return redirect()->route('carrito.index')->with('error', 'El producto no está en el carrito de compras.');
+            return response()->json(['success' => false, 'message' => 'El producto no está en el carrito de compras.']);
         }
-
     }
 
-    public function decreaseProduct(Request $request){
+    public function decreaseProduct(Request $request)
+    {
         $product_id = $request->input('product_id');
         $cliente_id = Auth::user()->id;
-        //Get he user associated with the client_id
-        $cliente =User::findOrFail($cliente_id);
-        //Get the product associated with the product_id
+        $cliente = User::findOrFail($cliente_id);
         $product = Product::findOrFail($product_id);
-        //Get the shopping cart of the user
         $carrito = ShoppingCart::where('user_id', $cliente_id)->first();
-        //Check if the product is in the shopping cart
         $productInCart = $carrito->products()->where('product_id', $product_id)->first();
+
         if ($productInCart != null) {
-            //Increment the quantity of the product in the shopping cart
             $newQuantity = $productInCart->pivot->quantity - 1;
-            // Update the quantity and the total price of the product in the shopping cart
-            $carrito->products()->updateExistingPivot($product_id, ['quantity' => $newQuantity,'total_price' => $productInCart->pivot->total_price - $product->price]);
-            // Update the total price of the shopping cart
+            if ($newQuantity < 1) {
+                return response()->json(['success' => false, 'message' => 'La cantidad no puede ser menor que 1.']);
+            }
+            $carrito->products()->updateExistingPivot($product_id, [
+                'quantity' => $newQuantity,
+                'total_price' => $productInCart->pivot->total_price - $product->price
+            ]);
             $carrito->total_price -= $product->price;
-            // Update the total products in the shopping cart
             $carrito->total_products -= 1;
-            //Save the changes
             $carrito->save();
 
-
-            //Redirect to the shopping cart with a success message
-            return redirect()->route('carrito.index')->with('success', 'Producto incrementado en el carrito exitosamente.');
+            return response()->json(['success' => true, 'quantity' => $newQuantity]);
         } else {
-            return redirect()->route('carrito.index')->with('error', 'El producto no está en el carrito de compras.');
+            return response()->json(['success' => false, 'message' => 'El producto no está en el carrito de compras.']);
         }
-
     }
 
     public function addQuantityProduct(Request $request)
@@ -195,60 +205,45 @@ class ShoppingCartsController extends Controller
         $quantity = $request->input('quantity');
         $product_id = $request->input('product_id');
         $cliente_id = Auth::user()->id;
-
-        // Get the user associated with the cliente_id
         $cliente = User::findOrFail($cliente_id);
-
-        // Get the product associated with the product_id
         $product = Product::findOrFail($product_id);
 
-        // Check if the user exists
         if ($cliente == null) {
-            return redirect()->view('auth.login');
+            return response()->json(['success' => false, 'message' => 'El usuario no está autenticado.']);
         } else {
-            // Check if the product has stock
             if ($product->stock > 0 && $product->stock >= $quantity) {
-
-                // Check if the user has a shopping cart
                 $carrito = ShoppingCart::where('user_id', $cliente_id)->first();
 
                 if ($carrito == null) {
-                    // Create a shopping cart for the user
                     $carrito = new ShoppingCart();
                     $carrito->user_id = $cliente_id;
                     $carrito->save();
                 }
 
-                // Check if the product is already in the shopping cart
                 $productInCart = $carrito->products()->where('product_id', $product_id)->first();
                 if ($productInCart != null) {
-                    // If the product is already in the shopping cart, increase the quantity and the total price
                     $carrito->products()->updateExistingPivot($product_id, [
-                        'quantity' => $productInCart->pivot->quantity + $quantity,
-                        'total_price' => $productInCart->pivot->total_price +  ($product->price)*$quantity
+                        'quantity' => $quantity,
+                        'total_price' => $product->price * $quantity
                     ]);
                 } else {
-                    // If the product is not in the shopping cart, add the product to the shopping cart
                     $carrito->products()->attach($product_id, [
                         'quantity' => $quantity,
                         'total_price' => $product->price * $quantity
                     ]);
                 }
 
-                // Update the total price and the total products in the shopping cart
-                $carrito->total_price += ($product->price) * $quantity;
+                $carrito->total_price += $product->price * $quantity;
                 $carrito->total_products += $quantity;
+                $carrito->save();
 
-                // Redirect to the previous page with a success message
-                $previousUrl = URL::previous();
-                return redirect()->to($previousUrl)->with('success', 'Product added to cart successfully.');
-
+                return response()->json(['success' => true, 'message' => 'Cantidad del producto actualizada exitosamente.']);
             } else {
-                return redirect()->route('products.show', $product_id)->with('error', 'Product out of stock.');
+                return response()->json(['success' => false, 'message' => 'Producto fuera de stock o cantidad inválida.']);
             }
         }
     }
-
-
-
 }
+
+
+
