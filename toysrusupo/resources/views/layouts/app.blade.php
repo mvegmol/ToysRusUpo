@@ -228,9 +228,22 @@
     <main>
         @yield('content')
     </main>
-    <footer class="py-5 ">
-        <div class="container">
-            <p class="m-0 text-center">Copyright &copy; Toysrusupo 2023</p>
+    <footer class="w-full py-14">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl mx-auto">
+
+                <ul
+                    class="text-lg flex items-center justify-center flex-col gap-7 md:flex-row md:gap-12 transition-all duration-500 py-16 mb-10 border-b border-gray-200">
+                    <li><a href="#" class="text-gray-800 hover:text-gray-900">Pagedone</a></li>
+                    <li><a href="#" class=" text-gray-800 hover:text-gray-900">Products</a></li>
+                    <li><a href="#" class=" text-gray-800 hover:text-gray-900">Resources</a></li>
+                    <li><a href="#" class=" text-gray-800 hover:text-gray-900">Blogs</a></li>
+                    <li><a href="#" class=" text-gray-800 hover:text-gray-900">Support</a></li>
+                </ul>
+
+                <span class="text-lg text-gray-500 text-center block">©<a href="https://pagedone.io/">ToysRus UPO</a>
+                    2024, All rights reserved.</span>
+            </div>
         </div>
     </footer>
     <script>
