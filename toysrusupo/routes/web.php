@@ -43,4 +43,4 @@ Route::post('/cart/add', [ShoppingCartsController::class, 'addProduct'])->name('
 Route::get('/cart', [ShoppingCartsController::class, 'show_products'])->name('carts.show_products');
 Route::post('/cart/increment', [ShoppingCartsController::class, 'incrementProduct'])->name('cart.increment');
 Route::post('/cart/decrement', [ShoppingCartsController::class, 'decreaseProduct'])->name('cart.decrement');
-Route::post('/cart/update', [ShoppingCartsController::class, 'addQuantityProduct'])->name('cart.update');
+Route::post('/cart/update', [ShoppingCartsController::class, 'updateQuantityProduct'])->name('cart.update');

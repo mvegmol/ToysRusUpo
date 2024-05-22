@@ -15,10 +15,10 @@
                                 <p class="mt-1 text-xs text-gray-700">{{$product->description}}</p>
                             </div>
                             <div class="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
-                                <div class="flex items-center border-gray-100" data-product-id="{{ $product->id }}">
+                                <div class="flex items-center border-gray-100 product-container" data-product-id="{{ $product->id }}">
                                     <button class="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50 decrement-btn">-</button>
-                                    <input class="h-8 w-8 border bg-white text-center text-xs outline-none quantity-input" type="number" value="{{ $product->pivot->quantity }}" min="1" />
-                                    <button class="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50 increment-btn">+</button>
+<input class="h-8 w-8 border bg-white text-center text-xs outline-none quantity-input" type="number" value="{{ $product->pivot->quantity }}" min="1" />
+<button class="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50 increment-btn">+</button>
                                 </div>
                                 <div class="flex items-center space-x-4">
                                     <p class="text-sm">{{$product->pivot->total_price}} €</p>
@@ -57,69 +57,55 @@
         </div>
     </div>
 @endsection
-
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function() {
-        $('.increment-btn').click(function() {
-            var $input = $(this).siblings('.quantity-input');
-            var productId = $(this).closest('.flex').data('product-id');
+    document.addEventListener('DOMContentLoaded', function () {
+        const incrementButtons = document.querySelectorAll('.increment-btn');
+        const decrementButtons = document.querySelectorAll('.decrement-btn');
+        const quantityInputs = document.querySelectorAll('.quantity-input');
 
-            $.ajax({
-                url: '{{ route('cart.increment') }}',
-                method: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    product_id: productId
-                },
-                success: function(response) {
-                    if (response.success) {
-                        $input.val(response.quantity);
-                    }
-                }
+        incrementButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                console.log("dentro");
+                const productId = button.parentElement.dataset.productId;
+                updateCart(productId, 'increment');
             });
         });
 
-        $('.decrement-btn').click(function() {
-            var $input = $(this).siblings('.quantity-input');
-            var productId = $(this).closest('.flex').data('product-id');
-
-            $.ajax({
-                url: '{{ route('cart.decrement') }}',
-                method: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    product_id: productId
-                },
-                success: function(response) {
-                    if (response.success) {
-                        $input.val(response.quantity);
-                    }
-                }
+        decrementButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const productId = button.parentElement.dataset.productId;
+                updateCart(productId, 'decrement');
             });
         });
 
-        $('.quantity-input').change(function() {
-            var $input = $(this);
-            var productId = $(this).closest('.flex').data('product-id');
-            var quantity = $input.val();
-
-            $.ajax({
-                url: '{{ route('cart.update') }}',
-                method: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    product_id: productId,
-                    quantity: quantity
-                },
-                success: function(response) {
-                    if (response.success) {
-                        console.log('Quantity updated successfully');
-                    }
-                }
+        quantityInputs.forEach(input => {
+            input.addEventListener('change', function () {
+                const productId = input.parentElement.dataset.productId;
+                updateCart(productId, 'update', input.value);
             });
         });
+
+        function updateCart(productId, action, quantity = null) {
+            const formData = new FormData();
+            formData.append('product_id', productId);
+            formData.append('_token', '{{ csrf_token() }}');
+
+            if (action === 'update') {
+                formData.append('quantity', quantity);
+            }
+
+            fetch('/cart/' + action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
     });
 </script>
-
