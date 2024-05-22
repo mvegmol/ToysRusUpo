@@ -51,16 +51,15 @@
                     <ul
                         class='lg:flex lg:gap-x-10 lg:absolute lg:left-1/2 lg:-translate-x-1/2 max-lg:space-y-3 max-lg:fixed max-lg:bg-white max-lg:w-2/3 max-lg:min-w-[300px] max-lg:top-0 max-lg:left-0 max-lg:px-10 max-lg:py-4 max-lg:h-full max-lg:shadow-md max-lg:overflow-auto z-50'>
                         <li class='mb-6 hidden max-lg:block'>
-                            <a href="javascript:void(0)"><img src="https://readymadeui.com/readymadeui.svg"
-                                    alt="logo" class='w-36' />
+                            <a href="javascript:void(0)"><img src="" alt="logo" class='w-36' />
                             </a>
                         </li>
-                        <li class='max-lg:border-b max-lg:py-3'><a href='javascript:void(0)'
-                                class='hover:text-primary text-[17px] text-primary block font-bold'>Home</a></li>
+                        <li class='max-lg:border-b max-lg:py-3'><a href="{{ route('welcome.index') }}"
+                                class='hover:text-primary text-lg	 text-primary block font-bold'>Home</a></li>
 
                         <li class="group max-lg:border-b max-lg:py-3 relative">
                             <button id="toysDropdownButton"
-                                class="text-gray-600 font-bold text-[17px] hover:text-primary focus:outline-none block">
+                                class="text-gray-600 font-bold text-lg	 hover:text-primary focus:outline-none block">
                                 Toys
                                 <svg class="w-4 h-4 inline ml-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                     fill="none" viewBox="0 0 10 6">
@@ -71,13 +70,13 @@
                             <ul id="toysDropdownMenu" class="absolute hidden bg-white shadow-lg rounded-lg mt-2 w-44">
                                 <li class="border-b border-gray-200">
                                     <a href="{{ route('products.index') }}"
-                                        class="hover:bg-gray-100 text-gray-600 font-bold text-[17px] block px-4 py-2">
+                                        class="hover:bg-gray-100 text-gray-600 font-bold text-lg block px-4 py-2">
                                         Bestseller
                                     </a>
                                 </li>
                                 <li>
                                     <a href="{{ route('products.index') }}"
-                                        class="hover:bg-gray-100 text-gray-600 font-bold text-[17px] block px-4 py-2">
+                                        class="hover:bg-gray-100 text-gray-600 font-bold text-lg block px-4 py-2">
                                         More Follows
                                     </a>
                                 </li>
@@ -85,15 +84,15 @@
                         </li>
                         <li class='group max-lg:border-b max-lg:py-3 relative'>
                             <a href="{{ route('categories.index') }}"
-                                class='hover:text-primary text-gray-600 font-bold text-[17px] lg:hover:fill-primary block'>
+                                class='hover:text-primary text-gray-600 font-bold text-lg lg:hover:fill-primary block'>
                                 Categories
                             </a>
                         </li>
                         <li class='max-lg:border-b max-lg:py-3'><a href="{{ route('orders.index') }}"
-                                class='hover:text-primary text-gray-600 font-bold text-[17px] block'>Orders</a></li>
+                                class='hover:text-primary text-gray-600 font-bold text-lg	 block'>Orders</a></li>
 
                         <li class='max-lg:border-b max-lg:py-3'><a href='#Contacto'
-                                class='hover:text-primary text-gray-600 font-bold text-[17px] block'>Contact</a></li>
+                                class='hover:text-primary text-gray-600 font-bold text-lg block'>Contact</a></li>
 
                     </ul>
                 </div>
@@ -136,7 +135,7 @@
 
                             <li class="group max-lg:border-b max-lg:py-3 relative list-none">
                                 <button id="userDropdownButton"
-                                    class="text-gray-600 font-bold text-[17px] hover:text-primary focus:outline-none block">
+                                    class="text-gray-600 font-bold text-lg	 hover:text-primary focus:outline-none block">
 
                                     User
                                     <svg class="w-4 h-4 inline ml-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -147,12 +146,12 @@
                                 </button>
                                 <ul id="userDropdownMenu" class="absolute hidden bg-white shadow-lg rounded-lg mt-2 w-22">
                                     <li class="border-b border-gray-200">
-                                        <a class="hover:bg-gray-100 text-gray-600 font-bold text-[17px] block px-2 py-2"
+                                        <a class="hover:bg-gray-100 text-gray-600 font-bold text-lg	 block px-2 py-2"
                                             href="{{ route('login') }}">{{ __('Login') }}</a>
                                         </a>
                                     </li>
                                     <li class="border-b border-gray-200">
-                                        <a class="hover:bg-gray-100 text-gray-600 font-bold text-[17px] block px-2 py-2"
+                                        <a class="hover:bg-gray-100 text-gray-600 font-bold text-lg	 block px-2 py-2"
                                             href="{{ route('register') }}">{{ __('Register') }}</a>
                                         </a>
                                     </li>
@@ -161,7 +160,7 @@
                         @else
                             <li class="group max-lg:border-b max-lg:py-3 relative list-none">
                                 <button id="logoutDropdownButton"
-                                    class="text-gray-600 font-bold text-[17px] hover:text-primary focus:outline-none block">
+                                    class="text-gray-600 font-bold text-lg	 hover:text-primary focus:outline-none block">
                                     {{ Auth::user()->name }}
                                     <svg class="w-4 h-4 inline ml-1" aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
@@ -173,14 +172,14 @@
                                     class="absolute hidden bg-white shadow-lg rounded-lg mt-2 w-44">
                                     <li class="border-b border-gray-200">
                                         <a href="{{ route('categories.index') }}"
-                                            class="hover:bg-gray-100 text-gray-600 font-bold text-[17px] block px-4 py-2">
+                                            class="hover:bg-gray-100 text-gray-600 font-bold text-lg block px-4 py-2">
                                             Profile
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ route('logout') }}"
                                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                                            class="hover:bg-gray-100 text-gray-600 font-bold text-[17px] block px-4 py-2">
+                                            class="hover:bg-gray-100 text-gray-600 font-bold text-lg block px-4 py-2">
                                             {{ __('Logout') }}
                                         </a>
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST"
@@ -218,7 +217,7 @@
                 </path>
             </svg>
             <input type='email' placeholder='Search...'
-                class="w-full outline-none bg-transparent text-gray-600 font-semibold text-[17px]" />
+                class="w-full outline-none bg-transparent text-gray-600 font-semibold text-lg	" />
         </div>
 
     </header>
