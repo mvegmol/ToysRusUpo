@@ -56,6 +56,16 @@
                             'old' => 'min_age',
                             'attributes' => 'min=0',
                         ],
+                    
+                        [
+                            'id' => 'categories',
+                            'type' => 'select',
+                            'label' => 'Categories',
+                            'name' => 'categories[]',
+                            'old' => 'categories',
+                            'options' => $categories,
+                            'multiple' => true,
+                        ],
                     ]" buttonLabel="Add Product" />
                 @endcomponent
             </div>
