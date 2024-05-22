@@ -9,7 +9,7 @@ export default {
         extend: {
             colors: {
                 primary: {
-                    DEFAULT: "#00FA9A", // Verde agua como color primario
+                    DEFAULT: "#7FFFD4", // Verde agua como color primario
                 },
             },
         },
