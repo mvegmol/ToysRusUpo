@@ -61,6 +61,17 @@
                             'attributes' => 'min=0',
                             'value' => $product->min_age,
                         ],
+
+                        [
+                            'id' => 'categories',
+                            'type' => 'select',
+                            'label' => 'Categories',
+                            'name' => 'categories[]',
+                            'old' => 'categories',
+                            'options' => $categories,
+                            'multiple' => true,
+                            'selected' => $product->categories->pluck('id')->toArray(),
+                        ],
                     ]" :method="'PUT'" buttonLabel="Update Product" />
                 @endcomponent
             </div>

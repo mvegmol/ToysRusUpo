@@ -7,6 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>ToysRusUpo</title>
     @vite(['resources/js/app.js', 'resources/css/app.scss'])
+<<<<<<< Updated upstream
+=======
+    {{-- @vite('resources/css/app.css') --}}
+>>>>>>> Stashed changes
 </head>
 
 <body>
