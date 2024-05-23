@@ -3,7 +3,7 @@
 <form action="{{ route($route . '.detach', ['category' => $category->id, 'product' => $entity->id]) }}" method="post">
     @csrf
     @method('DELETE')
-    <a href="{{ route($route . '.show', $entity->id) }}"
+    <a href="{{ route('products.show', $entity->id) }}"
         class="inline-flex items-center bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-medium px-3 py-1 rounded mr-2">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24"
             stroke="currentColor">

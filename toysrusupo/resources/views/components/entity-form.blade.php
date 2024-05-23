@@ -40,7 +40,7 @@
     @endforeach
 
     <div class="flex justify-center">
-        <input type="submit" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+        <input type="submit" class="px-4 py-2 bg-primary hover:bg-tertiary text-white rounded-md"
             value="{{ $buttonLabel }}">
     </div>
 </form>
