@@ -4,11 +4,11 @@
     'categoryId' => null
 ])
 
-<div class="form-group">
+<div class="mb-4">
     <form action="{{ route($actionRoute, ['category' => $categoryId]) }}" method="get">
-        <div class="input-group">
-            <input class="form-control" name="search" placeholder="Search by id..." value="{{ $searchQuery }}">
-            <button type="submit" class="btn btn-primary">Search</button>
+        <div class="flex items-center">
+            <input class="form-input border border-gray-300 rounded-l px-4 py-2" name="search" placeholder="Search by id..." value="{{ $searchQuery }}">
+            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-medium px-4 py-2 rounded-r">Search</button>
         </div>
     </form>
 </div>

@@ -1,9 +1,10 @@
 <div>
     @foreach ($details as $detail)
-        <div class="row">
-            <label
-                class="col-md-4 col-form-label text-md-end text-start"><strong>{{ $detail['label'] }}:</strong></label>
-            <div class="col-md-6" style="line-height: 35px;">
+        <div class="flex flex-col mb-4">
+            <label class="font-medium text-gray-700 mb-2">
+                <strong>{{ $detail['label'] }}:</strong>
+            </label>
+            <div class="p-2 bg-gray-100 rounded-md" style="line-height: 35px;">
                 {{ $detail['value'] }}
             </div>
         </div>

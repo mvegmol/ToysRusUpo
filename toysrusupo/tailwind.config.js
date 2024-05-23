@@ -15,7 +15,13 @@ export default {
         extend: {
             colors: {
                 primary: {
-                    DEFAULT: "#7FFFD4", // Verde agua como color primario
+                    DEFAULT: "#398564", // Verde agua como color primario
+                },
+                secondary: {
+                    DEFAULT: "#66b2b2", // Color secundario
+                },
+                tertiary: {
+                    DEFAULT: "#317256", // Color terciario
                 },
             },
         },
