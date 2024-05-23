@@ -38,7 +38,7 @@ class ShoppingCartsController extends Controller
         }
 
         // Return the view with the products
-        return view('carts.show', compact('productos','carrito'));
+        return view('carts.show', compact('productos', 'carrito'));
     }
 
     /**
@@ -141,7 +141,6 @@ class ShoppingCartsController extends Controller
                 // Redirect to the previous page with a success message
                 $previousUrl = URL::previous();
                 return redirect()->to($previousUrl)->with('success', 'Product added to cart successfully.');
-
             } else {
                 return redirect()->route('products.show', $product_id)->with('error', 'Product out of stock.');
             }
@@ -179,46 +178,46 @@ class ShoppingCartsController extends Controller
     }
 
     public function decreaseProduct(Request $request)
-{
-    try {
-        $request->validate([
-            'product_id' => 'required|integer|exists:products,id'
-        ]);
+    {
+        try {
+            $request->validate([
+                'product_id' => 'required|integer|exists:products,id'
+            ]);
 
-        $product_id = $request->input('product_id');
-        $user_id = Auth::id();
+            $product_id = $request->input('product_id');
+            $user_id = Auth::id();
 
-        $carrito = ShoppingCart::where('user_id', $user_id)->first();
-        $product = Product::findOrFail($product_id);
+            $carrito = ShoppingCart::where('user_id', $user_id)->first();
+            $product = Product::findOrFail($product_id);
 
-        if ($carrito) {
-            $productInCart = $carrito->products()->where('product_id', $product_id)->first();
-            if ($productInCart) {
-                $newQuantity = $productInCart->pivot->quantity - 1;
-                if ($newQuantity > 0) {
-                    $carrito->products()->updateExistingPivot($product_id, [
-                        'quantity' => $newQuantity,
-                        'total_price' => $productInCart->pivot->total_price - $product->price
-                    ]);
-                    $carrito->total_price -= $product->price;
-                    $carrito->total_products -= 1;
-                    $carrito->save();
-                } else {
-                    $carrito->products()->detach($product_id);
-                    $carrito->total_price -= $product->price;
-                    $carrito->total_products -= 1;
-                    $carrito->save();
+            if ($carrito) {
+                $productInCart = $carrito->products()->where('product_id', $product_id)->first();
+                if ($productInCart) {
+                    $newQuantity = $productInCart->pivot->quantity - 1;
+                    if ($newQuantity > 0) {
+                        $carrito->products()->updateExistingPivot($product_id, [
+                            'quantity' => $newQuantity,
+                            'total_price' => $productInCart->pivot->total_price - $product->price
+                        ]);
+                        $carrito->total_price -= $product->price;
+                        $carrito->total_products -= 1;
+                        $carrito->save();
+                    } else {
+                        $carrito->products()->detach($product_id);
+                        $carrito->total_price -= $product->price;
+                        $carrito->total_products -= 1;
+                        $carrito->save();
+                    }
                 }
             }
-        }
 
-        // Return success JSON response
-        return response()->json(['success' => true]);
-    } catch (\Exception $e) {
-        // Return error JSON response
-        return response()->json(['error' => $e->getMessage()], 500);
+            // Return success JSON response
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            // Return error JSON response
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
-}
     public function updateQuantityProduct(Request $request)
     {
         $request->validate([
@@ -242,10 +241,10 @@ class ShoppingCartsController extends Controller
                 ]);
 
                 // Recalculate total_price and total_products
-                $total_price = $carrito->products->sum(function($product) {
+                $total_price = $carrito->products->sum(function ($product) {
                     return $product->pivot->total_price;
                 });
-                $total_products = $carrito->products->sum(function($product) {
+                $total_products = $carrito->products->sum(function ($product) {
                     return $product->pivot->quantity;
                 });
 
@@ -259,6 +258,54 @@ class ShoppingCartsController extends Controller
         return response()->json(['success' => true]);
     }
 
+    public function deleteProductCart(Request $request)
+    {
+        // Validar la solicitud
+        $request->validate([
+            'product_id' => 'required|integer|exists:products,id'
+        ]);
 
+        // Obtener el ID del producto y el ID del usuario
+        $product_id = $request->input('product_id');
+        $user_id = Auth::id();
 
+        // Encontrar el carrito del usuario
+        $carrito = ShoppingCart::where('user_id', $user_id)->first();
+
+        // Verificar que el carrito exista
+        if (!$carrito) {
+            return redirect()->route('welcome.index')->with('error', 'Carrito no encontrado');
+        }
+
+        // Verificar que el producto esté en el carrito
+        $product = $carrito->products()->where('product_id', $product_id)->first();
+
+        if (!$product) {
+            return redirect()->back()->with('error', 'Producto no encontrado en el carrito');
+        }
+
+        // Obtener la cantidad del producto en el carrito
+        $quantity = $product->pivot->quantity;
+
+        // Eliminar el producto del carrito
+        $carrito->products()->detach($product_id);
+
+        // Actualizar el precio total del carrito
+        $carrito->total_price -= $product->price * $quantity;
+
+        // Actualizar la cantidad total de productos en el carrito
+        $carrito->total_products -= $quantity;
+
+        // Guardar los cambios en el carrito
+        $carrito->save();
+
+        // Verificar si quedan productos en el carrito
+        if ($carrito->products()->count() == 0) {
+            // Si el carrito está vacío, redirigir a la página de bienvenida
+            return redirect()->route('welcome.index')->with('success', 'Producto eliminado del carrito. El carrito está vacío.');
+        }
+
+        // Redirigir a la URL previa si aún hay productos en el carrito
+        return redirect()->back()->with('success', 'Producto eliminado del carrito.');
+    }
 }
