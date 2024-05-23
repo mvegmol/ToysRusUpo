@@ -224,8 +224,10 @@ class CategoriesController extends Controller
 
     public function addProduct(CategoryProductRequest $request, Category $category): RedirectResponse
     {
+
         Log::info("Mipe");
-        $validated = $request->validated();        
+
+        $validated = $request->validated();
         $product = Product::find($validated['id']);
 
         try {

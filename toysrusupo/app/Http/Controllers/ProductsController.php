@@ -80,7 +80,8 @@ class ProductsController extends Controller
      */
     public function create(): View
     {
-        return view('products.create');
+        $categories = Category::all();
+        return view('products.create', compact('categories'));
     }
 
     /**
@@ -88,8 +89,8 @@ class ProductsController extends Controller
      */
     public function store(ProductRequest $request): RedirectResponse
     {
-        $product = $request->validated();
-        Product::create($product);
+        $product = Product::create($request->only('name', 'description', 'price', 'stock', 'min_age'));
+        $product->categories()->sync($request->categories);
 
         $count = Product::count();
         $perPage = Config::get('app.per_page');
@@ -116,7 +117,9 @@ class ProductsController extends Controller
      */
     public function edit(Product $product): View
     {
-        return view('products.edit', compact('product'));
+        $categories = Category::all();
+
+        return view('products.edit', compact('product', 'categories'));
     }
 
     /**
@@ -124,7 +127,8 @@ class ProductsController extends Controller
      */
     public function update(ProductRequest $request, Product $product): RedirectResponse
     {
-        $product->update($request->validated());
+        $product->update($request->only('name', 'description', 'price', 'stock', 'min_age'));
+        $product->categories()->sync($request->categories);
         $search = session('search_id', null);
 
         if ($search == null) {

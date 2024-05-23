@@ -7,56 +7,62 @@
     'emptyMessage',
     'showProductsButton' => false,
     'showCategoryProductActions' => false,
-    'category'
+    'category',
 ])
 
 @php
     $isProductEntity = strtolower($entityName) === 'product';
 @endphp
 
-<table class="table table-striped table-bordered text-center">
-    <thead>
+<table class="min-w-full divide-y divide-gray-200 text-center">
+    <thead class="bg-gray-50">
         <tr>
-            <th scope="col">Id</th>
+            <th scope="col" class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Id</th>
             @foreach ($headers as $header)
-                <th scope="col">{{ $header }}</th>
+                <th scope="col" class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {{ $header }}</th>
             @endforeach
-            <th scope="col">Actions</th>
+            <th scope="col" class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
             @if ($isProductEntity)
-                <th scope="col">Añadir al Carrito</th>
+                <th scope="col" class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Añadir al
+                    Carrito</th>
             @endif
         </tr>
     </thead>
-    <tbody>
+    <tbody class="bg-white divide-y divide-gray-200">
         @forelse ($entities as $entity)
             <tr>
-                <th scope="row">
+                <th scope="row" class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {{ $entity->id }}
                 </th>
                 @foreach ($fields as $field)
-                    <td>{{ $entity->{$field} }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $entity->{$field} }}</td>
                 @endforeach
-                <td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     @if ($showCategoryProductActions == false)
                         <x-entity-actions :entity="$entity" :route="$actionsRoute" :entityName="$entityName" :showProductsButton="$showProductsButton" />
                     @else
-                        <x-category-product-actions :entity="$entity" :route="$actionsRoute" :entityName="$entityName" :category="$category" />
+                        <x-category-product-actions :entity="$entity" :route="$actionsRoute" :entityName="$entityName"
+                            :category="$category" />
                     @endif
                 </td>
                 @if ($isProductEntity)
-                <td>
-                    <form action="{{ route('cart.add') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="product_id" value="{{ $entity->id }}">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <form action="{{ route('cart.add') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="product_id" value="{{ $entity->id }}">
 
-                        <button type="submit" class="btn btn-danger">Añadir al Carrito</button>
-                    </form>
-                </td>
-
+                            <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded">Añadir al
+                                Carrito</button>
+                        </form>
+                    </td>
                 @endif
             </tr>
         @empty
-            <td colspan="{{ count($headers) + 2 + ($isProductEntity ? 1 : 0) }}">{{ $emptyMessage }}</td>
+            <tr>
+                <td colspan="{{ count($headers) + 2 + ($isProductEntity ? 1 : 0) }}"
+                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $emptyMessage }}</td>
+            </tr>
         @endforelse
     </tbody>
 </table>
