@@ -41,3 +41,7 @@ Route::post('orders/update-status', [OrdersController::class, 'updateStatus'])->
 Route::post('/cart/add', [ShoppingCartsController::class, 'addProduct'])->name('cart.add')->middleware('auth');
 
 Route::get('/cart', [ShoppingCartsController::class, 'show_products'])->name('carts.show_products');
+Route::post('/cart/increment', [ShoppingCartsController::class, 'incrementProduct'])->name('cart.increment');
+Route::post('/cart/decrement', [ShoppingCartsController::class, 'decreaseProduct'])->name('cart.decrement');
+Route::post('/cart/update', [ShoppingCartsController::class, 'updateQuantityProduct'])->name('cart.update');
+Route::post('/cart/delete',[ShoppingCartsController::class, 'deleteProductCart'])->name('cart.delete');
