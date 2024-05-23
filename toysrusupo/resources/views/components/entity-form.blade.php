@@ -5,7 +5,7 @@
     'method' => 'POST',
 ])
 
-<form action="{{ $actionUrl }}" method="post">
+<form action="{{ $actionUrl }}" method="post" class="space-y-6 max-w-lg mx-auto">
     @csrf
 
     @if ($method !== 'POST')
@@ -13,35 +13,34 @@
     @endif
 
     @foreach ($fields as $field)
-        <div class="mb-3 row">
-            <label for="{{ $field['id'] }}"
-                class="col-md-4 col-form-label text-md-end text-start">{{ $field['label'] }}:</label>
-            <div class="col-md-6">
-                @if ($field['type'] === 'textarea')
-                    <textarea class="form-control @error($field['old']) is-invalid @enderror" id="{{ $field['id'] }}"
-                        name="{{ $field['name'] }}" {!! $field['attributes'] ?? '' !!}>{{ old($field['old'], $field['value'] ?? '') }}</textarea>
-                @elseif ($field['type'] === 'select' && isset($field['multiple']) && $field['multiple'])
-                    <select class="form-control @error($field['old']) is-invalid @enderror" id="{{ $field['id'] }}"
-                        name="{{ $field['name'] }}" multiple>
-                        @foreach ($field['options'] as $option)
-                            <option value="{{ $option->id }}"
-                                {{ in_array($option->id, old($field['old'], $field['selected'] ?? [])) ? 'selected' : '' }}>
-                                {{ $option->name }}</option>
-                        @endforeach
-                    </select>
-                @else
-                    <input type="{{ $field['type'] }}" class="form-control @error($field['old']) is-invalid @enderror"
-                        id="{{ $field['id'] }}" name="{{ $field['name'] }}"
-                        value="{{ old($field['old'], $field['value'] ?? null) }}" {!! $field['attributes'] ?? '' !!}>
-                @endif
-                @error($field['old'])
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
-            </div>
+        <div class="flex flex-col mb-4">
+            <label for="{{ $field['id'] }}" class="font-medium text-gray-700 mb-2">{{ $field['label'] }}:</label>
+            @if ($field['type'] === 'textarea')
+                <textarea class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-green-500 @error($field['old']) border-red-500 @enderror"
+                    id="{{ $field['id'] }}" name="{{ $field['name'] }}" {!! $field['attributes'] ?? '' !!}>{{ old($field['old'], $field['value'] ?? '') }}</textarea>
+            @elseif ($field['type'] === 'select' && isset($field['multiple']) && $field['multiple'])
+                <select class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-green-500 @error($field['old']) border-red-500 @enderror"
+                    id="{{ $field['id'] }}" name="{{ $field['name'] }}" multiple>
+                    @foreach ($field['options'] as $option)
+                        <option value="{{ $option->id }}"
+                            {{ in_array($option->id, old($field['old'], $field['selected'] ?? [])) ? 'selected' : '' }}>
+                            {{ $option->name }}</option>
+                    @endforeach
+                </select>
+            @else
+                <input type="{{ $field['type'] }}"
+                    class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-green-500 @error($field['old']) border-red-500 @enderror"
+                    id="{{ $field['id'] }}" name="{{ $field['name'] }}"
+                    value="{{ old($field['old'], $field['value'] ?? null) }}" {!! $field['attributes'] ?? '' !!}>
+            @endif
+            @error($field['old'])
+                <span class="text-red-500">{{ $message }}</span>
+            @enderror
         </div>
     @endforeach
 
-    <div class="mb-3 row">
-        <input type="submit" class="col-md-3 offset-md-5 btn btn-primary" value="{{ $buttonLabel }}">
+    <div class="flex justify-center">
+        <input type="submit" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+            value="{{ $buttonLabel }}">
     </div>
 </form>

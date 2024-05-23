@@ -1,39 +1,37 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container-fluid">
-        <div class="row justify-content-center mt-3">
-            <div class="col-md-12">
+    <div class="mx-4 mt-3">
 
-                @include('partials.messages')
+        @include('partials.messages')
 
-                @component('components.card')
-                    @slot('header')
-                        <x-header :title="'Category List'">
-                            @slot('controls')
-                                <x-back-button route="welcome.index">&larr; Back</x-back-button>
-                            @endslot
-                        </x-header>
+        @component('components.card')
+            @slot('header')
+                <x-header :title="'Category List'">
+                    @slot('controls')
+                        <x-back-button route="welcome.index">&larr; Back</x-back-button>
                     @endslot
+                </x-header>
+            @endslot
 
-                    <div class="row py-2">
-                        <div class="col-md-6">
-                            <x-add-button route="categories.create" entityName="Category" />
-                        </div>
-                        <div class="col-md-6">
-                            <x-search-form :actionRoute="'search.categories'" :searchQuery="$search ?? ''" />
-                        </div>
-                    </div>
-
-                    <x-entity-table :entities="$categories" :headers="['Name', 'Description']" :fields="['name', 'description']" actionsRoute="categories"
-                        entityName="Category" emptyMessage="No Categories Found!" :showProductsButton="true" />
-
-                    @slot('footer')
-                        {{ $categories->links() }}
-                    @endslot
-                @endcomponent
-
+            <div class="flex flex-wrap py-2">
+                <div class="w-full md:w-1/2 mb-4 md:mb-0">
+                    <x-add-button route="categories.create" entityName="Category" />
+                </div>
+                <div class="w-full md:w-1/2 flex justify-end">
+                    <x-search-form :actionRoute="'search.categories'" :searchQuery="$search ?? ''" />
+                </div>
             </div>
-        </div>
+
+            <x-entity-table :entities="$categories" :headers="['Name', 'Description']" :fields="['name', 'description']" actionsRoute="categories" entityName="Category"
+                emptyMessage="No Categories Found!" :showProductsButton="true" />
+
+            @slot('footer')
+                <div class="mt-4">
+                    {{ $categories->links() }}
+                </div>
+            @endslot
+        @endcomponent
+
     </div>
 @endsection
