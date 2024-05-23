@@ -95,10 +95,14 @@
                             </div>
 
                         </div>
-                        <a href="#"
-                            class="block w-full py-2 text-center bg-primary text-white border border-primary rounded-b hover:bg-transparent hover:text-primary transition">Add
-                            to Cart</a>
-
+                        <form action="{{ route('cart.add') }}" method="POST" class="block w-full">
+                            @csrf
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                            <input type="submit"
+                                class="w-full py-2 text-center bg-primary text-white border border-primary rounded-b hover:bg-transparent hover:text-primary transition">
+                            Add to Cart
+                            </input>
+                        </form>
                     </div>
 
                 @empty
@@ -107,10 +111,11 @@
                     </div>
                 @endforelse
                 <div class="mt-4">
-                    {{ $products->links() }} {{-- Pagination links --}}
+
                 </div>
 
             </div>
+            {{ $products->links() }} {{-- Pagination links --}}
         </div>
         <!-- ./new arrival -->
 
