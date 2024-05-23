@@ -2,7 +2,6 @@
 
 @section('content')
     <div class="mx-4 mt-3">
-
         @include('partials.messages')
 
         @component('components.card')
