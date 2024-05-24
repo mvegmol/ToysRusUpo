@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\ShoppingCart;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrdersController extends Controller
 {
@@ -105,5 +107,56 @@ class OrdersController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function buy()
+    {
+        $cliente_id = Auth::user()->id;
+
+        // Obtain the user's shopping cart
+        $carrito = ShoppingCart::where('user_id', $cliente_id)->first();
+
+        $productos = $carrito->products;
+
+        //Creamos un order
+        $order = new Order();
+
+        $order ->user_id = $cliente_id;
+        if($carrito->total_price<50)
+        {
+            $order ->total_price = ($carrito->total_price)+5;
+        }else{
+            $order ->total_price = $carrito->total_price;
+        }
+
+        $order->address = "Sin Dirección todavía";
+
+        $order->status= 'pending';
+
+        $order->created_at = now();
+
+
+        $order->save();
+
+        $productos = $carrito->products;
+
+        foreach($productos as $p){
+            //dd($productos);
+            $order->products()->attach($p->id,
+            [
+                'quantity' => $p->pivot->quantity,
+                'price' => $p->pivot->total_price
+            ]
+            );
+            $p->stock = $p->pivot->quantity;
+            $p->save();
+        }
+
+
+
+        $carrito->delete();
+
+        return redirect()->route('welcome.index');
+
     }
 }
