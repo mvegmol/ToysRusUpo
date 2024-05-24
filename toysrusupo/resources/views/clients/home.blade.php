@@ -98,10 +98,10 @@
                         <form action="{{ route('cart.add') }}" method="POST" class="block w-full">
                             @csrf
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
-                            <input type="submit"
+                            <button type="submit"
                                 class="w-full py-2 text-center bg-primary text-white border border-primary rounded-b hover:bg-transparent hover:text-primary transition">
-                            Add to Cart
-                            </input>
+                                Add to Cart
+                            </button>
                         </form>
                     </div>
 
@@ -115,7 +115,7 @@
                 </div>
 
             </div>
-            {{ $products->links() }} {{-- Pagination links --}}
+            {{ $products->links() }}
         </div>
         <!-- ./new arrival -->
 
