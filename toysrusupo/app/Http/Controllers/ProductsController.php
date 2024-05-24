@@ -188,4 +188,12 @@ class ProductsController extends Controller
         return view('products.index', compact('products', 'search'));
     }
 
+    public function show_client($productId): View
+    {
+        $product = Product::with('categories')->findOrFail($productId);
+        $product->category_names = $product->categories->pluck('name')->join(', ');
+
+        return view('clients.productDetails', compact('product'));
+    }
+
 }

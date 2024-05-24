@@ -65,7 +65,7 @@
                                 alt="product 1" class="w-full">
                             <div
                                 class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition">
-                                <a href="#"
+                                <a href="{{ route('products_clients.show', $product->id) }}"
                                     class="text-lg w-9 h-8 rounded-full text-black bg-primary flex items-center justify-center hover:bg-gray-800 transition"
                                     title="View Product">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -95,10 +95,14 @@
                             </div>
 
                         </div>
-                        <a href="#"
-                            class="block w-full py-2 text-center bg-primary text-white border border-primary rounded-b hover:bg-transparent hover:text-primary transition">Add
-                            to Cart</a>
-
+                        <form action="{{ route('cart.add') }}" method="POST" class="block w-full">
+                            @csrf
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                            <button type="submit"
+                                class="w-full py-2 text-center bg-primary text-white border border-primary rounded-b hover:bg-transparent hover:text-primary transition">
+                                Add to Cart
+                            </button>
+                        </form>
                     </div>
 
                 @empty
@@ -107,10 +111,11 @@
                     </div>
                 @endforelse
                 <div class="mt-4">
-                    {{ $products->links() }} {{-- Pagination links --}}
+
                 </div>
 
             </div>
+            {{ $products->links() }}
         </div>
         <!-- ./new arrival -->
 
