@@ -5,11 +5,14 @@
         <h1 class="mb-10 text-center text-2xl font-bold">Shopping Cart</h1>
         <div class="mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
             <div class="rounded-lg md:w-2/3">
+                <div id="mensaje"></div>
                 @foreach ($productos as $product)
                     <div class="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
                         <img src="https://images.unsplash.com/photo-1515955656352-a1fa3ffcd111?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
                             alt="product-image" class="w-full rounded-lg sm:w-40" />
                         <div class="sm:ml-4 sm:flex sm:w-full sm:justify-between">
+
+
                             <div class="mt-5 sm:mt-0">
                                 <h2 class="text-lg font-bold text-gray-900">{{$product->name}}</h2>
                                 <p class="mt-1 text-xs text-gray-700">{{$product->description}}</p>
@@ -70,61 +73,105 @@
                         @endif
                     </div>
                 </div>
-                <button class="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">Check
-                    out</button>
+                <form method="GET" action="{{ route('cart.checkout') }}">
+                    <button type="submit" class="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">
+                        Check out
+                    </button>
+                </form>
             </div>
         </div>
     </div>
 @endsection
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const incrementButtons = document.querySelectorAll('.increment-btn');
-        const decrementButtons = document.querySelectorAll('.decrement-btn');
-        const quantityInputs = document.querySelectorAll('.quantity-input');
+    const urlParams = new URLSearchParams(window.location.search);
+    const successMessage = urlParams.get('successMessage');
+    const errorMessage = urlParams.get('errorMessage');
 
-        incrementButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                console.log("dentro");
-                const productId = button.parentElement.dataset.productId;
-                updateCart(productId, 'increment');
-            });
+    if (successMessage) {
+        displayMessage(successMessage, 'success');
+    } else if (errorMessage) {
+        displayMessage(errorMessage, 'error');
+    }
+
+    const incrementButtons = document.querySelectorAll('.increment-btn');
+    const decrementButtons = document.querySelectorAll('.decrement-btn');
+    const quantityInputs = document.querySelectorAll('.quantity-input');
+
+    incrementButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const productId = button.parentElement.dataset.productId;
+            updateCart(productId, 'increment');
         });
-
-        decrementButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                const productId = button.parentElement.dataset.productId;
-                updateCart(productId, 'decrement');
-            });
-        });
-
-        quantityInputs.forEach(input => {
-            input.addEventListener('change', function () {
-                const productId = input.parentElement.dataset.productId;
-                updateCart(productId, 'update', input.value);
-            });
-        });
-
-        function updateCart(productId, action, quantity = null) {
-            const formData = new FormData();
-            formData.append('product_id', productId);
-            formData.append('_token', '{{ csrf_token() }}');
-
-            if (action === 'update') {
-                formData.append('quantity', quantity);
-            }
-
-            fetch('/cart/' + action, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                location.reload();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        }
     });
+
+    decrementButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const productId = button.parentElement.dataset.productId;
+            updateCart(productId, 'decrement');
+        });
+    });
+
+    quantityInputs.forEach(input => {
+        input.addEventListener('change', function () {
+            const productId = input.parentElement.dataset.productId;
+            updateCart(productId, 'update', input.value);
+        });
+    });
+
+    function updateCart(productId, action, quantity = null) {
+        const formData = new FormData();
+        formData.append('product_id', productId);
+        formData.append('_token', '{{ csrf_token() }}');
+
+        if (action === 'update') {
+            formData.append('quantity', quantity);
+        }
+
+        fetch('/cart/' + action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            let message = '';
+            if (data.success) {
+                message = 'Producto añadido al carrito con éxito';
+            } else {
+                message = 'No hay suficiente cantidad disponible';
+            }
+            redirectToPageWithMessage(message);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    function redirectToPageWithMessage(message) {
+        const url = new URL(window.location.href);
+
+            url.searchParams.set('error', message);
+            window.location.href = url.toString();
+
+        url.searchParams.set('successMessage', message);
+        window.location.href = url.toString();
+
+    }
+
+    function displayMessage(message, type) {
+        const isNotEnoughQuantity = message === "No hay suficiente cantidad disponible";
+        const messageType = isNotEnoughQuantity ? 'error' : type;
+
+        const messageContainer = document.createElement('div');
+        messageContainer.classList.add('bg-' + (messageType === 'success' ? 'green' : 'red') + '-100', 'border', 'border-' + (messageType === 'success' ? 'green' : 'red') + '-400', 'text-' + (messageType === 'success' ? 'green' : 'red') + '-700', 'px-4', 'py-3', 'rounded', 'relative', 'mb-4');
+        messageContainer.textContent = message;
+
+        var div = document.getElementById("mensaje");
+        div.appendChild(messageContainer);
+
+        setTimeout(function() {
+            messageContainer.remove();
+        }, 2000);
+    }
+});
 </script>
