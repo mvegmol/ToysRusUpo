@@ -1,9 +1,11 @@
 <?php
+
 use App\Http\Controllers\AddressesController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ShoppingCartsController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,10 +19,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [ProductsController::class,'home'])->name('welcome.index');
+Route::get('/', [ProductsController::class, 'home'])->name('welcome.index');
 Route::get('/home', function () {
     return view('auth.dashboard');
-})->middleware('auth','verified');
+})->middleware('auth', 'verified');
 
 Route::resource('/products', ProductsController::class);
 Route::get('/search/products', [ProductsController::class, 'search'])->name('search.products');
@@ -44,4 +46,6 @@ Route::get('/cart', [ShoppingCartsController::class, 'show_products'])->name('ca
 Route::post('/cart/increment', [ShoppingCartsController::class, 'incrementProduct'])->name('cart.increment');
 Route::post('/cart/decrement', [ShoppingCartsController::class, 'decreaseProduct'])->name('cart.decrement');
 Route::post('/cart/update', [ShoppingCartsController::class, 'updateQuantityProduct'])->name('cart.update');
-Route::post('/cart/delete',[ShoppingCartsController::class, 'deleteProductCart'])->name('cart.delete');
+Route::post('/cart/delete', [ShoppingCartsController::class, 'deleteProductCart'])->name('cart.delete');
+
+Route::get('/profile', [UsersController::class, 'profile'])->name('clients.profile');
