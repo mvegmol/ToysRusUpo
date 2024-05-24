@@ -159,19 +159,26 @@ class ShoppingCartsController extends Controller
         $carrito = ShoppingCart::where('user_id', $user_id)->first();
         $product = Product::findOrFail($product_id);
 
-        if ($carrito) {
-            $productInCart = $carrito->products()->where('product_id', $product_id)->first();
-            if ($productInCart) {
-                $newQuantity = $productInCart->pivot->quantity + 1;
-                $carrito->products()->updateExistingPivot($product_id, [
-                    'quantity' => $newQuantity,
-                    'total_price' => $productInCart->pivot->total_price + $product->price
-                ]);
-                $carrito->total_price += $product->price;
-                $carrito->total_products += 1;
-                $carrito->save();
+            if ($carrito) {
+                $productInCart = $carrito->products()->where('product_id', $product_id)->first();
+                if ($productInCart) {
+                    $newQuantity = $productInCart->pivot->quantity + 1;
+
+                    if($product->stock >=$newQuantity){
+                        $carrito->products()->updateExistingPivot($product_id, [
+                            'quantity' => $newQuantity,
+                            'total_price' => $productInCart->pivot->total_price + $product->price
+                        ]);
+                        $carrito->total_price += $product->price;
+                        $carrito->total_products += 1;
+                        $carrito->save();
+                    }else
+                    {
+                        return response()->json(['error' => false, 'message' => 'No hay suficiente cantidad disponible'], 400);
+
+                    }
+                }
             }
-        }
 
         // Return JSON response
         return response()->json(['success' => true]);
@@ -231,27 +238,33 @@ class ShoppingCartsController extends Controller
 
         $carrito = ShoppingCart::where('user_id', $user_id)->first();
         $product = Product::findOrFail($product_id);
+        if($product->stock>=$quantity){
+            if ($carrito) {
+                $productInCart = $carrito->products()->where('product_id', $product_id)->first();
+                if ($productInCart) {
+                    $carrito->products()->updateExistingPivot($product_id, [
+                        'quantity' => $quantity,
+                        'total_price' => $product->price * $quantity
+                    ]);
 
-        if ($carrito) {
-            $productInCart = $carrito->products()->where('product_id', $product_id)->first();
-            if ($productInCart) {
-                $carrito->products()->updateExistingPivot($product_id, [
-                    'quantity' => $quantity,
-                    'total_price' => $product->price * $quantity
-                ]);
+                    // Recalculate total_price and total_products
+                    $total_price = $carrito->products->sum(function ($product) {
+                        return $product->pivot->total_price;
+                    });
+                    $total_products = $carrito->products->sum(function ($product) {
+                        return $product->pivot->quantity;
+                    });
 
-                // Recalculate total_price and total_products
-                $total_price = $carrito->products->sum(function ($product) {
-                    return $product->pivot->total_price;
-                });
-                $total_products = $carrito->products->sum(function ($product) {
-                    return $product->pivot->quantity;
-                });
-
-                $carrito->total_price = $total_price;
-                $carrito->total_products = $total_products;
-                $carrito->save();
+                    $carrito->total_price = $total_price;
+                    $carrito->total_products = $total_products;
+                    $carrito->save();
+                }
             }
+        }
+        else
+        {
+            return response()->json(['error' => false, 'message' => 'No hay suficiente cantidad disponible'], 400);
+
         }
 
         // Return JSON response
@@ -307,5 +320,28 @@ class ShoppingCartsController extends Controller
 
         // Redirigir a la URL previa si aún hay productos en el carrito
         return redirect()->back()->with('success', 'Producto eliminado del carrito.');
+    }
+    public function checkout()
+    {
+         // Obtain the authenticated user's ID
+         $cliente_id = Auth::user()->id;
+
+         // Obtain the user's shopping cart
+         $carrito = ShoppingCart::where('user_id', $cliente_id)->first();
+
+         // Check if the shopping cart exists
+         if (!$carrito) {
+             $previousUrl = URL::previous();
+             return redirect()->to($previousUrl)->with('error', 'The shopping cart does not exist.');
+         }
+
+         // Get the products in the cart
+         $productos = $carrito->products;
+
+
+
+         // Return the view with the products
+         return view('carts.checkout', compact('productos', 'carrito'));
+
     }
 }

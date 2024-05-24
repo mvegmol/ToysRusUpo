@@ -46,5 +46,9 @@ Route::post('/cart/decrement', [ShoppingCartsController::class, 'decreaseProduct
 Route::post('/cart/update', [ShoppingCartsController::class, 'updateQuantityProduct'])->name('cart.update');
 Route::post('/cart/delete',[ShoppingCartsController::class, 'deleteProductCart'])->name('cart.delete');
 
+Route::get('/cart/checkout', [ShoppingCartsController::class, 'checkout'])->name('cart.checkout');
+
+Route::post('/comprar', [OrdersController::class, 'buy'])->name('order.buy');
 
 Route::get('/products_clients/show/{productId}',[ProductsController::class, 'show_client'])->name('products_clients.show');
+
