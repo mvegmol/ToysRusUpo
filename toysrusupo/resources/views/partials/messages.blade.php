@@ -1,12 +1,12 @@
 @switch(true)
     @case(session('success'))
-        <div class="alert alert-success" role="alert">
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
             {{ session('success') }}
         </div>
     @break
 
     @case(session('error'))
-        <div class="alert alert-danger" role="alert">
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
             {{ session('error') }}
         </div>
     @break
