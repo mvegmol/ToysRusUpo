@@ -13,18 +13,22 @@ return new class extends Migration
     {
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
-            #Foreign key del usuario
-            $table->foreignId('user_id')->references('id')->on('users')->constrained()->onDelete('cascade');
-            #Dirección
+            // Foreign key del usuario
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            // Dirección
             $table->string('direction');
-            #Provincia
+            // Provincia
             $table->string('province');
-            #Código Postal
+            // Código Postal
             $table->string('zip_code');
-            #Ciudad
+            // Ciudad
             $table->string('city');
-            #País
+            // País
             $table->string('country');
+            // Nombre completo (nombre y apellidos)
+            $table->string('full_name');
+            // Número de teléfono
+            $table->string('phone_number');
             $table->timestamps();
         });
     }

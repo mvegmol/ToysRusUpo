@@ -36,7 +36,6 @@ Route::get('/categories/{category}/add-product-form', [CategoriesController::cla
 Route::post('/categories/{category}/add-product', [CategoriesController::class, 'addProduct'])->name('categories.add-product');
 
 Route::resource('/orders', OrdersController::class);
-Route::resource('/addresses', AddressesController::class);
 Route::get('users/{user_id}/orders', [OrdersController::class, 'ordersByUser'])->name('orders.by_user');
 Route::post('orders/update-status', [OrdersController::class, 'updateStatus'])->name('orders.update_status');
 
@@ -53,5 +52,5 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/clients/addresses', [UsersController::class, 'addresses'])->name('clients.addresses');
+    Route::resource('/addresses', AddressesController::class);
 });

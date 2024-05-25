@@ -21,8 +21,9 @@ class AddressRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'user_id' => 'required|exists:users,id',
+        return [            
+            'full_name' => 'required|string|max:255',
+            'phone_number' => 'required|string|max:15',
             'direction' => 'required|string|max:255',
             'city' => 'required|string|max:50',
             'province' => 'required|string|max:50',

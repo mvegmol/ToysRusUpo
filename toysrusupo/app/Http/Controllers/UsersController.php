@@ -66,12 +66,7 @@ class UsersController extends Controller
 
     public function profile():View
     {
-        $cliente_name = Auth::user()->name;
-        return view('clients.profile', compact('cliente_name'));
-    }
-
-    public function addresses()
-    {                
-        return view('clients.addresses');
-    }
+        $client_name = Auth::user()->name;
+        return view('clients.profile', compact('client_name'));
+    }    
 }

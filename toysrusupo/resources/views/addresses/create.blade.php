@@ -1,66 +1,88 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="row justify-content-center mt-3">
-        <div class="col-md-8">
-            @component('components.card')
-                @slot('header')
-                    <x-header :title="'Añadir nueva dirección'">
-                        @slot('controls')
-                            <x-back-button route="addresses.index">&larr; Volver</x-back-button>
-                        @endslot
-                    </x-header>
-                @endslot
+<div class="flex justify-center min-h-screen">
+    <div class="w-full max-w-2xl mx-auto p-6">
+        <nav class="text-sm mb-6">
+            <a href="{{ route('clients.profile') }}" class="text-gray-500 hover:text-primary hover:underline">My Account</a> 
+            <span class="text-gray-500 mx-2">›</span> 
+            <a href="{{ route('addresses.index') }}" class="text-gray-500 hover:text-primary hover:underline">My Addresses</a>
+            <span class="text-gray-500 mx-2">›</span>
+            <span class="text-primary">New Address</span>
+        </nav>
 
-                <x-entity-form :actionUrl="route('addresses.store')" :fields="[
-                    [
-                        'id' => 'direction',
-                        'type' => 'text',
-                        'label' => 'Dirección',
-                        'name' => 'direction',
-                        'old' => 'direction',
-                    ],
-                
-                    [
-                        'id' => 'city',
-                        'type' => 'text',
-                        'label' => 'Ciudad',
-                        'name' => 'city',
-                        'old' => 'city',
-                    ],
-                
-                    [
-                        'id' => 'province',
-                        'type' => 'text',
-                        'label' => 'Provincia',
-                        'name' => 'province',
-                        'old' => 'province',
-                    ],
-                
-                    [
-                        'id' => 'zip_code',
-                        'type' => 'text',
-                        'label' => 'Código Postal',
-                        'name' => 'zip_code',
-                        'old' => 'zip_code',
-                    ],
-                
-                    [
-                        'id' => 'country',
-                        'type' => 'text',
-                        'label' => 'País',
-                        'name' => 'country',
-                        'old' => 'country',
-                    ],
-                    [
-                        'id' => 'user_id',
-                        'type' => 'number',
-                        'label' => 'Id del Usuario',
-                        'name' => 'user_id',
-                        'old' => 'user_id',
-                    ],
-                ]" buttonLabel="Add Adrress" />
-            @endcomponent
-        </div>
+        @component('components.card')
+            @slot('header')
+                <x-header :title="'Add a new address'">
+                    @slot('controls')
+                        <x-back-button route="addresses.index">&larr; Back</x-back-button>
+                    @endslot
+                </x-header>
+            @endslot
+
+            <x-entity-form :actionUrl="route('addresses.store')" :fields="[
+                [
+                    'id' => 'country',
+                    'type' => 'select',
+                    'label' => 'Country/Region',
+                    'name' => 'country',
+                    'options' => $countries,
+                    'old' => 'country',
+                    'placeholder' => 'Select your country'
+                ],
+                [
+                    'id' => 'full_name',
+                    'type' => 'text',
+                    'label' => 'Full Name',
+                    'name' => 'full_name',
+                    'old' => 'full_name',
+                    'placeholder' => 'Enter your full name'
+                ],
+                [
+                    'id' => 'phone_number',
+                    'type' => 'text',
+                    'label' => 'Phone Number',
+                    'name' => 'phone_number',
+                    'old' => 'phone_number',
+                    'help' => 'This can be used to assist with delivery',
+                    'placeholder' => 'Enter your phone number'
+                ],
+                [
+                    'id' => 'direction',
+                    'type' => 'text',
+                    'label' => 'Address',
+                    'name' => 'direction',
+                    'old' => 'direction',
+                    'placeholder' => 'Enter your address'
+                ],
+                [
+                    'id' => 'zip_code',
+                    'type' => 'text',
+                    'label' => 'Postal Code',
+                    'name' => 'zip_code',
+                    'old' => 'zip_code',
+                    'inline' => true,
+                    'placeholder' => 'Enter postal code'
+                ],
+                [
+                    'id' => 'city',
+                    'type' => 'text',
+                    'label' => 'City',
+                    'name' => 'city',
+                    'old' => 'city',
+                    'inline' => true,
+                    'placeholder' => 'Enter your city'
+                ],
+                [
+                    'id' => 'province',
+                    'type' => 'text',
+                    'label' => 'Province',
+                    'name' => 'province',
+                    'old' => 'province',
+                    'placeholder' => 'Enter your province'
+                ],                
+            ]" buttonLabel="Add Address" />
+        @endcomponent
     </div>
+</div>
 @endsection
