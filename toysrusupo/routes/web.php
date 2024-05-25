@@ -4,6 +4,7 @@ use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ShoppingCartsController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -52,3 +53,4 @@ Route::post('/comprar', [OrdersController::class, 'buy'])->name('order.buy');
 
 Route::get('/products_clients/show/{productId}',[ProductsController::class, 'show_client'])->name('products_clients.show');
 
+Route::get('/likeProduct',[UsersController::class,"likeorUnlikeProduct"])->name('user.like');

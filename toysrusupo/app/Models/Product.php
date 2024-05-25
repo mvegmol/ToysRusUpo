@@ -26,5 +26,8 @@ class Product extends Model
         return $this->belongsToMany(Order::class)->withPivot('quantity', 'price');
     }
 
+    public function userFavourites(){
+        return $this->belongsToMany(User::class, 'favourite_product', 'product_id', 'user_id');
+    }
 
 }
