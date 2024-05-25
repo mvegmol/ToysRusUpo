@@ -69,4 +69,9 @@ class UsersController extends Controller
         $cliente_name = Auth::user()->name;
         return view('clients.profile', compact('cliente_name'));
     }
+
+    public function addresses()
+    {                
+        return view('clients.addresses');
+    }
 }
