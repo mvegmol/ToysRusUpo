@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 use Illuminate\View\View;
+ use Illuminate\Support\Facades\URL;
 
 class UsersController extends Controller
 {
@@ -64,9 +68,35 @@ class UsersController extends Controller
         //
     }
 
+
     public function profile():View
     {
         $client_name = Auth::user()->name;
         return view('clients.profile', compact('client_name'));
     }    
+  public function likeorUnlikeProduct(Request $request)
+    {
+        $cliente_id = Auth::user()->id;
+
+        $client = User::findOrFail($cliente_id);
+
+        $product_id = $request->input('product_id');
+
+        $product = Product::findOrFail($product_id);
+
+        $likeProduct = $client->favouriteProducts()->where('product_id', $product_id)->first();
+
+        if($likeProduct ==null){
+
+            $client->favouriteProducts()->attach($product_id);
+
+        }else{
+            $client->favouriteProducts()->detach($product_id);
+        }
+
+        $previousUrl = URL::previous();
+        return redirect()->to($previousUrl)->with('success', 'Like product correct');
+
+    }
+
 }
