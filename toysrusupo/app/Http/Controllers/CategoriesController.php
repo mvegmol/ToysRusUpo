@@ -20,30 +20,39 @@ class CategoriesController extends Controller
      */
     public function index(Request $request): View
     {
-        if ($request->clear_search) {
-            session()->forget('search_id');
-            session()->forget('last_page');
-            session()->forget('categories_last_page');
+        try {
+            DB::beginTransaction();
+
+            if ($request->clear_search) {
+                session()->forget('search_id');
+                session()->forget('last_page');
+                session()->forget('categories_last_page');
+            }
+
+            $search = session('search_id', null);
+
+            if ($search !== null) {
+                $request->request->set('page', 1);
+            } elseif (!$request->has('page') && session()->has('last_page')) {
+                $request->merge(['page' => session('last_page', 1)]);
+            }
+
+            $page = $request->input('page', 1);
+            session(['last_page' => $page]);
+
+            $perPage = Config::get('app.per_page');
+
+            $categories = Category::when($search, function ($query) use ($search) {
+                return $query->where('id', '=', $search);
+            })->paginate($perPage);
+
+            DB::commit();
+
+            return view('categories.index', compact('categories', 'search'));
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
         }
-
-        $search = session('search_id', null);
-
-        if ($search !== null) {
-            $request->request->set('page', 1);
-        } elseif (!$request->has('page') && session()->has('last_page')) {
-            $request->merge(['page' => session('last_page', 1)]);
-        }
-
-        $page = $request->input('page', 1);
-        session(['last_page' => $page]);
-
-        $perPage = Config::get('app.per_page');
-
-        $categories = Category::when($search, function ($query) use ($search) {
-            return $query->where('id', '=', $search);
-        })->paginate($perPage);
-
-        return view('categories.index', compact('categories', 'search'));
     }
 
     /**
@@ -59,16 +68,25 @@ class CategoriesController extends Controller
      */
     public function store(CategoryRequest $request): RedirectResponse
     {
-        $category = $request->validated();
-        Category::create($category);
+        try {
+            DB::beginTransaction();
 
-        $count = Category::count();
-        $perPage = Config::get('app.per_page');
-        $lastPage = ceil($count / $perPage);
+            $category = $request->validated();
+            Category::create($category);
 
-        session()->forget('search_id');
+            $count = Category::count();
+            $perPage = Config::get('app.per_page');
+            $lastPage = ceil($count / $perPage);
 
-        return redirect()->route('categories.index', ['page' => $lastPage])->with('success', 'Category created successfully.');
+            session()->forget('search_id');
+
+            DB::commit();
+
+            return redirect()->route('categories.index', ['page' => $lastPage])->with('success', 'Category created successfully.');
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -92,16 +110,25 @@ class CategoriesController extends Controller
      */
     public function update(CategoryRequest $request, Category $category): RedirectResponse
     {
-        $category->update($request->validated());
-        $search = session('search_id', null);
+        try {
+            DB::beginTransaction();
 
-        if ($search == null) {
-            $lastPage = session('last_page', 1);
-        } else {
-            $lastPage = 1;
+            $category->update($request->validated());
+            $search = session('search_id', null);
+
+            if ($search == null) {
+                $lastPage = session('last_page', 1);
+            } else {
+                $lastPage = 1;
+            }
+
+            DB::commit();
+
+            return redirect()->route('categories.index', ['page' => $lastPage])->with('success', 'Category updated successfully.');
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
         }
-
-        return redirect()->route('categories.index', ['page' => $lastPage])->with('success', 'Category updated successfully.');
     }
 
     /**
@@ -109,112 +136,157 @@ class CategoriesController extends Controller
      */
     public function destroy(Category $category): RedirectResponse
     {
-        $category->delete();
-        $search = session('search_id', null);
+        try {
+            DB::beginTransaction();
 
-        if ($search == null) {
-            $count = Category::count();
-            $perPage = Config::get('app.per_page');
-            $totalPages = ceil($count / $perPage);
-            $lastPage = session('last_page', 1);
+            $category->delete();
+            $search = session('search_id', null);
 
-            if ($lastPage > $totalPages) {
-                $lastPage = $totalPages;
+            if ($search == null) {
+                $count = Category::count();
+                $perPage = Config::get('app.per_page');
+                $totalPages = ceil($count / $perPage);
+                $lastPage = session('last_page', 1);
+
+                if ($lastPage > $totalPages) {
+                    $lastPage = $totalPages;
+                }
+            } else {
+                $lastPage = 1;
             }
-        } else {
-            $lastPage = 1;
-        }
 
-        return redirect()->route('categories.index', ['page' => $lastPage])->with('success', 'Category deleted successfully.');
+            DB::commit();
+
+            return redirect()->route('categories.index', ['page' => $lastPage])->with('success', 'Category deleted successfully.');
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
     }
 
     public function search(Request $request): View|RedirectResponse
     {
-        $search = $request->search;
+        try {
+            DB::beginTransaction();
 
-        if (empty($search)) {
-            session()->forget('search_id');
-            session()->forget('last_page');
-            return redirect()->route('categories.index');
+            $search = $request->search;
+
+            if (empty($search)) {
+                session()->forget('search_id');
+                session()->forget('last_page');
+                    DB::commit();
+                return redirect()->route('categories.index');
+            }
+
+            session(['search_id' => $search]);
+
+            $categories = Category::where('id', '=', $search)->paginate();
+
+            DB::commit();
+
+            return view('categories.index', compact('categories', 'search'));
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
         }
-
-        session(['search_id' => $search]);
-
-        $categories = Category::where('id', '=', $search)->paginate();
-
-        return view('categories.index', compact('categories', 'search'));
     }
-
     public function showProducts(Request $request, $id): View
     {
-        $category = Category::with('products')->findOrFail($id);
+        try {
+            DB::beginTransaction();
 
-        if ($request->has('prevPage')) {
-            session(['categories_last_page' => $request->prevPage]);
+            $category = Category::with('products')->findOrFail($id);
+
+            if ($request->has('prevPage')) {
+                session(['categories_last_page' => $request->prevPage]);
+            }
+
+            $search = session('search_id', null);
+
+            if ($search !== null || $request->has('resetPage')) {
+                $request->request->set('page', 1);
+            } elseif (!$request->has('page') && session()->has('last_page')) {
+                $request->merge(['page' => session('last_page', 1)]);
+            }
+
+            $page = $request->input('page', 1);
+            session(['last_page' => $page]);
+
+            $perPage = Config::get('app.per_page');
+
+            $products = $category->products()->paginate($perPage);
+
+            DB::commit();
+
+            return view('categories.show_products', ['category' => $category, 'products' => $products]);
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
         }
-
-        $search = session('search_id', null);
-
-        if ($search !== null || $request->has('resetPage')) {
-            $request->request->set('page', 1);
-        } elseif (!$request->has('page') && session()->has('last_page')) {
-            $request->merge(['page' => session('last_page', 1)]);
-        }
-
-        $page = $request->input('page', 1);
-        session(['last_page' => $page]);
-
-        $perPage = Config::get('app.per_page');
-
-        $products = $category->products()->paginate($perPage);
-
-        return view('categories.show_products', ['category' => $category, 'products' => $products]);
     }
 
     public function detachProduct(Category $category, Product $product)
     {
-        $category->products()->detach($product->id);
+        try {
+            DB::beginTransaction();
 
-        $search = session('search_id', null);
+            $category->products()->detach($product->id);
 
-        if ($search == null) {
-            $count = $category->products()->count();
-            $perPage = Config::get('app.per_page');
-            $totalPages = ceil($count / $perPage);
-            $lastPage = session('last_page', 1);
+            $search = session('search_id', null);
 
-            if ($lastPage > $totalPages) {
-                $lastPage = $totalPages;
+            if ($search == null) {
+                $count = $category->products()->count();
+                $perPage = Config::get('app.per_page');
+                $totalPages = ceil($count / $perPage);
+                $lastPage = session('last_page', 1);
+
+                if ($lastPage > $totalPages) {
+                    $lastPage = $totalPages;
+                }
+            } else {
+                $lastPage = 1;
             }
-        } else {
-            $lastPage = 1;
-        }
 
-        return redirect()->route('categories.products', ['category' => $category->id, 'page' => $lastPage])
-            ->with('success', 'Product has been successfully detached from the category.');
+            DB::commit();
+
+            return redirect()->route('categories.products', ['category' => $category->id, 'page' => $lastPage])
+                ->with('success', 'Product has been successfully detached from the category.');
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
     }
 
     public function searchInCategory(Request $request, Category $category): View|RedirectResponse
     {
-        $search = $request->search;
+        try {
+            DB::beginTransaction();
 
-        if (empty($search)) {
-            session()->forget('search_id');
-            session()->forget('last_page');
-            return redirect()->route('categories.products', $category->id);
+            $search = $request->search;
+
+            if (empty($search)) {
+                session()->forget('search_id');
+                session()->forget('last_page');
+                return redirect()->route('categories.products', $category->id);
+            }
+
+            session(['search_id' => $search]);
+
+            $products = $category->products()
+                ->where('products.id', '=', $search)
+                ->paginate();
+
+            DB::commit();
+
+            return view('categories.show_products', [
+                'category' => $category,
+                'products' => $products,
+                'search' => $search
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
         }
-
-        session(['search_id' => $search]);
-
-        $products = $category->products()
-            ->where('products.id', '=', $search)
-            ->paginate();
-
-        return view('categories.show_products', [
-            'category' => $category,
-            'products' => $products,
-            'search' => $search
-        ]);
     }
 
     public function addProductForm(Category $category): View
@@ -224,15 +296,16 @@ class CategoriesController extends Controller
 
     public function addProduct(CategoryProductRequest $request, Category $category): RedirectResponse
     {
-
-        Log::info("Mipe");
-
-        $validated = $request->validated();
-        $product = Product::find($validated['id']);
-
         try {
             DB::beginTransaction();
+
+            Log::info("Mipe");
+
+            $validated = $request->validated();
+            $product = Product::find($validated['id']);
+
             $category->products()->attach($product->id);
+
             DB::commit();
 
             $count = $category->products()->count();
