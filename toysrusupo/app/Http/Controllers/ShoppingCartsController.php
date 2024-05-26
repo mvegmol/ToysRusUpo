@@ -228,7 +228,7 @@ class ShoppingCartsController extends Controller
     public function decreaseProduct(Request $request)
     {
         try {
-            // Iniciar la transacción
+
             DB::beginTransaction();
 
             $request->validate([
@@ -262,22 +262,22 @@ class ShoppingCartsController extends Controller
                 }
             }
 
-            // Commit la transacción
+
             DB::commit();
 
-            // Return success JSON response
+
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
-            // Rollback la transacción en caso de excepción
+
             DB::rollback();
-            // Return error JSON response
+
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
     public function updateQuantityProduct(Request $request)
     {
         try {
-            // Iniciar la transacción
+
             DB::beginTransaction();
 
             $request->validate([
@@ -315,20 +315,20 @@ class ShoppingCartsController extends Controller
                     }
                 }
             } else {
-                // Rollback la transacción
+
                 DB::rollback();
                 return response()->json(['error' => false, 'message' => 'No hay suficiente cantidad disponible'], 400);
             }
 
-            // Commit la transacción
+
             DB::commit();
 
-            // Return JSON response
+
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
-            // Rollback la transacción en caso de excepción
+
             DB::rollback();
-            // Return error JSON response
+
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
@@ -336,10 +336,10 @@ class ShoppingCartsController extends Controller
     public function deleteProductCart(Request $request)
     {
         try {
-            // Iniciar la transacción
+
             DB::beginTransaction();
 
-            // Validar la solicitud
+
             $request->validate([
                 'product_id' => 'required|integer|exists:products,id'
             ]);
@@ -382,7 +382,7 @@ class ShoppingCartsController extends Controller
             // Guardar los cambios en el carrito
             $carrito->save();
 
-            // Commit la transacción
+
             DB::commit();
 
             // Verificar si quedan productos en el carrito
@@ -394,16 +394,14 @@ class ShoppingCartsController extends Controller
             // Redirigir a la URL previa si aún hay productos en el carrito
             return redirect()->back()->with('success', 'Producto eliminado del carrito.');
         } catch (\Exception $e) {
-            // Rollback la transacción en caso de excepción
             DB::rollback();
-            // Manejar la excepción o re-lanzarla
             throw $e;
         }
     }
     public function checkout()
     {
         try {
-            // Iniciar la transacción
+
             DB::beginTransaction();
 
             // Obtain the authenticated user's ID
@@ -421,15 +419,13 @@ class ShoppingCartsController extends Controller
             // Get the products in the cart
             $productos = $carrito->products;
 
-            // Commit la transacción
+
             DB::commit();
 
             // Return the view with the products
             return view('carts.checkout', compact('productos', 'carrito'));
         } catch (\Exception $e) {
-            // Rollback la transacción en caso de excepción
             DB::rollback();
-            // Manejar la excepción o re-lanzarla
             throw $e;
         }
     }
