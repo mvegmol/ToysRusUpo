@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\InformativeEmail;
 class OrdersController extends Controller
 {
     /**
@@ -277,7 +279,9 @@ class OrdersController extends Controller
             }
 
             $carrito->delete();
+            Mail::to(Auth::user()->email)->send(new InformativeEmail($order,$productos,Auth::user()->email));
             DB::commit();
+
             return redirect()->route('welcome.index');
         } catch (\Exception $e) {
             DB::rollBack();
