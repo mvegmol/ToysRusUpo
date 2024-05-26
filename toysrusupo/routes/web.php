@@ -45,7 +45,17 @@ Route::get('/cart', [ShoppingCartsController::class, 'show_products'])->name('ca
 Route::post('/cart/increment', [ShoppingCartsController::class, 'incrementProduct'])->name('cart.increment');
 Route::post('/cart/decrement', [ShoppingCartsController::class, 'decreaseProduct'])->name('cart.decrement');
 Route::post('/cart/update', [ShoppingCartsController::class, 'updateQuantityProduct'])->name('cart.update');
-Route::post('/cart/delete', [ShoppingCartsController::class, 'deleteProductCart'])->name('cart.delete');
+
+Route::post('/cart/delete',[ShoppingCartsController::class, 'deleteProductCart'])->name('cart.delete');
+
+Route::get('/cart/checkout', [ShoppingCartsController::class, 'checkout'])->name('cart.checkout');
+
+Route::post('/comprar', [OrdersController::class, 'buy'])->name('order.buy');
+
+Route::get('/products_clients/show/{productId}',[ProductsController::class, 'show_client'])->name('products_clients.show');
+
+
+  Route::post('/cart/delete', [ShoppingCartsController::class, 'deleteProductCart'])->name('cart.delete');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/clients/profile', [UsersController::class, 'profile'])->name('clients.profile');
