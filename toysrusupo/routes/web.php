@@ -20,6 +20,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [ProductsController::class, 'home'])->name('welcome.index');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/products/toys', [ProductsController::class, 'toys'])->name('products.toys');
+    Route::get('/products/{category}/toys', [ProductsController::class, 'categoryToys'])->name('products.categoryToys');
+});
+
 Route::get('/home', function () {
     return view('auth.dashboard');
 })->middleware('auth', 'verified');
