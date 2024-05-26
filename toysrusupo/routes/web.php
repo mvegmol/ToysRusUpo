@@ -55,6 +55,7 @@ Route::post('/comprar', [OrdersController::class, 'buy'])->name('order.buy');
 Route::get('/products_clients/show/{productId}',[ProductsController::class, 'show_client'])->name('products_clients.show');
 
 
+
   Route::post('/cart/delete', [ShoppingCartsController::class, 'deleteProductCart'])->name('cart.delete');
 
 Route::middleware(['auth'])->group(function () {
@@ -64,3 +65,4 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::resource('/addresses', AddressesController::class);
 });
+Route::get('/likeProduct',[UsersController::class,"likeorUnlikeProduct"])->name('user.like');

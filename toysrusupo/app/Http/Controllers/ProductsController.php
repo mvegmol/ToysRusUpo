@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -43,7 +44,12 @@ class ProductsController extends Controller
             $product->category_names = $product->categories->pluck('name')->join(', ');
         }
 
-        return view('clients.home', compact('products', 'search'));
+        $favorites = [];
+        if (Auth::check()) {
+            $favorites = Auth::user()->favouriteProducts->pluck('id')->toArray();
+        }
+
+        return view('clients.home', compact('products', 'search','favorites'));
     }
 
 
