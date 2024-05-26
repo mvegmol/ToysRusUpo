@@ -20,8 +20,33 @@ class OrdersController extends Controller
         }
         $page = $request->input('page', 1);
         session(['last_page' => $page]);
+        // Get filter parameters
+        $orderType = $request->input('order_type', 'all');
+        $duration = $request->input('duration', 'this_week');
+        $query = Order::query();
 
-        $orders = Order::paginate(5);
+        if ($orderType !== 'all') {
+            $query->where('status', $orderType);
+        }
+        switch ($duration) {
+            case 'this_month':
+                $query->where('created_at', '>=', now()->startOfMonth());
+                break;
+            case 'last_3_months':
+                $query->where('created_at', '>=', now()->subMonths(3));
+                break;
+            case 'last_6_months':
+                $query->where('created_at', '>=', now()->subMonths(6));
+                break;
+            case 'this_year':
+                $query->where('created_at', '>=', now()->startOfYear());
+                break;
+            default:
+                // Default is this week
+                $query->where('created_at', '>=', now()->startOfWeek());
+                break;
+        }
+        $orders = $query->paginate(5);
         return view('orders.index', compact('orders'));
 
     }
