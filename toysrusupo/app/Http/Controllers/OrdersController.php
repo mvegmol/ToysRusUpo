@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
 use App\Models\Order;
 use App\Models\ShoppingCart;
 use App\Models\Product;
@@ -223,35 +224,41 @@ class OrdersController extends Controller
     {
         //
     }
-
-    public function buy()
+    public function buy(Request $request)
     {
-        try{
-            if(!Auth::check()){
+        try {
+            if (!Auth::check()) {
                 return redirect()->route('login');
             }
 
-            $cliente_id = Auth::user()->id;
+
             DB::beginTransaction();
+            $cliente_id = Auth::user()->id;
             // Obtain the user's shopping cart
             $carrito = ShoppingCart::where('user_id', $cliente_id)->first();
 
             $productos = $carrito->products;
 
+            $address_id = $request->input('selected_address_id');
+
+            $direcciones = collect(Auth::user()->address);
+
+
+            $address = $direcciones->firstWhere('id', $address_id);
+
             //Creamos un order
             $order = new Order();
 
-            $order ->user_id = $cliente_id;
-            if($carrito->total_price<50)
-            {
-                $order ->total_price = ($carrito->total_price)+5;
-            }else{
-                $order ->total_price = $carrito->total_price;
+            $order->user_id = $cliente_id;
+            if ($carrito->total_price < 50) {
+                $order->total_price = ($carrito->total_price) + 5;
+            } else {
+                $order->total_price = $carrito->total_price;
             }
 
-            $order->address = "Sin Dirección todavía";
+            $order->address = "Direction: {$address->direction}, City: {$address->city}, Province: {$address->province}, ZIP Code: {$address->zip_code}, Country: {$address->country}, Full Name: {$address->full_name}, Phone Number: {$address->phone_number}";
 
-            $order->status= 'pending';
+            $order->status = 'pending';
 
             $order->created_at = now();
 
@@ -260,13 +267,14 @@ class OrdersController extends Controller
 
             $productos = $carrito->products;
 
-            foreach($productos as $p){
+            foreach ($productos as $p) {
                 //dd($productos);
-                $order->products()->attach($p->id,
-                [
-                    'quantity' => $p->pivot->quantity,
-                    'price' => $p->pivot->total_price
-                ]
+                $order->products()->attach(
+                    $p->id,
+                    [
+                        'quantity' => $p->pivot->quantity,
+                        'price' => $p->pivot->total_price
+                    ]
                 );
                 $p->stock = $p->pivot->quantity;
                 $p->save();
@@ -275,11 +283,10 @@ class OrdersController extends Controller
             $carrito->delete();
             DB::commit();
             return redirect()->route('welcome.index');
-
-    }catch(\Exception $e){
-        DB::rollBack();
-        return redirect()->back()->with('error', 'An error occurred while processing your request.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'An error occurred while processing your request.');
+        }
     }
-
-    }
+    
 }

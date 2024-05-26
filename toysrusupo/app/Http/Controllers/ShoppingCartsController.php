@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
 use App\Models\Product;
 use App\Models\ShoppingCart;
 use App\Models\User;
@@ -34,7 +35,7 @@ class ShoppingCartsController extends Controller
             }
 
             // Obtener los productos en el carrito
-            $productos = $carrito->products;
+            $productos = $carrito->products()->paginate(3);
 
             // Verificar si el carrito tiene productos
             if ($productos->isEmpty()) {
@@ -392,7 +393,8 @@ class ShoppingCartsController extends Controller
             }
 
             // Redirigir a la URL previa si aún hay productos en el carrito
-            return redirect()->back()->with('success', 'Producto eliminado del carrito.');
+
+            return redirect()->route('carts.show_products')->with('error', 'Producto eliminado del carrito.');
         } catch (\Exception $e) {
             DB::rollback();
             throw $e;
@@ -408,7 +410,8 @@ class ShoppingCartsController extends Controller
             $cliente_id = Auth::user()->id;
 
             // Obtain the user's shopping cart
-            $carrito = ShoppingCart::where('user_id', $cliente_id)->first();
+
+            $carrito = Auth::user()->shoppingCart;
 
             // Check if the shopping cart exists
             if (!$carrito) {
@@ -419,11 +422,13 @@ class ShoppingCartsController extends Controller
             // Get the products in the cart
             $productos = $carrito->products;
 
+            //Get
+            $addresses = Auth::user()->address;
 
             DB::commit();
 
             // Return the view with the products
-            return view('carts.checkout', compact('productos', 'carrito'));
+            return view('carts.checkout', compact('productos', 'carrito','addresses'));
         } catch (\Exception $e) {
             DB::rollback();
             throw $e;
