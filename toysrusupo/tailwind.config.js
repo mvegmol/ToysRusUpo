@@ -18,7 +18,7 @@ export default {
                     DEFAULT: "#398564", // Verde agua como color primario
                 },
                 secondary: {
-                    DEFAULT: "#66b2b2", // Color secundario
+                    DEFAULT: "#B2DFDB", // Color secundario
                 },
                 tertiary: {
                     DEFAULT: "#317256", // Color terciario

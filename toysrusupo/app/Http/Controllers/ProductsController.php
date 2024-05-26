@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -20,59 +21,82 @@ class ProductsController extends Controller
 
     public function home(Request $request): View
     {
-        $search = session('search_id', null);
+        try {
+            DB::beginTransaction();
 
-        if ($search !== null) {
-            $request->request->set('page', 1);
-        } elseif (!$request->has('page') && session()->has('last_page')) {
-            $request->merge(['page' => session('last_page', 1)]);
+            $search = session('search_id', null);
+
+            if ($search !== null) {
+                $request->request->set('page', 1);
+            } elseif (!$request->has('page') && session()->has('last_page')) {
+                $request->merge(['page' => session('last_page', 1)]);
+            }
+
+            $page = $request->input('page', 1);
+            session(['last_page' => $page]);
+
+            $perPage = Config::get('app.per_page');
+
+            $products = Product::with('categories')
+                ->when($search, function ($query) use ($search) {
+                    return $query->where('id', '=', $search);
+                })
+                ->paginate($perPage);
+
+            foreach ($products as $product) {
+                $product->category_names = $product->categories->pluck('name')->join(', ');
+            }
+
+            $favorites = [];
+            if (Auth::check()) {
+                $favorites = Auth::user()->favouriteProducts->pluck('id')->toArray();
+            }
+
+            DB::commit();
+
+            return view('clients.home', compact('products', 'search', 'favorites'));
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
         }
-
-        $page = $request->input('page', 1);
-        session(['last_page' => $page]);
-
-        $perPage = Config::get('app.per_page');
-
-        $products = Product::with('categories')
-            ->when($search, function ($query) use ($search) {
-                return $query->where('id', '=', $search);
-            })
-            ->paginate($perPage);
-
-        foreach ($products as $product) {
-            $product->category_names = $product->categories->pluck('name')->join(', ');
-        }
-
-        return view('clients.home', compact('products', 'search'));
     }
 
 
     public function index(Request $request): View
     {
-        $search = session('search_id', null);
+        try {
+            DB::beginTransaction();
 
-        if ($search !== null) {
-            $request->request->set('page', 1);
-        } elseif (!$request->has('page') && session()->has('last_page')) {
-            $request->merge(['page' => session('last_page', 1)]);
+            $search = session('search_id', null);
+
+            if ($search !== null) {
+                $request->request->set('page', 1);
+            } elseif (!$request->has('page') && session()->has('last_page')) {
+                $request->merge(['page' => session('last_page', 1)]);
+            }
+
+            $page = $request->input('page', 1);
+            session(['last_page' => $page]);
+
+            $perPage = Config::get('app.per_page');
+
+            $products = Product::with('categories')
+                ->when($search, function ($query) use ($search) {
+                    return $query->where('id', '=', $search);
+                })
+                ->paginate($perPage);
+
+            foreach ($products as $product) {
+                $product->category_names = $product->categories->pluck('name')->join(', ');
+            }
+
+            DB::commit();
+
+            return view('products.index', compact('products', 'search'));
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
         }
-
-        $page = $request->input('page', 1);
-        session(['last_page' => $page]);
-
-        $perPage = Config::get('app.per_page');
-
-        $products = Product::with('categories')
-            ->when($search, function ($query) use ($search) {
-                return $query->where('id', '=', $search);
-            })
-            ->paginate($perPage);
-
-        foreach ($products as $product) {
-            $product->category_names = $product->categories->pluck('name')->join(', ');
-        }
-
-        return view('products.index', compact('products', 'search'));
     }
 
     /**
@@ -80,8 +104,18 @@ class ProductsController extends Controller
      */
     public function create(): View
     {
-        $categories = Category::all();
-        return view('products.create', compact('categories'));
+        try {
+            DB::beginTransaction();
+
+            $categories = Category::all();
+
+            DB::commit();
+
+            return view('products.create', compact('categories'));
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -89,16 +123,25 @@ class ProductsController extends Controller
      */
     public function store(ProductRequest $request): RedirectResponse
     {
-        $product = Product::create($request->only('name', 'description', 'price', 'stock', 'min_age'));
-        $product->categories()->sync($request->categories);
+        try {
+            DB::beginTransaction();
 
-        $count = Product::count();
-        $perPage = Config::get('app.per_page');
-        $lastPage = ceil($count / $perPage);
+            $product = Product::create($request->only('name', 'description', 'price', 'stock', 'min_age'));
+            $product->categories()->sync($request->categories);
 
-        session()->forget('search_id');
+            $count = Product::count();
+            $perPage = Config::get('app.per_page');
+            $lastPage = ceil($count / $perPage);
 
-        return redirect()->route('products.index', ['page' => $lastPage])->with('success', 'Product created successfully.');
+            session()->forget('search_id');
+
+            DB::commit();
+
+            return redirect()->route('products.index', ['page' => $lastPage])->with('success', 'Product created successfully.');
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -106,94 +149,138 @@ class ProductsController extends Controller
      */
     public function show($productId): View
     {
-        $product = Product::with('categories')->findOrFail($productId);
-        $product->category_names = $product->categories->pluck('name')->join(', ');
+        try {
+            DB::beginTransaction();
 
-        return view('products.show', compact('product'));
+            $product = Product::with('categories')->findOrFail($productId);
+            $product->category_names = $product->categories->pluck('name')->join(', ');
+
+            DB::commit();
+
+            return view('products.show', compact('product'));
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Product $product): View
     {
-        $categories = Category::all();
+        try {
+            DB::beginTransaction();
 
-        return view('products.edit', compact('product', 'categories'));
+            $categories = Category::all();
+
+            DB::commit();
+
+            return view('products.edit', compact('product', 'categories'));
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(ProductRequest $request, Product $product): RedirectResponse
     {
-        $product->update($request->only('name', 'description', 'price', 'stock', 'min_age'));
-        $product->categories()->sync($request->categories);
-        $search = session('search_id', null);
+        try {
+            DB::beginTransaction();
 
-        if ($search == null) {
-            $lastPage = session('last_page', 1);
-        } else {
-            $lastPage = 1;
+            $product->update($request->only('name', 'description', 'price', 'stock', 'min_age'));
+            $product->categories()->sync($request->categories);
+            $search = session('search_id', null);
+
+            if ($search == null) {
+                $lastPage = session('last_page', 1);
+            } else {
+                $lastPage = 1;
+            }
+
+            DB::commit();
+
+            return redirect()->route('products.index', ['page' => $lastPage])->with('success', 'Product updated successfully.');
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
         }
-
-        return redirect()->route('products.index', ['page' => $lastPage])->with('success', 'Product updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Product $product): RedirectResponse
     {
-        $product->categories()->detach();
-        $product->delete();
-        $search = session('search_id', null);
+        try {
+            DB::beginTransaction();
 
-        if ($search == null) {
-            $count = Product::count();
-            $perPage = Config::get('app.per_page');
-            $totalPages = ceil($count / $perPage);
-            $lastPage = session('last_page', 1);
+            $product->categories()->detach();
+            $product->delete();
+            $search = session('search_id', null);
 
-            if ($lastPage > $totalPages) {
-                $lastPage = $totalPages;
+            if ($search == null) {
+                $count = Product::count();
+                $perPage = Config::get('app.per_page');
+                $totalPages = ceil($count / $perPage);
+                $lastPage = session('last_page', 1);
+
+                if ($lastPage > $totalPages) {
+                    $lastPage = $totalPages;
+                }
+            } else {
+                $lastPage = 1;
             }
-        } else {
-            $lastPage = 1;
-        }
 
-        return redirect()->route('products.index', ['page' => $lastPage])->with('success', 'Product deleted successfully.');
+            DB::commit();
+
+            return redirect()->route('products.index', ['page' => $lastPage])->with('success', 'Product deleted successfully.');
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
     }
 
     public function search(Request $request): View|RedirectResponse
     {
-        $search = $request->search;
+        try {
+            DB::beginTransaction();
 
-        if (empty($search)) {
-            session()->forget('search_id');
-            session()->forget('last_page');
-            return redirect()->route('products.index');
+            $search = $request->search;
+
+            if (empty($search)) {
+                session()->forget('search_id');
+                session()->forget('last_page');
+                return redirect()->route('products.index');
+            }
+
+            session(['search_id' => $search]);
+
+            $products = Product::with('categories')
+                ->where('id', '=', $search)
+                ->paginate();
+
+            foreach ($products as $product) {
+                $product->category_names = $product->categories->pluck('name')->join(', ');
+            }
+
+            DB::commit();
+
+            return view('products.index', compact('products', 'search'));
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
         }
-
-        session(['search_id' => $search]);
-
-        $products = Product::with('categories')
-            ->where('id', '=', $search)
-            ->paginate();
-
-        foreach ($products as $product) {
-            $product->category_names = $product->categories->pluck('name')->join(', ');
-        }
-
-        return view('products.index', compact('products', 'search'));
     }
 
     public function show_client($productId): View
     {
-        $product = Product::with('categories')->findOrFail($productId);
-        $product->category_names = $product->categories->pluck('name')->join(', ');
+        try {
+            DB::beginTransaction();
 
-        return view('clients.productDetails', compact('product'));
+            $product = Product::with('categories')->findOrFail($productId);
+            $product->category_names = $product->categories->pluck('name')->join(', ');
+
+            DB::commit();
+
+            return view('clients.productDetails', compact('product'));
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
     }
-
 }

@@ -1,28 +1,48 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Http\Requests\AddressRequest;
 use App\Models\Address;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+
 class AddressesController extends Controller
 {
+    protected $countries;
+
+    public function __construct()
+    {
+        $this->countries = [
+            'Albania', 'Andorra', 'Armenia', 'Austria', 'Azerbaijan', 'Belarus', 'Belgium', 'Bosnia and Herzegovina', 'Bulgaria',
+            'Croatia', 'Cyprus', 'Czech Republic', 'Denmark', 'Estonia', 'Finland', 'France', 'Georgia', 'Germany', 'Greece',
+            'Hungary', 'Iceland', 'Ireland', 'Italy', 'Kazakhstan', 'Kosovo', 'Latvia', 'Liechtenstein', 'Lithuania', 'Luxembourg',
+            'Malta', 'Moldova', 'Monaco', 'Montenegro', 'Netherlands', 'North Macedonia', 'Norway', 'Poland', 'Portugal', 'Romania',
+            'Russia', 'San Marino', 'Serbia', 'Slovakia', 'Slovenia', 'Spain', 'Sweden', 'Switzerland', 'Turkey', 'Ukraine', 'United Kingdom', 'Vatican City'
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): View
+    public function index(Request $request)
     {
-        //
-        if(!$request->has('page') && session()->has('last_page')) {
-            $request->merge(['page' => session('last_page', 1)]);
-        }
-        $page = $request->input('page', 1);
-        session(['last_page' => $page]);
-        $addresses = Address::paginate(5);
-        return view('addresses.index', compact('addresses'));
+        try {
+            DB::beginTransaction();
 
+            $addresses = Auth::user()->address;
+
+            DB::commit();
+
+            return view('addresses.index', compact('addresses'));
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Failed to fetch addresses.');
+        }
     }
 
     /**
@@ -30,8 +50,7 @@ class AddressesController extends Controller
      */
     public function create(): View
     {
-        //
-        return view('addresses.create');
+        return view('addresses.create', ['countries' => $this->countries]);
     }
 
 
@@ -40,16 +59,21 @@ class AddressesController extends Controller
      */
     public function store(AddressRequest $request): RedirectResponse
     {
+        try {
+            DB::beginTransaction();
 
-        $address = $request->validated();
-        Address::create($address);
-        $count = Address::count();
-        $perPage = Config::get('app.per_page');
-        $lastPage = ceil($count / $perPage);
+            $validated = $request->validated();
+            $validated['user_id'] = Auth::id();
+            Address::create($validated);
 
-        return redirect()->route('addresses.index', ['page' => $lastPage])->with('success', 'Address created successfully.');
+            DB::commit();
+
+            return redirect()->route('addresses.index')->with('success', 'Address created successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Failed to create address.');
+        }
     }
-
     /**
      * Display the specified resource.
      */
@@ -63,20 +87,42 @@ class AddressesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Address $address): View
-    {
-        return view('addresses.edit', compact('address'));
+    public function edit(Address $address): View|RedirectResponse
+{
+    try {
+        DB::beginTransaction();
+
+        $view = view('addresses.edit', [
+            'address' => $address,
+            'countries' => $this->countries
+        ]);
+
+        DB::commit();
+
+        return $view;
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return view('error')->with('message', 'Failed to load address for editing.');
     }
+}
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(AddressRequest $request,Address $address): RedirectResponse
+    public function update(AddressRequest $request, Address $address): RedirectResponse
     {
-        $lastPage = session('last_page', 1);
-        $address->update($request->validated());
+        try {
+            DB::beginTransaction();
 
-        return redirect()->route('addresses.index', ['page' => $lastPage])->with('success', 'Address updated successfully.');
+            $address->update($request->validated());
+
+            DB::commit();
+
+            return redirect()->route('addresses.index')->with('success', 'Address updated successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Failed to update address.');
+        }
     }
 
     /**
@@ -84,14 +130,18 @@ class AddressesController extends Controller
      */
     public function destroy(Address $address): RedirectResponse
     {
-        $address->delete();
-        $count = Address::count();
-        $perPage = Config::get('app.per_page');
-        $totalPages = ceil($count / $perPage);
-        $lastPage = ceil($count / $perPage);
-        if ($lastPage > $totalPages) {
-            $lastPage = $totalPages;
+        try {
+            DB::beginTransaction();
+
+            $address->delete();
+
+            DB::commit();
+
+            return redirect()->route('addresses.index')->with('success', 'Address deleted successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return redirect()->route('addresses.index')->with('error', 'Failed to delete address.');
         }
-        return redirect()->route('addresses.index', ['page' => $lastPage])->with('success', 'Address deleted successfully.');
     }
 }
