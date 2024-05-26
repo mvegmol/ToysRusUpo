@@ -13,21 +13,40 @@ class OrdersController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request):View
+    public function index(Request $request): View
     {
-        if(!$request->has('page') && session()->has('last_page')){
+        // Check if the user is authenticated
+        if (Auth::check()) {
+            // Get the client ID
+            $cliente_id = Auth::user()->id;
+
+            // Check if the user is an admin
+            if (Auth::user()->rol === 'admin') {
+                $query = Order::query();
+            } else {
+                // If not an admin, retrieve only user's orders
+                $query = Order::where('user_id', $cliente_id);
+            }
+        } else {
+            // If not authenticated, redirect to the previous page
+            return redirect()->back();
+        }
+
+        if (!$request->has('page') && session()->has('last_page')) {
             $request->merge(['page' => session('last_page', 1)]);
         }
+
         $page = $request->input('page', 1);
         session(['last_page' => $page]);
+
         // Get filter parameters
         $orderType = $request->input('order_type', 'all');
         $duration = $request->input('duration', 'this_week');
-        $query = Order::query();
 
         if ($orderType !== 'all') {
             $query->where('status', $orderType);
         }
+
         switch ($duration) {
             case 'this_month':
                 $query->where('created_at', '>=', now()->startOfMonth());
@@ -46,9 +65,9 @@ class OrdersController extends Controller
                 $query->where('created_at', '>=', now()->startOfWeek());
                 break;
         }
+
         $orders = $query->paginate(5);
         return view('orders.index', compact('orders'));
-
     }
     /**
      * Display a paginated listing of orders for a specific user.
