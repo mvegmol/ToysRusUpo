@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
 use App\Models\Order;
 use App\Models\ShoppingCart;
 use Illuminate\Contracts\View\View;
@@ -109,8 +110,18 @@ class OrdersController extends Controller
         //
     }
 
-    public function buy()
+    public function buy(Request $request)
     {
+
+        $address_id = $request->input('selected_address_id');
+
+        $direcciones = collect(Auth::user()->address);
+
+
+        $address = $direcciones->firstWhere('id', $address_id);
+
+
+
         $cliente_id = Auth::user()->id;
 
         // Obtain the user's shopping cart
@@ -129,7 +140,8 @@ class OrdersController extends Controller
             $order ->total_price = $carrito->total_price;
         }
 
-        $order->address = "Sin Dirección todavía";
+
+        $order->address = "Direction: {$address->direction}, City: {$address->city}, Province: {$address->province}, ZIP Code: {$address->zip_code}, Country: {$address->country}, Full Name: {$address->full_name}, Phone Number: {$address->phone_number}";
 
         $order->status= 'pending';
 

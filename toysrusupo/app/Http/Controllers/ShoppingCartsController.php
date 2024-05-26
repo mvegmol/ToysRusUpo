@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
 use App\Models\Product;
 use App\Models\ShoppingCart;
 use App\Models\User;
@@ -409,7 +410,8 @@ class ShoppingCartsController extends Controller
             $cliente_id = Auth::user()->id;
 
             // Obtain the user's shopping cart
-            $carrito = ShoppingCart::where('user_id', $cliente_id)->first();
+
+            $carrito = Auth::user()->shoppingCart;
 
             // Check if the shopping cart exists
             if (!$carrito) {
@@ -420,11 +422,13 @@ class ShoppingCartsController extends Controller
             // Get the products in the cart
             $productos = $carrito->products;
 
+            //Get
+            $addresses = Auth::user()->address;
 
             DB::commit();
 
             // Return the view with the products
-            return view('carts.checkout', compact('productos', 'carrito'));
+            return view('carts.checkout', compact('productos', 'carrito','addresses'));
         } catch (\Exception $e) {
             DB::rollback();
             throw $e;
