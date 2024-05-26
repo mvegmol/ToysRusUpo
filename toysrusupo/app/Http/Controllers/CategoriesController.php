@@ -19,7 +19,11 @@ class CategoriesController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request): View
-    {
+{
+    try {
+        // Iniciar la transacción
+        DB::beginTransaction();
+
         if ($request->clear_search) {
             session()->forget('search_id');
             session()->forget('last_page');
@@ -43,8 +47,18 @@ class CategoriesController extends Controller
             return $query->where('id', '=', $search);
         })->paginate($perPage);
 
+        // Commit la transacción
+        DB::commit();
+
         return view('categories.index', compact('categories', 'search'));
+
+    } catch (\Exception $e) {
+        // Rollback la transacción en caso de excepción
+        DB::rollback();
+        // Manejar la excepción o re-lanzarla
+        throw $e;
     }
+}
 
     /**
      * Show the form for creating a new resource.
@@ -58,7 +72,11 @@ class CategoriesController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(CategoryRequest $request): RedirectResponse
-    {
+{
+    try {
+        // Iniciar la transacción
+        DB::beginTransaction();
+
         $category = $request->validated();
         Category::create($category);
 
@@ -68,8 +86,18 @@ class CategoriesController extends Controller
 
         session()->forget('search_id');
 
+        // Commit la transacción
+        DB::commit();
+
         return redirect()->route('categories.index', ['page' => $lastPage])->with('success', 'Category created successfully.');
+
+    } catch (\Exception $e) {
+        // Rollback la transacción en caso de excepción
+        DB::rollback();
+        // Manejar la excepción o re-lanzarla
+        throw $e;
     }
+}
 
     /**
      * Display the specified resource.
@@ -91,7 +119,11 @@ class CategoriesController extends Controller
      * Update the specified resource in storage.
      */
     public function update(CategoryRequest $request, Category $category): RedirectResponse
-    {
+{
+    try {
+        // Iniciar la transacción
+        DB::beginTransaction();
+
         $category->update($request->validated());
         $search = session('search_id', null);
 
@@ -101,40 +133,70 @@ class CategoriesController extends Controller
             $lastPage = 1;
         }
 
+        // Commit la transacción
+        DB::commit();
+
         return redirect()->route('categories.index', ['page' => $lastPage])->with('success', 'Category updated successfully.');
+
+    } catch (\Exception $e) {
+        // Rollback la transacción en caso de excepción
+        DB::rollback();
+        // Manejar la excepción o re-lanzarla
+        throw $e;
     }
+}
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Category $category): RedirectResponse
     {
-        $category->delete();
-        $search = session('search_id', null);
+        try {
+            // Iniciar la transacción
+            DB::beginTransaction();
 
-        if ($search == null) {
-            $count = Category::count();
-            $perPage = Config::get('app.per_page');
-            $totalPages = ceil($count / $perPage);
-            $lastPage = session('last_page', 1);
+            $category->delete();
+            $search = session('search_id', null);
 
-            if ($lastPage > $totalPages) {
-                $lastPage = $totalPages;
+            if ($search == null) {
+                $count = Category::count();
+                $perPage = Config::get('app.per_page');
+                $totalPages = ceil($count / $perPage);
+                $lastPage = session('last_page', 1);
+
+                if ($lastPage > $totalPages) {
+                    $lastPage = $totalPages;
+                }
+            } else {
+                $lastPage = 1;
             }
-        } else {
-            $lastPage = 1;
-        }
 
-        return redirect()->route('categories.index', ['page' => $lastPage])->with('success', 'Category deleted successfully.');
+            // Commit la transacción
+            DB::commit();
+
+            return redirect()->route('categories.index', ['page' => $lastPage])->with('success', 'Category deleted successfully.');
+
+        } catch (\Exception $e) {
+            // Rollback la transacción en caso de excepción
+            DB::rollback();
+            // Manejar la excepción o re-lanzarla
+            throw $e;
+        }
     }
 
     public function search(Request $request): View|RedirectResponse
-    {
+{
+    try {
+        // Iniciar la transacción
+        DB::beginTransaction();
+
         $search = $request->search;
 
         if (empty($search)) {
             session()->forget('search_id');
             session()->forget('last_page');
+            // Commit la transacción
+            DB::commit();
             return redirect()->route('categories.index');
         }
 
@@ -142,11 +204,24 @@ class CategoriesController extends Controller
 
         $categories = Category::where('id', '=', $search)->paginate();
 
-        return view('categories.index', compact('categories', 'search'));
-    }
+        // Commit la transacción
+        DB::commit();
 
-    public function showProducts(Request $request, $id): View
-    {
+        return view('categories.index', compact('categories', 'search'));
+
+    } catch (\Exception $e) {
+        // Rollback la transacción en caso de excepción
+        DB::rollback();
+        // Manejar la excepción o re-lanzarla
+        throw $e;
+    }
+}
+public function showProducts(Request $request, $id): View
+{
+    try {
+        // Iniciar la transacción
+        DB::beginTransaction();
+
         $category = Category::with('products')->findOrFail($id);
 
         if ($request->has('prevPage')) {
@@ -168,11 +243,25 @@ class CategoriesController extends Controller
 
         $products = $category->products()->paginate($perPage);
 
-        return view('categories.show_products', ['category' => $category, 'products' => $products]);
-    }
+        // Commit la transacción
+        DB::commit();
 
-    public function detachProduct(Category $category, Product $product)
-    {
+        return view('categories.show_products', ['category' => $category, 'products' => $products]);
+
+    } catch (\Exception $e) {
+        // Rollback la transacción en caso de excepción
+        DB::rollback();
+        // Manejar la excepción o re-lanzarla
+        throw $e;
+    }
+}
+
+public function detachProduct(Category $category, Product $product)
+{
+    try {
+        // Iniciar la transacción
+        DB::beginTransaction();
+
         $category->products()->detach($product->id);
 
         $search = session('search_id', null);
@@ -190,12 +279,26 @@ class CategoriesController extends Controller
             $lastPage = 1;
         }
 
+        // Commit la transacción
+        DB::commit();
+
         return redirect()->route('categories.products', ['category' => $category->id, 'page' => $lastPage])
             ->with('success', 'Product has been successfully detached from the category.');
-    }
 
-    public function searchInCategory(Request $request, Category $category): View|RedirectResponse
-    {
+    } catch (\Exception $e) {
+        // Rollback la transacción en caso de excepción
+        DB::rollback();
+        // Manejar la excepción o re-lanzarla
+        throw $e;
+    }
+}
+
+public function searchInCategory(Request $request, Category $category): View|RedirectResponse
+{
+    try {
+        // Iniciar la transacción
+        DB::beginTransaction();
+
         $search = $request->search;
 
         if (empty($search)) {
@@ -210,12 +313,21 @@ class CategoriesController extends Controller
             ->where('products.id', '=', $search)
             ->paginate();
 
+        // Commit la transacción
+        DB::commit();
+
         return view('categories.show_products', [
             'category' => $category,
             'products' => $products,
             'search' => $search
         ]);
+    } catch (\Exception $e) {
+        // Rollback la transacción en caso de excepción
+        DB::rollback();
+        // Manejar la excepción o re-lanzarla
+        throw $e;
     }
+}
 
     public function addProductForm(Category $category): View
     {
@@ -223,28 +335,33 @@ class CategoriesController extends Controller
     }
 
     public function addProduct(CategoryProductRequest $request, Category $category): RedirectResponse
-    {
+{
+    try {
+        // Iniciar la transacción
+        DB::beginTransaction();
 
         Log::info("Mipe");
 
         $validated = $request->validated();
         $product = Product::find($validated['id']);
 
-        try {
-            DB::beginTransaction();
-            $category->products()->attach($product->id);
-            DB::commit();
+        $category->products()->attach($product->id);
 
-            $count = $category->products()->count();
-            $perPage = Config::get('app.per_page');
-            $lastPage = ceil($count / $perPage);
+        // Commit la transacción
+        DB::commit();
 
-            session()->forget('search_id');
+        $count = $category->products()->count();
+        $perPage = Config::get('app.per_page');
+        $lastPage = ceil($count / $perPage);
 
-            return redirect()->route('categories.products', ['category' => $category->id, 'page' => $lastPage])->with('success', 'Product added successfully.');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->with('error', 'Failed to add product.');
-        }
+        session()->forget('search_id');
+
+        return redirect()->route('categories.products', ['category' => $category->id, 'page' => $lastPage])->with('success', 'Product added successfully.');
+    } catch (\Exception $e) {
+        // Rollback la transacción en caso de excepción
+        DB::rollBack();
+        // Manejar la excepción o re-lanzarla
+        return back()->with('error', 'Failed to add product.');
     }
+}
 }
