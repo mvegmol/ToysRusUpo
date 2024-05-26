@@ -7,7 +7,8 @@
             </h1>
             <p class="text-base font-medium leading-6 text-gray-600">{{ $order->created_at }}</p>
         </div>
-        <div class="mt-10 flex flex-col xl:flex-row justify-center items-stretch w-full xl:space-x-8 space-y-4 md:space-y-6 xl:space-y-0 rounded-md">
+        <div
+            class="mt-10 flex flex-col xl:flex-row justify-center items-stretch w-full xl:space-x-8 space-y-4 md:space-y-6 xl:space-y-0 rounded-md">
             <div class="flex flex-col justify-start items-start w-full space-y-4 md:space-y-6 xl:space-y-8">
                 <div class="flex flex-col justify-start items-start bg-gray-50 px-4 py-4 md:py-6 md:p-6 xl:p-8 w-full">
                     <p class="text-lg md:text-xl font-semibold leading-6 xl:leading-5 text-gray-800">Customer’s Cart</p>
@@ -28,7 +29,8 @@
                                             <h3 class="text-xl xl:text-2xl font-semibold leading-6 text-gray-800">
                                                 {{ $product->name }}</h3>
 
-                                            <p class="text-base flex-col xl:text-lg leading-5">Price: ${{ $product->price }}</p>
+                                            <p class="text-base flex-col xl:text-lg leading-5">Price: ${{ $product->price }}
+                                            </p>
                                             <p class="text-base flex-col xl:text-lg leading-6">Quantity:
                                                 {{ $product->pivot->quantity }}</p>
 
@@ -115,16 +117,10 @@
                                 class="flex justify-center md:justify-start items-center md:items-start flex-col space-y-4 xl:mt-8">
                                 <p class="text-base font-semibold leading-4 text-center md:text-left text-gray-800">
                                     Shipping Address</p>
-                                <p class="w-48 lg:w-full text-center md:text-left text-sm leading-5 text-gray-600">180
-                                    North King Street, Northhampton MA 1060</p>
+                                <p class="w-48 lg:w-full text-center md:text-left text-sm leading-5 text-gray-600">
+                                    {{ $order->address }}</p>
                             </div>
-                            <div
-                                class="flex justify-center md:justify-start items-center md:items-start flex-col space-y-4">
-                                <p class="text-base font-semibold leading-4 text-center md:text-left text-gray-800">Billing
-                                    Address</p>
-                                <p class="w-48 lg:w-full text-center md:text-left text-sm leading-5 text-gray-600">180
-                                    North King Street, Northhampton MA 1060</p>
-                            </div>
+
                         </div>
 
                     </div>
