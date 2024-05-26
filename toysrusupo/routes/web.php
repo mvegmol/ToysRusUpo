@@ -1,9 +1,11 @@
 <?php
+
 use App\Http\Controllers\AddressesController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ShoppingCartsController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,10 +19,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [ProductsController::class,'home'])->name('welcome.index');
+Route::get('/', [ProductsController::class, 'home'])->name('welcome.index');
 Route::get('/home', function () {
     return view('auth.dashboard');
-})->middleware('auth','verified');
+})->middleware('auth', 'verified');
 
 Route::resource('/products', ProductsController::class);
 Route::get('/search/products', [ProductsController::class, 'search'])->name('search.products');
@@ -34,7 +36,6 @@ Route::get('/categories/{category}/add-product-form', [CategoriesController::cla
 Route::post('/categories/{category}/add-product', [CategoriesController::class, 'addProduct'])->name('categories.add-product');
 
 Route::resource('/orders', OrdersController::class);
-Route::resource('/addresses', AddressesController::class);
 Route::get('users/{user_id}/orders', [OrdersController::class, 'ordersByUser'])->name('orders.by_user');
 Route::post('orders/update-status', [OrdersController::class, 'updateStatus'])->name('orders.update_status');
 
@@ -44,6 +45,7 @@ Route::get('/cart', [ShoppingCartsController::class, 'show_products'])->name('ca
 Route::post('/cart/increment', [ShoppingCartsController::class, 'incrementProduct'])->name('cart.increment');
 Route::post('/cart/decrement', [ShoppingCartsController::class, 'decreaseProduct'])->name('cart.decrement');
 Route::post('/cart/update', [ShoppingCartsController::class, 'updateQuantityProduct'])->name('cart.update');
+
 Route::post('/cart/delete',[ShoppingCartsController::class, 'deleteProductCart'])->name('cart.delete');
 
 Route::get('/cart/checkout', [ShoppingCartsController::class, 'checkout'])->name('cart.checkout');
@@ -52,3 +54,13 @@ Route::post('/comprar', [OrdersController::class, 'buy'])->name('order.buy');
 
 Route::get('/products_clients/show/{productId}',[ProductsController::class, 'show_client'])->name('products_clients.show');
 
+
+  Route::post('/cart/delete', [ShoppingCartsController::class, 'deleteProductCart'])->name('cart.delete');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/clients/profile', [UsersController::class, 'profile'])->name('clients.profile');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('/addresses', AddressesController::class);
+});

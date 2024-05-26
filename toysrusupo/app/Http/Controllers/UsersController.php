@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class UsersController extends Controller
 {
@@ -61,4 +63,10 @@ class UsersController extends Controller
     {
         //
     }
+
+    public function profile():View
+    {
+        $client_name = Auth::user()->name;
+        return view('clients.profile', compact('client_name'));
+    }    
 }

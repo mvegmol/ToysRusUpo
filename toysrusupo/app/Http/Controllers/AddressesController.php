@@ -1,37 +1,45 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Http\Requests\AddressRequest;
 use App\Models\Address;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\View\View;
+
 class AddressesController extends Controller
 {
+    protected $countries;
+
+    public function __construct()
+    {
+        $this->countries = [
+            'Albania', 'Andorra', 'Armenia', 'Austria', 'Azerbaijan', 'Belarus', 'Belgium', 'Bosnia and Herzegovina', 'Bulgaria',
+            'Croatia', 'Cyprus', 'Czech Republic', 'Denmark', 'Estonia', 'Finland', 'France', 'Georgia', 'Germany', 'Greece',
+            'Hungary', 'Iceland', 'Ireland', 'Italy', 'Kazakhstan', 'Kosovo', 'Latvia', 'Liechtenstein', 'Lithuania', 'Luxembourg',
+            'Malta', 'Moldova', 'Monaco', 'Montenegro', 'Netherlands', 'North Macedonia', 'Norway', 'Poland', 'Portugal', 'Romania',
+            'Russia', 'San Marino', 'Serbia', 'Slovakia', 'Slovenia', 'Spain', 'Sweden', 'Switzerland', 'Turkey', 'Ukraine', 'United Kingdom', 'Vatican City'
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request): View
     {
-        //
-        if(!$request->has('page') && session()->has('last_page')) {
-            $request->merge(['page' => session('last_page', 1)]);
-        }
-        $page = $request->input('page', 1);
-        session(['last_page' => $page]);
-        $addresses = Address::paginate(5);
+        $addresses = Auth::user()->address;        
         return view('addresses.index', compact('addresses'));
-
     }
 
     /**
      * Show the form for creating a new resource.
      */
     public function create(): View
-    {
-        //
-        return view('addresses.create');
+    {        
+        return view('addresses.create', ['countries' => $this->countries]);
     }
 
 
@@ -40,14 +48,11 @@ class AddressesController extends Controller
      */
     public function store(AddressRequest $request): RedirectResponse
     {
+        $validated = $request->validated();
+        $validated['user_id'] = Auth::id();
+        Address::create($validated);
 
-        $address = $request->validated();
-        Address::create($address);
-        $count = Address::count();
-        $perPage = Config::get('app.per_page');
-        $lastPage = ceil($count / $perPage);
-
-        return redirect()->route('addresses.index', ['page' => $lastPage])->with('success', 'Address created successfully.');
+        return redirect()->route('addresses.index')->with('success', 'Address created successfully.');
     }
 
     /**
@@ -65,18 +70,20 @@ class AddressesController extends Controller
      */
     public function edit(Address $address): View
     {
-        return view('addresses.edit', compact('address'));
+        return view('addresses.edit', [
+            'address' => $address,
+            'countries' => $this->countries
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(AddressRequest $request,Address $address): RedirectResponse
-    {
-        $lastPage = session('last_page', 1);
+    public function update(AddressRequest $request, Address $address): RedirectResponse
+    {        
         $address->update($request->validated());
 
-        return redirect()->route('addresses.index', ['page' => $lastPage])->with('success', 'Address updated successfully.');
+        return redirect()->route('addresses.index')->with('success', 'Address updated successfully.');
     }
 
     /**
@@ -85,13 +92,7 @@ class AddressesController extends Controller
     public function destroy(Address $address): RedirectResponse
     {
         $address->delete();
-        $count = Address::count();
-        $perPage = Config::get('app.per_page');
-        $totalPages = ceil($count / $perPage);
-        $lastPage = ceil($count / $perPage);
-        if ($lastPage > $totalPages) {
-            $lastPage = $totalPages;
-        }
-        return redirect()->route('addresses.index', ['page' => $lastPage])->with('success', 'Address deleted successfully.');
+        
+        return redirect()->route('addresses.index')->with('success', 'Address deleted successfully.');
     }
 }

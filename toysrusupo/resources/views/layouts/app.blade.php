@@ -13,7 +13,7 @@
 
 </head>
 
-<body>
+<body class="min-h-screen flex flex-col">
 
     <header class='border-b bg-white font-sans min-h-[60px] px-10 py-3 relative tracking-wide relative z-50'>
         <div class='flex flex-wrap items-center max-lg:gap-y-6 max-sm:gap-x-4'>
@@ -171,7 +171,7 @@
                                 <ul id="logoutDropdownMenu"
                                     class="absolute hidden bg-white shadow-lg rounded-lg mt-2 w-44">
                                     <li class="border-b border-gray-200">
-                                        <a href="{{ route('categories.index') }}"
+                                        <a href="{{ route('clients.profile') }}"
                                             class="hover:bg-gray-100 text-gray-600 font-bold text-lg block px-4 py-2">
                                             Profile
                                         </a>
@@ -224,10 +224,10 @@
 
 
 
-    <main>
+    <main class="flex-grow">
         @yield('content')
     </main>
-    <footer class="w-full py-14 ">
+    <footer class="w-full pb-14">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="max-w-3xl mx-auto">
 

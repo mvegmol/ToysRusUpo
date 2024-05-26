@@ -1,4 +1,4 @@
-<div class="bg-white shadow-md rounded-lg overflow-hidden border border-secondary">
+<div class="bg-white shadow-xl shadow-secondary/40 rounded-lg overflow-hidden border border-secondary">
     <div class="bg-secondary px-6 py-4 border-b">
         {{ $header }}
     </div>
