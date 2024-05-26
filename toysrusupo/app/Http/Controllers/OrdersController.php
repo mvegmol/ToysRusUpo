@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\ShoppingCart;
+use App\Models\Product;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 
 class OrdersController extends Controller
 {
@@ -122,11 +124,36 @@ class OrdersController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $id)
+    public function show(Request $request, int $id)
     {
         $order = Order::findOrFail($id);
-        return view('orders.show', compact('order'));
+        $user = $order->user;
+        $previousOrdersCount = $user->orders->count();
 
+        // Obtener el número de página actual
+        $page = $request->input('page', session('last_page', 1));
+
+        // Guardar el número de página actual en la sesión
+        session(['last_page' => $page]);
+
+        // Obtener productos paginados con sus categorías
+        $products = $order->products()->with('categories')->paginate(3);
+        //dd($products);
+        // Añadir nombres de categorías a los productos
+        $products->each(function ($product) {
+            $product->category_names = $product->categories->pluck('name')->implode(', ');
+        });
+        if(($order->total_price-5)<50)
+        {
+            $shipping = "$5";
+            $subtotal = $order->total_price-5;
+
+        }else{
+            $shipping = "Free Shipping";
+            $subtotal = $order->total_price;
+        }
+
+        return view('orders.show', compact('order', 'user', 'previousOrdersCount', 'products','shipping','subtotal'));
     }
 
     /**
