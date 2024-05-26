@@ -6,7 +6,9 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\URL;
+
+use Illuminate\View\View;
+ use Illuminate\Support\Facades\URL;
 
 class UsersController extends Controller
 {
@@ -66,7 +68,13 @@ class UsersController extends Controller
         //
     }
 
-    public function likeorUnlikeProduct(Request $request)
+
+    public function profile():View
+    {
+        $client_name = Auth::user()->name;
+        return view('clients.profile', compact('client_name'));
+    }    
+  public function likeorUnlikeProduct(Request $request)
     {
         $cliente_id = Auth::user()->id;
 
@@ -90,4 +98,5 @@ class UsersController extends Controller
         return redirect()->to($previousUrl)->with('success', 'Like product correct');
 
     }
+
 }
