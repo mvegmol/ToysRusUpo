@@ -7,42 +7,43 @@
             </h1>
             <p class="text-base font-medium leading-6 text-gray-600">{{ $order->created_at }}</p>
         </div>
-        <div
-            class="mt-10 flex flex-col xl:flex-row jusitfy-center items-stretch w-full xl:space-x-8 space-y-4 md:space-y-6 xl:space-y-0 rounded-md">
+        <div class="mt-10 flex flex-col xl:flex-row justify-center items-stretch w-full xl:space-x-8 space-y-4 md:space-y-6 xl:space-y-0 rounded-md">
             <div class="flex flex-col justify-start items-start w-full space-y-4 md:space-y-6 xl:space-y-8">
                 <div class="flex flex-col justify-start items-start bg-gray-50 px-4 py-4 md:py-6 md:p-6 xl:p-8 w-full">
                     <p class="text-lg md:text-xl font-semibold leading-6 xl:leading-5 text-gray-800">Customer’s Cart</p>
-                    @foreach ($products as $product)
-                        <div
-                            class="mt-4 md:mt-6 flex flex-col md:flex-row justify-start items-start md:items-center md:space-x-6 xl:space-x-8 w-full">
-                            <div class="pb-4 md:pb-8 w-full md:w-40">
-                                <img class="w-full hidden md:block" src="{{ $product->image }}"
-                                    alt="{{ $product->name }}" />
-                                <img class="w-full md:hidden" src="https://i.ibb.co/L039qbN/Rectangle-10.png"
-                                    alt="{{ $product->name }}" />
-                            </div>
+                    <div class="overflow-y-auto max-h-96 pr-4">
+                        @foreach ($products as $product)
                             <div
-                                class="border-b rounded-md border-gray-200 md:flex-row flex-col flex justify-between items-start w-full pb-8 space-y-4 md:space-y-0">
-                                <div class="w-full flex flex-col justify-start items-start space-y-8">
-                                    <div class="flex justify-between w-full">
-                                        <h3 class="text-xl xl:text-2xl font-semibold leading-6 text-gray-800">
-                                            {{ $product->name }}</h3>
+                                class="mt-4 md:mt-6 flex flex-col md:flex-row justify-start items-start md:items-center md:space-x-6 xl:space-x-8 w-full">
+                                <div class="pb-4 md:pb-8 w-full md:w-40">
+                                    <img class="w-full hidden md:block" src="{{ $product->image_url }}"
+                                        alt="{{ $product->name }}" />
+                                    <img class="w-full md:hidden" src="https://i.ibb.co/L039qbN/Rectangle-10.png"
+                                        alt="{{ $product->name }}" />
+                                </div>
+                                <div
+                                    class="border-b rounded-md border-gray-200 md:flex-row flex-col flex justify-between items-start w-full pb-8 space-y-4 md:space-y-0">
+                                    <div class="w-full flex flex-col justify-start items-start space-y-8">
+                                        <div class="flex justify-between w-full">
+                                            <h3 class="text-xl xl:text-2xl font-semibold leading-6 text-gray-800">
+                                                {{ $product->name }}</h3>
 
-                                        <p class="text-base flex-col xl:text-lg leading-5">Price: ${{ $product->price }}</p>
-                                        <p class="text-base flex-col xl:text-lg leading-6">Quantity:
-                                            {{ $product->pivot->quantity }}</p>
+                                            <p class="text-base flex-col xl:text-lg leading-5">Price: ${{ $product->price }}</p>
+                                            <p class="text-base flex-col xl:text-lg leading-6">Quantity:
+                                                {{ $product->pivot->quantity }}</p>
 
-                                    </div>
-                                    <!-- Aquí agregamos la categoría justo debajo del nombre -->
-                                    <div class="text-base xl:text-lg leading-6">
-                                        Category: {{ $product->category_names }}
+                                        </div>
+                                        <!-- Aquí agregamos la categoría justo debajo del nombre -->
+                                        <div class="text-base xl:text-lg leading-6">
+                                            Category: {{ $product->category_names }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
                     <hr>
-                    {{ $products->links() }}
+
                 </div>
 
                 <div

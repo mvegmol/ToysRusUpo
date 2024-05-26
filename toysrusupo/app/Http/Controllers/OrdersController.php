@@ -16,7 +16,7 @@ class OrdersController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): View
+    public function index(Request $request)
     {
         if (Auth::check()) {
             $cliente_id = Auth::user()->id;
@@ -87,7 +87,7 @@ class OrdersController extends Controller
     /**
      * Display a paginated listing of orders for a specific user.
      */
-    public function ordersByUser(Request $request):View
+    public function ordersByUser(Request $request)
     {
         try{
             if(!Auth::check()){
@@ -108,6 +108,7 @@ class OrdersController extends Controller
         }catch(\Exception $e){
             DB::rollBack();
             return redirect()->back()->with('error', 'An error occurred while processing your request.');
+
         }
     }
 
@@ -164,18 +165,12 @@ class OrdersController extends Controller
                 $order = Order::findOrFail($id);
                 $user = $order->user;
                 $previousOrdersCount = $user->orders->count();
-
-                // Obtener el número de página actual
-                $page = $request->input('page', session('last_page', 1));
-
-                // Guardar el número de página actual en la sesión
-                session(['last_page' => $page]);
-
                 // Obtener productos paginados con sus categorías
-                $products = $order->products()->with('categories')->paginate(3);
+                $products = $order->products()->with('categories')->get();
                 //dd($products);
                 // Añadir nombres de categorías a los productos
                 $products->each(function ($product) {
+
                     $product->category_names = $product->categories->pluck('name')->implode(', ');
                 });
                 if(($order->total_price-5)<50)
@@ -187,8 +182,9 @@ class OrdersController extends Controller
                     $shipping = "Free Shipping";
                     $subtotal = $order->total_price;
                 }
+
                 DB::commit();
-                return view('orders.show', compact('order', 'user', 'previousOrdersCount', 'products','shipping','subtotal'));
+                return view('orders.show', compact('order', 'user', 'previousOrdersCount','products','shipping','subtotal'));
 
             }catch(\Exception $e){
 
@@ -288,5 +284,5 @@ class OrdersController extends Controller
             return redirect()->back()->with('error', 'An error occurred while processing your request.');
         }
     }
-    
+
 }
