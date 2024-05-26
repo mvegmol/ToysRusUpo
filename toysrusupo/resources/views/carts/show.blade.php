@@ -41,6 +41,7 @@
                         </div>
                     </div>
                 @endforeach
+                {{ $productos->links() }}
             </div>
             <!-- Sub total -->
             <div class="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">

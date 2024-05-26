@@ -34,7 +34,7 @@ class ShoppingCartsController extends Controller
             }
 
             // Obtener los productos en el carrito
-            $productos = $carrito->products;
+            $productos = $carrito->products()->paginate(3);
 
             // Verificar si el carrito tiene productos
             if ($productos->isEmpty()) {
@@ -392,7 +392,8 @@ class ShoppingCartsController extends Controller
             }
 
             // Redirigir a la URL previa si aún hay productos en el carrito
-            return redirect()->back()->with('success', 'Producto eliminado del carrito.');
+
+            return redirect()->route('carts.show_products')->with('error', 'Producto eliminado del carrito.');
         } catch (\Exception $e) {
             DB::rollback();
             throw $e;
