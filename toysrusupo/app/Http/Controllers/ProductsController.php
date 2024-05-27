@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -342,4 +343,94 @@ class ProductsController extends Controller
         }
 
     }
+    public function productsLike()
+    {
+        if(!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        try {
+
+            DB::beginTransaction();
+
+
+            $cliente_id = Auth::user()->id;
+
+            $client = User::findOrFail($cliente_id);
+
+            $products = $client->favouriteProducts()->paginate(16);
+
+            $categories = Category::all();
+            $favorites = [];
+            $favorites = Auth::user()->favouriteProducts->pluck('id')->toArray();
+
+            DB::commit();
+
+            return view('products.favourite', compact('products', 'favorites', 'categories'));
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+            throw $e;
+        }
+    }
+
+    public function categoryToysFavourite(Request $request, $id): View
+    {
+        try {
+            DB::beginTransaction();
+            $category = Category::with('products')->findOrFail($id);
+
+            $cliente_id = Auth::user()->id;
+            $client = User::findOrFail($cliente_id);
+
+            $products = $client->favouriteProducts()
+                            ->whereHas('categories', function($query) use ($id) {
+                                $query->where('categories.id', $id);
+                            })
+                            ->paginate(16);
+
+            $favorites = Auth::user()->favouriteProducts->pluck('id')->toArray();
+
+            $categories = Category::all();
+
+            DB::commit();
+
+            return view('products.favourite', compact('category', 'products', 'favorites', 'categories'));
+
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
+
+
+    public function productsMoreLike()
+    {
+        try {
+            DB::beginTransaction();
+
+            $query = Product::orderByFavorites();
+
+            $products = $query->paginate(8);
+
+            // Cargar relaciones para cada producto
+            $products->load('categories');
+
+            foreach ($products as $product) {
+                $product->category_names = $product->categories->pluck('name')->join(', ');
+
+            }
+
+            DB::commit();
+
+            return view('products.favourite_ad', compact('products'));
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
+
+
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Product extends Model
 {
@@ -28,6 +29,15 @@ class Product extends Model
 
     public function userFavourites(){
         return $this->belongsToMany(User::class, 'favourite_product', 'product_id', 'user_id');
+    }
+
+    public static function orderByFavorites()
+    {
+        return static::select('products.id', 'name', 'description', 'price', 'stock', 'image_url', 'min_age', DB::raw('COUNT(favourite_product.product_id) as total_favorites'))
+            ->leftJoin('favourite_product', 'products.id', '=', 'favourite_product.product_id')
+            ->groupBy('products.id', 'name', 'description', 'price', 'stock', 'image_url', 'min_age')
+            ->orderByDesc('total_favorites')
+            ->orderBy('name', 'asc');
     }
 
 }
