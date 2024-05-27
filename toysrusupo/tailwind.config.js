@@ -29,6 +29,10 @@ export default {
                     hover: "#C8E5E2", // Color secundario más oscuro para hover
                 },
             },
+
+            maxWidth: {
+                'carousel': '90rem',
+            },
         },
     },
     plugins: [],
