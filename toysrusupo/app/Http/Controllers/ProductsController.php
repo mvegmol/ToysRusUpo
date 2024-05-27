@@ -52,6 +52,7 @@ class ProductsController extends Controller
                 $favorites = Auth::user()->favouriteProducts->pluck('id')->toArray();
             }
 
+
             DB::commit();
 
             return view('clients.home', compact('products', 'search', 'favorites'));
@@ -59,8 +60,39 @@ class ProductsController extends Controller
             DB::rollback();
             throw $e;
         }
+
     }
 
+    public function toys(Request $request): View
+    {
+        $perPage = Config::get('app.toys_per_page');
+        $products = Product::with('categories')->paginate($perPage);        
+
+        $favorites = [];
+        if (Auth::check()) {
+            $favorites = Auth::user()->favouriteProducts->pluck('id')->toArray();
+        }
+
+        $categories = Category::all();
+
+        return view('products.toys', compact('products', 'favorites', 'categories'));
+    }
+
+    public function categoryToys(Request $request, $id): View
+    {
+        $category = Category::with('products')->findOrFail($id);        
+        $perPage = Config::get('app.per_page');
+        $products = $category->products()->paginate($perPage);
+
+        $favorites = [];
+        if (Auth::check()) {
+            $favorites = Auth::user()->favouriteProducts->pluck('id')->toArray();
+        }
+
+        $categories = Category::all();
+
+        return view('products.toys', compact('category', 'products', 'favorites', 'categories'));
+    }
 
     public function index(Request $request): View
     {
@@ -272,6 +304,8 @@ class ProductsController extends Controller
         try {
             DB::beginTransaction();
 
+
+
             $product = Product::with('categories')->findOrFail($productId);
             $product->category_names = $product->categories->pluck('name')->join(', ');
 
@@ -282,5 +316,6 @@ class ProductsController extends Controller
             DB::rollback();
             throw $e;
         }
+
     }
 }
