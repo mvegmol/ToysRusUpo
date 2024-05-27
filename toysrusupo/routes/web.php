@@ -83,3 +83,5 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/productsMoreLike', [ProductsController::class, 'productsMoreLike'])->name('products.moreLike');
 
 
+Route::get('/user/{id}',[UsersController::class,"edit"])->name('user.edit');
+Route::put('/user/update/{id}',[UsersController::class,"update"])->name('user.update');
