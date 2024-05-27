@@ -21,10 +21,10 @@
 
     <div
         class="w-full max-w-full m-0 mx-auto mb-16 px-3 flex justify-center items-start flex-nowrap whitespace-nowrap text-center">
-        <nav class="flex space-x-8 px-4 overflow-x-auto  scrollbar-hide">
+        <nav class="flex space-x-10 px-4 overflow-x-auto  scrollbar-hide">
             @foreach ($categories as $c)
                 <div
-                    class="min-w-[110px] p-0 mx-[5px] text-center border-0 rounded-none overflow-hidden flex-shrink-0 transition-all duration-150 ease-in-out">
+                    class="min-w-[170px] p-0 mx-[5px] text-center border-0 rounded-none overflow-hidden flex-shrink-0 transition-all duration-150 ease-in-out">
                     <a href="{{ route('products.categoryToys', $c->id) }}"
                         class="text-gray-500 hover:text-primary hover:font-semibold transition-all duration-150 ease-in-out">
                         <span class="text-sm">{{ $c->name }}</span>
