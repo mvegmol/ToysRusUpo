@@ -19,22 +19,25 @@
 
     <div class="w-1/2 border-t border-gray-300 mx-auto my-8"></div>
 
-    <div class="w-full max-w-full m-0 mx-auto mb-16 px-3 flex justify-center items-start flex-wrap text-center">
-        <nav class="flex flex-wrap justify-center">
+    <div
+        class="w-full max-w-full m-0 mx-auto mb-16 px-3 flex justify-center items-start flex-nowrap whitespace-nowrap text-center">
+        <nav class="flex space-x-10 px-4 overflow-x-auto  scrollbar-hide">
+            <div class="w-[170px] p-0 mx-[5px] mb-4 text-center border-0 rounded-none overflow-hidden flex-shrink-0 transition-all duration-150 ease-in-out">
+                <a href="{{ route('products.toys') }}"
+                    class="text-gray-500 hover:text-primary hover:font-semibold transition-all duration-150 ease-in-out">
+                    <span class="text-sm">All</span>
+                </a>
+            </div>
             @foreach ($categories as $c)
-                <div class="w-[170px] p-0 mx-[5px] mb-4 text-center border-0 rounded-none overflow-hidden flex-shrink-0 transition-all duration-150 ease-in-out">
+                <div
+                    class="min-w-[170px] p-0 mx-[5px] text-center border-0 rounded-none overflow-hidden flex-shrink-0 transition-all duration-150 ease-in-out">
                     <a href="{{ route('products.categoryToys', $c->id) }}"
                         class="text-gray-500 hover:text-primary hover:font-semibold transition-all duration-150 ease-in-out">
                         <span class="text-sm">{{ $c->name }}</span>
                     </a>
                 </div>
             @endforeach
-            <div class="w-[170px] p-0 mx-[5px] mb-4 text-center border-0 rounded-none overflow-hidden flex-shrink-0 transition-all duration-150 ease-in-out">
-                <a href="{{ route('products.toys') }}"
-                    class="text-gray-500 hover:text-primary hover:font-semibold transition-all duration-150 ease-in-out">
-                    <span class="text-sm">No Category</span>
-                </a>
-            </div>
+
         </nav>
     </div>
 
