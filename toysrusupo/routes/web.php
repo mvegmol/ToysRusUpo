@@ -71,6 +71,7 @@ Route::middleware(['auth'])->group(function () {
 });
 Route::get('/likeProduct',[UsersController::class,"likeorUnlikeProduct"])->name('user.like');
 
+Route::get('change-language/{locale}', [UsersController::class, 'changeLanguage'])->name('change.language');
 
 
 

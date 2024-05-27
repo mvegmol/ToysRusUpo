@@ -5,7 +5,7 @@
         style="background-image: url('https://previews.123rf.com/images/lonabon/lonabon1803/lonabon180300027/97287074-conjunto-de-diferentes-juguetes-para-ni%C3%B1os-y-ni%C3%B1as-banner.jpg');">
         <div class="container mx-auto">
             <h1 class="text-6xl text-gray-800 font-medium mb-4 capitalize text-center">
-                best collection for toys & games
+                @lang("messages.bestCollection")
             </h1>
 
 
@@ -16,7 +16,7 @@
 
 
         <div class="container py-16">
-            <h2 class="text-2xl font-medium text-gray-800 uppercase mb-6">shop by category</h2>
+            <h2 class="text-2xl font-medium text-gray-800 uppercase mb-6">@lang("messages.shopByCategory")</h2>
             <div class="grid grid-cols-3 gap-3">
                 <div class="relative rounded-sm overflow-hidden group">
                     <img src="assets/images/category/category-1.jpg" alt="category 1" class="w-full">
@@ -56,7 +56,7 @@
 
         <!-- new arrival -->
         <div class="container pb-16">
-            <h2 class="text-2xl font-medium text-gray-800 uppercase mb-6">Top New Arrival</h2>
+            <h2 class="text-2xl font-medium text-gray-800 uppercase mb-6">@lang("messages.topnewArrival")</h2>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 @forelse ($products as $product)
                     <div class="bg-white shadow rounded overflow-hidden group">
@@ -122,7 +122,7 @@
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
                             <button type="submit"
                                 class="w-full py-2 text-center bg-primary text-white border border-primary rounded-b hover:bg-transparent hover:text-primary transition">
-                                Add to Cart
+                                @lang("messages.addCart")
                             </button>
                         </form>
                     </div>
@@ -151,7 +151,7 @@
 
         <!-- product -->
         <div class="container pb-16">
-            <h2 class="text-2xl font-medium text-gray-800 uppercase mb-6">recomended for you</h2>
+            <h2 class="text-2xl font-medium text-gray-800 uppercase mb-6">@lang("messages.recommend")</h2>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
                 <div class="bg-white shadow rounded overflow-hidden group">
                     <div class="relative">
@@ -494,4 +494,6 @@
             </div>
         </div>
     </div>
+    <a href="{{ route('change.language', 'en') }}">English</a>
+<a href="{{ route('change.language', 'es') }}">Español</a>
 @endsection

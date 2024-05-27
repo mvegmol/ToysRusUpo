@@ -60,7 +60,7 @@
                         <li class="group max-lg:border-b max-lg:py-3 relative">
                             <button id="toysDropdownButton"
                                 class="text-gray-600 font-bold text-lg	 hover:text-primary focus:outline-none block">
-                                Toys
+                                @lang('messages.toys')
                                 <svg class="w-4 h-4 inline ml-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                     fill="none" viewBox="0 0 10 6">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -71,13 +71,13 @@
                                 <li class="border-b border-gray-200">
                                     <a href="{{ route('products.toys') }}"
                                         class="hover:bg-gray-100 text-gray-600 font-bold text-lg block px-4 py-2">
-                                        Bestseller
+                                        @lang('messages.bestseller')
                                     </a>
                                 </li>
                                 <li>
                                     <a href="{{ route('products.toys') }}"
                                         class="hover:bg-gray-100 text-gray-600 font-bold text-lg block px-4 py-2">
-                                        More Follows
+                                        @lang('messages.morefollows')
                                     </a>
                                 </li>
                             </ul>
@@ -85,14 +85,14 @@
                         <li class='group max-lg:border-b max-lg:py-3 relative'>
                             <a href="{{ route('categories.index') }}"
                                 class='hover:text-primary text-gray-600 font-bold text-lg lg:hover:fill-primary block'>
-                                Categories
+                                @lang('messages.categories')
                             </a>
                         </li>
                         <li class='max-lg:border-b max-lg:py-3'><a href="{{ route('orders.index') }}"
-                                class='hover:text-primary text-gray-600 font-bold text-lg	 block'>Orders</a></li>
+                                class='hover:text-primary text-gray-600 font-bold text-lg	 block'>@lang('messages.orders')</a></li>
 
                         <li class='max-lg:border-b max-lg:py-3'><a href='#Contacto'
-                                class='hover:text-primary text-gray-600 font-bold text-lg block'>Contact</a></li>
+                                class='hover:text-primary text-gray-600 font-bold text-lg block'>@lang('messages.contact')</a></li>
 
                     </ul>
                 </div>
@@ -105,8 +105,14 @@
                                 d="M45.5 4A18.53 18.53 0 0 0 32 9.86 18.5 18.5 0 0 0 0 22.5C0 40.92 29.71 59 31 59.71a2 2 0 0 0 2.06 0C34.29 59 64 40.92 64 22.5A18.52 18.52 0 0 0 45.5 4ZM32 55.64C26.83 52.34 4 36.92 4 22.5a14.5 14.5 0 0 1 26.36-8.33 2 2 0 0 0 3.27 0A14.5 14.5 0 0 1 60 22.5c0 14.41-22.83 29.83-28 33.14Z"
                                 data-original="#000000" />
                         </svg>
-                        <span
-                            class="absolute left-auto -ml-1 -top-1 rounded-full bg-red-500 px-1 py-0 text-xs text-white">0</span>
+
+                        <span class="absolute left-auto -ml-1 -top-1 rounded-full bg-red-500 px-1 py-0 text-xs text-white">
+                            @if (Auth::check() && Auth::user()->favouriteProducts())
+                                {{ Auth::user()->favoriteQuantity() }}
+                            @else
+                                0
+                            @endif
+                        </span>
                     </span>
                     <a href="{{ Auth::check() ? route('carts.show_products') : route('login') }}">
                         <span class="relative">
@@ -137,7 +143,7 @@
                                 <button id="userDropdownButton"
                                     class="text-gray-600 font-bold text-lg	 hover:text-primary focus:outline-none block">
 
-                                    User
+                                   @lang("messages.user")
                                     <svg class="w-4 h-4 inline ml-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                         fill="none" viewBox="0 0 10 6">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
