@@ -10,7 +10,7 @@
 
     {{-- @vite(['resources/js/app.js', 'resources/css/app.scss']) --}}
     @vite('resources/css/app.css', 'resources/css/style.css')
-
+    <script src="//unpkg.com/alpinejs" defer></script>
 </head>
 
 <body class="min-h-screen flex flex-col">

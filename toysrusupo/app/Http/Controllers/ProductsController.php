@@ -23,45 +23,26 @@ class ProductsController extends Controller
     public function home(Request $request): View
     {
         try {
-            DB::beginTransaction();
+            DB::beginTransaction();            
 
-            $search = session('search_id', null);
-
-            if ($search !== null) {
-                $request->request->set('page', 1);
-            } elseif (!$request->has('page') && session()->has('last_page')) {
-                $request->merge(['page' => session('last_page', 1)]);
-            }
-
-            $page = $request->input('page', 1);
-            session(['last_page' => $page]);
-
-            $perPage = Config::get('app.per_page');
-
-            $products = Product::with('categories')
-                ->when($search, function ($query) use ($search) {
-                    return $query->where('id', '=', $search);
-                })
-                ->paginate($perPage);
-
-            foreach ($products as $product) {
-                $product->category_names = $product->categories->pluck('name')->join(', ');
-            }
+            $perPage = Config::get('app.toys_per_page');
+            $products = Product::with('categories')->paginate($perPage);        
 
             $favorites = [];
             if (Auth::check()) {
                 $favorites = Auth::user()->favouriteProducts->pluck('id')->toArray();
             }
 
+            $categories = Category::bestCategories()->take(6);           
 
             DB::commit();
 
-            return view('clients.home', compact('products', 'search', 'favorites'));
+            return view('clients.home', compact('products', 'favorites', 'categories'));
         } catch (\Exception $e) {
             DB::rollback();
+
             throw $e;
         }
-
     }
 
     public function toys(Request $request): View
