@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class AddressesController extends Controller
@@ -28,17 +29,27 @@ class AddressesController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): View
+    public function index(Request $request)
     {
-        $addresses = Auth::user()->address;        
-        return view('addresses.index', compact('addresses'));
+        try {
+            DB::beginTransaction();
+
+            $addresses = Auth::user()->address;
+
+            DB::commit();
+
+            return view('addresses.index', compact('addresses'));
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Failed to fetch addresses.');
+        }
     }
 
     /**
      * Show the form for creating a new resource.
      */
     public function create(): View
-    {        
+    {
         return view('addresses.create', ['countries' => $this->countries]);
     }
 
@@ -48,13 +59,21 @@ class AddressesController extends Controller
      */
     public function store(AddressRequest $request): RedirectResponse
     {
-        $validated = $request->validated();
-        $validated['user_id'] = Auth::id();
-        Address::create($validated);
+        try {
+            DB::beginTransaction();
 
-        return redirect()->route('addresses.index')->with('success', 'Address created successfully.');
+            $validated = $request->validated();
+            $validated['user_id'] = Auth::id();
+            Address::create($validated);
+
+            DB::commit();
+
+            return redirect()->route('addresses.index')->with('success', 'Address created successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Failed to create address.');
+        }
     }
-
     /**
      * Display the specified resource.
      */
@@ -68,22 +87,42 @@ class AddressesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Address $address): View
-    {
-        return view('addresses.edit', [
+    public function edit(Address $address): View|RedirectResponse
+{
+    try {
+        DB::beginTransaction();
+
+        $view = view('addresses.edit', [
             'address' => $address,
             'countries' => $this->countries
         ]);
+
+        DB::commit();
+
+        return $view;
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return view('error')->with('message', 'Failed to load address for editing.');
     }
+}
 
     /**
      * Update the specified resource in storage.
      */
     public function update(AddressRequest $request, Address $address): RedirectResponse
-    {        
-        $address->update($request->validated());
+    {
+        try {
+            DB::beginTransaction();
 
-        return redirect()->route('addresses.index')->with('success', 'Address updated successfully.');
+            $address->update($request->validated());
+
+            DB::commit();
+
+            return redirect()->route('addresses.index')->with('success', 'Address updated successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Failed to update address.');
+        }
     }
 
     /**
@@ -91,8 +130,18 @@ class AddressesController extends Controller
      */
     public function destroy(Address $address): RedirectResponse
     {
-        $address->delete();
-        
-        return redirect()->route('addresses.index')->with('success', 'Address deleted successfully.');
+        try {
+            DB::beginTransaction();
+
+            $address->delete();
+
+            DB::commit();
+
+            return redirect()->route('addresses.index')->with('success', 'Address deleted successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return redirect()->route('addresses.index')->with('error', 'Failed to delete address.');
+        }
     }
 }
