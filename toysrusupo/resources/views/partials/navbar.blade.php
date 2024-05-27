@@ -23,9 +23,6 @@
                                 alt="logo" class='w-36' />
                         </a>
                     </li>
-                    <li class='max-lg:border-b max-lg:py-3'><a href="{{ route('products.index') }}"
-                            class='hover:text-primary text-lg text-primary block font-bold'>@lang('messages.toys')</a></li>
-
 
 
                     <li class='max-lg:border-b max-lg:py-3'><a href="{{ route('orders.index') }}"
@@ -67,11 +64,7 @@
                             class='hover:text-primary text-gray-600 font-bold text-lg block'>@lang('messages.orders')</a>
                     </li>
 
-                    <li class='max-lg:border-b max-lg:py-3'><a href="{{ route('products.toys') }}"
-                            class='hover:text-primary text-gray-600 font-bold text-lg block'>@lang('messages.toys')</a>
-                    </li>
-
-                    {{-- <li class="group max-lg:border-b max-lg:py-3 relative">
+                    <li class="group max-lg:border-b max-lg:py-3 relative">
                         <button id="toysDropdownButton"
                             class="text-gray-600 font-bold text-lg hover:text-primary focus:outline-none block">
                             @lang('messages.toys')
@@ -83,19 +76,31 @@
                         </button>
                         <ul id="toysDropdownMenu" class="absolute hidden bg-secondary shadow-lg rounded-lg mt-2 w-44">
                             <li class="border-b border-gray-200">
-                                <a href="{{ route('products.toys') }}"
+                                <a href="{{ route('products.bestSelling') }}"
                                     class="hover:bg-secondary-hover hover:text-primary text-gray-600 font-bold text-lg block px-4 py-2">
                                     @lang('messages.bestseller')
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('products.toys') }}"
+                                <a href="{{ route('products.favourites') }}"
                                     class="hover:bg-secondary-hover hover:text-primary text-gray-600 font-bold text-lg block px-4 py-2">
                                     @lang('messages.morefollows')
                                 </a>
                             </li>
+                            <li>
+                                <a href="{{ route('products.favourite') }}"
+                                    class="hover:bg-secondary-hover hover:text-primary text-gray-600 font-bold text-lg block px-4 py-2">
+                                    Mis Juguetes Favoritos
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('products.toys') }}"
+                                    class="hover:bg-secondary-hover hover:text-primary text-gray-600 font-bold text-lg block px-4 py-2">
+                                    Todos los Productos
+                                </a>
+                            </li>
                         </ul>
-                    </li> --}}
+                    </li>
 
                 </ul>
             </div>
@@ -114,6 +119,7 @@
                                     d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                             </svg>
                         </button>
+
                         <ul id="userDropdownMenu" class="absolute hidden bg-secondary shadow-lg rounded-lg mt-2 w-22">
                             <li class="border-b border-gray-200">
                                 <a class="hover:bg-secondary-hover hover:text-primary text-gray-600 font-bold text-lg block px-2 py-2"
