@@ -7,7 +7,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <!-- My Data -->
             <div
-                class="relative w-full md:w-96 h-64 p-6 bg-secondary shadow-md rounded-2xl flex flex-col items-center text-center border-2 border-gray-300 hover:bg-[#A9D6D2] hover:cursor-pointer">
+                class="relative w-full md:w-96 h-64 p-6 bg-lightSecondary shadow-md rounded-2xl flex flex-col items-center text-center border-2 border-gray-300 hover:bg-lightSecondary-hover hover:cursor-pointer">
                 <div class="absolute -top-6">
                     <div
                         class="w-20 h-20 rounded-full border-2 border-gray-300 shadow-md flex items-center justify-center bg-[#E0F7FA] hover:bg-[#D0EFF5]">
@@ -21,7 +21,7 @@
             </div>
             <!-- Orders -->
             <div
-                class="relative w-full md:w-96 h-64 p-6 bg-secondary shadow-md rounded-2xl flex flex-col items-center text-center border-2 border-gray-300 hover:bg-[#A9D6D2] hover:cursor-pointer">
+                class="relative w-full md:w-96 h-64 p-6 bg-lightSecondary shadow-md rounded-2xl flex flex-col items-center text-center border-2 border-gray-300 hover:bg-lightSecondary-hover hover:cursor-pointer">
                 <div class="absolute -top-6">
                     <div
                         class="w-20 h-20 rounded-full border-2 border-gray-300 shadow-md flex items-center justify-center bg-[#E0F7FA] hover:bg-[#D0EFF5]">
@@ -35,7 +35,7 @@
             </div>
             <!-- Addresses -->
             <a href="{{ route('addresses.index') }}"
-                class="relative w-full md:w-96 h-64 p-6 bg-secondary shadow-md rounded-2xl flex flex-col items-center text-center border-2 border-gray-300 hover:bg-[#A9D6D2] hover:cursor-pointer no-underline text-inherit">
+                class="relative w-full md:w-96 h-64 p-6 bg-lightSecondary shadow-md rounded-2xl flex flex-col items-center text-center border-2 border-gray-300 hover:bg-lightSecondary-hover hover:cursor-pointer no-underline text-inherit">
                 <div class="absolute -top-6">
                     <div
                         class="w-20 h-20 rounded-full border-2 border-gray-300 shadow-md flex items-center justify-center bg-[#E0F7FA] hover:bg-[#D0EFF5]">
@@ -49,7 +49,7 @@
             </a>
             <!-- Favorites -->
             <div
-                class="relative w-full md:w-96 h-64 p-6 bg-secondary shadow-md rounded-2xl flex flex-col items-center text-center border-2 border-gray-300 hover:bg-[#A9D6D2] hover:cursor-pointer">
+                class="relative w-full md:w-96 h-64 p-6 bg-lightSecondary shadow-md rounded-2xl flex flex-col items-center text-center border-2 border-gray-300 hover:bg-lightSecondary-hover hover:cursor-pointer">
                 <div class="absolute -top-6">
                     <div
                         class="w-20 h-20 rounded-full border-2 border-gray-300 shadow-md flex items-center justify-center bg-[#E0F7FA] hover:bg-[#D0EFF5]">
@@ -63,7 +63,7 @@
             </div>
             <!-- Payments -->
             <div
-                class="relative w-full md:w-96 h-64 p-6 bg-secondary shadow-md rounded-2xl flex flex-col items-center text-center border-2 border-gray-300 hover:bg-[#A9D6D2] hover:cursor-pointer">
+                class="relative w-full md:w-96 h-64 p-6 bg-lightSecondary shadow-md rounded-2xl flex flex-col items-center text-center border-2 border-gray-300 hover:bg-lightSecondary-hover hover:cursor-pointer">
                 <div class="absolute -top-6">
                     <div
                         class="w-20 h-20 rounded-full border-2 border-gray-300 shadow-md flex items-center justify-center bg-[#E0F7FA] hover:bg-[#D0EFF5]">
@@ -77,7 +77,7 @@
             </div>
             <!-- Logout -->
             <div
-                class="relative w-full md:w-96 h-64 p-6 bg-secondary shadow-md rounded-2xl flex flex-col items-center text-center border-2 border-gray-300 hover:bg-[#A9D6D2] hover:cursor-pointer">
+                class="relative w-full md:w-96 h-64 p-6 bg-lightSecondary shadow-md rounded-2xl flex flex-col items-center text-center border-2 border-gray-300 hover:bg-lightSecondary-hover hover:cursor-pointer">
                 <div class="absolute -top-6">
                     <div
                         class="w-20 h-20 rounded-full border-2 border-gray-300 shadow-md flex items-center justify-center bg-[#E0F7FA] hover:bg-[#D0EFF5]">
