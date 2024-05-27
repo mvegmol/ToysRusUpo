@@ -76,3 +76,5 @@ Route::get('lang/{lang}', [LanguageController::class, 'switchLang'])->name('lang
 
 
 
+Route::get('/user/{id}',[UsersController::class,"edit"])->name('user.edit');
+Route::put('/user/update/{id}',[UsersController::class,"update"])->name('user.update');
