@@ -143,7 +143,7 @@
                                 <button id="userDropdownButton"
                                     class="text-gray-600 font-bold text-lg	 hover:text-primary focus:outline-none block">
 
-                                   @lang(messages.user)
+                                   @lang("messages.user")
                                     <svg class="w-4 h-4 inline ml-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                         fill="none" viewBox="0 0 10 6">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
