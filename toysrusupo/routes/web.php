@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AddressesController;
 use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ShoppingCartsController;
@@ -71,7 +72,7 @@ Route::middleware(['auth'])->group(function () {
 });
 Route::get('/likeProduct',[UsersController::class,"likeorUnlikeProduct"])->name('user.like');
 
-Route::get('change-language/{locale}', [UsersController::class, 'changeLanguage'])->name('change.language');
+Route::get('lang/{lang}', [LanguageController::class, 'switchLang'])->name('lang.switch');
 
 
 

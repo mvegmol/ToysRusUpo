@@ -123,9 +123,5 @@ class UsersController extends Controller
             throw $e;
         }
     }
-    public function changeLanguage($locale)
-    {
-        app()->setLocale($locale);
-        return redirect()->back();
-    }
+
 }
