@@ -60,7 +60,7 @@
                         <li class="group max-lg:border-b max-lg:py-3 relative">
                             <button id="toysDropdownButton"
                                 class="text-gray-600 font-bold text-lg	 hover:text-primary focus:outline-none block">
-                                Toys
+                                @lang('messages.toys')
                                 <svg class="w-4 h-4 inline ml-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                     fill="none" viewBox="0 0 10 6">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -71,13 +71,13 @@
                                 <li class="border-b border-gray-200">
                                     <a href="{{ route('products.index') }}"
                                         class="hover:bg-gray-100 text-gray-600 font-bold text-lg block px-4 py-2">
-                                        Bestseller
+                                        @lang('messages.bestseller')
                                     </a>
                                 </li>
                                 <li>
                                     <a href="{{ route('products.index') }}"
                                         class="hover:bg-gray-100 text-gray-600 font-bold text-lg block px-4 py-2">
-                                        More Follows
+                                        @lang('messages.morefollows')
                                     </a>
                                 </li>
                             </ul>
@@ -85,14 +85,14 @@
                         <li class='group max-lg:border-b max-lg:py-3 relative'>
                             <a href="{{ route('categories.index') }}"
                                 class='hover:text-primary text-gray-600 font-bold text-lg lg:hover:fill-primary block'>
-                                Categories
+                                @lang('messages.categories')
                             </a>
                         </li>
                         <li class='max-lg:border-b max-lg:py-3'><a href="{{ route('orders.index') }}"
-                                class='hover:text-primary text-gray-600 font-bold text-lg	 block'>Orders</a></li>
+                                class='hover:text-primary text-gray-600 font-bold text-lg	 block'>@lang('messages.orders')</a></li>
 
                         <li class='max-lg:border-b max-lg:py-3'><a href='#Contacto'
-                                class='hover:text-primary text-gray-600 font-bold text-lg block'>Contact</a></li>
+                                class='hover:text-primary text-gray-600 font-bold text-lg block'>@lang('messages.contact')</a></li>
 
                     </ul>
                 </div>
@@ -143,7 +143,7 @@
                                 <button id="userDropdownButton"
                                     class="text-gray-600 font-bold text-lg	 hover:text-primary focus:outline-none block">
 
-                                    User
+                                   @lang(messages.user)
                                     <svg class="w-4 h-4 inline ml-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                         fill="none" viewBox="0 0 10 6">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
