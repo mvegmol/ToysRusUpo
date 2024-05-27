@@ -80,4 +80,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/products/{category}/toysFavourite', [ProductsController::class, 'categoryToysFavourite'])->name('products.categoryToysFavourite');
 });
 
+Route::get('/productsMoreLike', [ProductsController::class, 'productsMoreLike'])->name('products.moreLike');
+
 

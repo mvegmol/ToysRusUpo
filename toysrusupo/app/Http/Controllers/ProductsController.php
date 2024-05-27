@@ -382,4 +382,31 @@ class ProductsController extends Controller
     }
 
 
+    public function productsMoreLike()
+    {
+        try {
+            DB::beginTransaction();
+
+            $query = Product::orderByFavorites();
+
+            $products = $query->paginate(8);
+
+            // Cargar relaciones para cada producto
+            $products->load('categories');
+
+            foreach ($products as $product) {
+                $product->category_names = $product->categories->pluck('name')->join(', ');
+
+            }
+
+            DB::commit();
+
+            return view('products.favourite_ad', compact('products'));
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
+
+
 }
