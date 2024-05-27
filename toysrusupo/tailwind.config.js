@@ -24,6 +24,10 @@ export default {
                 tertiary: {
                     DEFAULT: "#317256", // Color terciario
                 },
+                lightSecondary: {
+                    DEFAULT: "#E0F2F1", // Fondo más claro para los recuadros del perfil de usuario
+                    hover: "#C8E5E2", // Color secundario más oscuro para hover
+                },
             },
         },
     },
