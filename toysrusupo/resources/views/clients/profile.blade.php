@@ -52,7 +52,7 @@
                 </div>
             </a>
             <!-- Favorites -->
-            <div
+            <a href="{{ route('addresses.index') }}"
                 class="relative w-full md:w-96 h-64 p-6 bg-lightSecondary shadow-md rounded-2xl flex flex-col items-center text-center border-2 border-gray-300 hover:bg-lightSecondary-hover hover:cursor-pointer">
                 <div class="absolute -top-6">
                     <div
@@ -64,7 +64,7 @@
                     <h3 class="text-xl font-bold mb-2 font-serif text-gray-700">Favorites</h3>
                     <p class="text-sm text-gray-600">View, add, or remove products from your favorites list.</p>
                 </div>
-            </div>
+            </a>
             <!-- Payments -->
             <div
                 class="relative w-full md:w-96 h-64 p-6 bg-lightSecondary shadow-md rounded-2xl flex flex-col items-center text-center border-2 border-gray-300 hover:bg-lightSecondary-hover hover:cursor-pointer">

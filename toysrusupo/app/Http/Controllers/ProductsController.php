@@ -23,17 +23,17 @@ class ProductsController extends Controller
     public function home(Request $request): View
     {
         try {
-            DB::beginTransaction();            
+            DB::beginTransaction();
 
             $perPage = Config::get('app.toys_per_page');
-            $products = Product::with('categories')->paginate($perPage);        
+            $products = Product::with('categories')->paginate($perPage);
 
             $favorites = [];
             if (Auth::check()) {
                 $favorites = Auth::user()->favouriteProducts->pluck('id')->toArray();
             }
 
-            $categories = Category::bestCategories()->take(6);           
+            $categories = Category::bestCategories()->take(6);
 
             DB::commit();
 
@@ -402,6 +402,7 @@ class ProductsController extends Controller
             foreach ($products as $product) {
                 $product->category_names = $product->categories->pluck('name')->join(', ');
 
+
             }
 
             DB::commit();
@@ -412,6 +413,118 @@ class ProductsController extends Controller
             throw $e;
         }
     }
+    public function allProductsFavourite()
+    {
+        try {
+            DB::beginTransaction();
+
+            $query = Product::orderByFavorites();
+
+            $products = $query->paginate(16);
+
+            $products->load('categories');
+
+            $favorites = [];
+            $favorites = Auth::user()->favouriteProducts->pluck('id')->toArray();
+            $categories = Category::all();
+            DB::commit();
+
+            return view('products.all_favourite', compact('products', 'favorites', 'categories'));
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
+
+    public function categoryProductsFavourites(Request $request, $id): View
+    {
+        try {
+            DB::beginTransaction();
+            $category = Category::with('products')->findOrFail($id);
+
+            $cliente_id = Auth::user()->id;
+            $client = User::findOrFail($cliente_id);
+
+            $query = Product::orderByFavorites();
+
+
+
+            $products = $query->whereHas('categories', function($query) use ($id) {
+                                $query->where('categories.id', $id);
+                            })
+                            ->paginate(16);
+
+            $favorites = Auth::user()->favouriteProducts->pluck('id')->toArray();
+
+            $categories = Category::all();
+
+            DB::commit();
+
+            return view('products.all_favourite', compact('category', 'products', 'favorites', 'categories'));
+
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
+
+    public function bestSellingProducts()
+    {
+        try {
+            DB::beginTransaction();
+
+            $query = Product::bestSellingProducts();
+
+            $products = $query->paginate(16);
+
+            $products->load('categories');
+
+            $favorites = [];
+            $favorites = Auth::user()->favouriteProducts->pluck('id')->toArray();
+            $categories = Category::all();
+            DB::commit();
+
+            return view('products.bestSelling', compact('products', 'favorites', 'categories'));
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
+
+    public function categorybestSellingProducts(Request $request, $id): View
+    {
+        try {
+            DB::beginTransaction();
+            $category = Category::with('products')->findOrFail($id);
+
+            $cliente_id = Auth::user()->id;
+            $client = User::findOrFail($cliente_id);
+
+            $query = Product::bestSellingProducts();
+
+
+
+            $products = $query->whereHas('categories', function($query) use ($id) {
+                                $query->where('categories.id', $id);
+                            })
+                            ->paginate(16);
+
+            $favorites = Auth::user()->favouriteProducts->pluck('id')->toArray();
+
+            $categories = Category::all();
+
+            DB::commit();
+
+            return view('products.bestSelling', compact('category', 'products', 'favorites', 'categories'));
+
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
+
 
 
 }

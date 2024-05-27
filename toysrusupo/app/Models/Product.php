@@ -40,4 +40,31 @@ class Product extends Model
             ->orderBy('name', 'asc');
     }
 
+    public static function bestSellingProducts()
+    {
+        return static::select(
+                'products.id',
+                'products.name',
+                'products.description',
+                'products.price',
+                'products.stock',
+                'products.image_url',
+                'products.min_age',
+                DB::raw('COUNT(orders.id) as total_orders')
+            )
+            ->leftJoin('order_product', 'products.id', '=', 'order_product.product_id')
+            ->leftJoin('orders', 'order_product.order_id', '=', 'orders.id')
+            ->groupBy(
+                'products.id',
+                'products.name',
+                'products.description',
+                'products.price',
+                'products.stock',
+                'products.image_url',
+                'products.min_age'
+            )
+            ->orderByDesc('total_orders')
+            ->orderBy('products.name', 'asc');
+    }
+
 }
