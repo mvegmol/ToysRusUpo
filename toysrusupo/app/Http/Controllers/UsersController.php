@@ -125,37 +125,6 @@ class UsersController extends Controller
         }
     }
 
-    public function productsLike()
-    {
-        if(!Auth::check()) {
-            return redirect()->route('login');
-        }
 
-        try {
-
-            DB::beginTransaction();
-
-
-            $cliente_id = Auth::user()->id;
-
-
-            $client = User::findOrFail($cliente_id);
-
-            $products = $client->favouriteProducts()->paginate(16);
-
-            $categories = Category::all();
-            $favorites = [];
-            $favorites = Auth::user()->favouriteProducts->pluck('id')->toArray();
-
-            DB::commit();
-
-            return view('products.favourite', compact('products', 'favorites', 'categories'));
-
-        } catch (\Exception $e) {
-
-            DB::rollback();
-            throw $e;
-        }
-    }
 
 }

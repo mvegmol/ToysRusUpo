@@ -70,11 +70,14 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::resource('/addresses', AddressesController::class);
 });
-Route::get('/likeProduct',[UsersController::class,"likeorUnlikeProduct"])->name('user.like');
+
 
 Route::get('lang/{lang}', [LanguageController::class, 'switchLang'])->name('lang.switch');
 
-Route::get('/productsw/favourite', [UsersController::class, 'productsLike'])->name('products.favourite');
-
+Route::middleware(['auth'])->group(function () {
+    Route::get('/likeProduct',[UsersController::class,"likeorUnlikeProduct"])->name('user.like');
+    Route::get('/productsw/favourite', [ProductsController::class, 'productsLike'])->name('products.favourite');
+    Route::get('/products/{category}/toysFavourite', [ProductsController::class, 'categoryToysFavourite'])->name('products.categoryToysFavourite');
+});
 
 
