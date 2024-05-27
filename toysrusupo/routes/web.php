@@ -74,5 +74,7 @@ Route::get('/likeProduct',[UsersController::class,"likeorUnlikeProduct"])->name(
 
 Route::get('lang/{lang}', [LanguageController::class, 'switchLang'])->name('lang.switch');
 
+Route::get('/productsw/favourite', [UsersController::class, 'productsLike'])->name('products.favourite');
+
 
 
