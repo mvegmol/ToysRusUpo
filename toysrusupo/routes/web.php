@@ -78,6 +78,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/likeProduct',[UsersController::class,"likeorUnlikeProduct"])->name('user.like');
     Route::get('/productsw/favourite', [ProductsController::class, 'productsLike'])->name('products.favourite');
     Route::get('/products/{category}/toysFavourite', [ProductsController::class, 'categoryToysFavourite'])->name('products.categoryToysFavourite');
+    Route::get('/productsFavourite', [ProductsController::class, 'allProductsFavourite'])->name('products.favourites');
+    Route::get('/products/{category}/toysAllFavourite', [ProductsController::class, 'categoryProductsFavourites'])->name('products.categoryToysFavourites');
+    Route::get('/productsBestSelling', [ProductsController::class, 'bestSellingProducts'])->name('products.bestSelling');
+    Route::get('/products/{category}/productsBestSelling', [ProductsController::class, 'categorybestSellingProducts'])->name('products.categoryBestSelling');
 });
 
 Route::get('/productsMoreLike', [ProductsController::class, 'productsMoreLike'])->name('products.moreLike');
