@@ -494,6 +494,6 @@
             </div>
         </div>
     </div>
-    <a href="{{ route('change.language', 'en') }}">English</a>
-<a href="{{ route('change.language', 'es') }}">Español</a>
+    <a href="{{ route('lang.switch', ['lang' => 'es']) }}">Español</a>
+<a href="{{ route('lang.switch', ['lang' => 'en']) }}">English</a>
 @endsection
