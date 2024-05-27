@@ -19,6 +19,7 @@ export default {
                 },
                 secondary: {
                     DEFAULT: "#B2DFDB", // Color secundario
+                    hover: "#A9D6D2", // Color secundario más oscuro para hover
                 },
                 tertiary: {
                     DEFAULT: "#317256", // Color terciario

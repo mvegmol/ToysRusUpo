@@ -113,7 +113,10 @@ return [
     */
 
     'faker_locale' => 'en_US',
-
+    'languages' => [
+        'en' => 'English',
+        'es' => 'Español',
+    ],
     /*
     |--------------------------------------------------------------------------
     | Encryption Key
