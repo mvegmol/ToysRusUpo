@@ -66,7 +66,7 @@ class ProductsController extends Controller
     public function toys(Request $request): View
     {
         $perPage = Config::get('app.toys_per_page');
-        $products = Product::with('categories')->paginate($perPage);        
+        $products = Product::with('categories')->paginate($perPage);
 
         $favorites = [];
         if (Auth::check()) {
@@ -80,7 +80,7 @@ class ProductsController extends Controller
 
     public function categoryToys(Request $request, $id): View
     {
-        $category = Category::with('products')->findOrFail($id);        
+        $category = Category::with('products')->findOrFail($id);
         $perPage = Config::get('app.per_page');
         $products = $category->products()->paginate($perPage);
 
@@ -94,9 +94,15 @@ class ProductsController extends Controller
         return view('products.toys', compact('category', 'products', 'favorites', 'categories'));
     }
 
-    public function index(Request $request): View
+    public function index(Request $request)
     {
         try {
+            if(!Auth::check()) {
+                return redirect()->route('login');
+            }
+            if(Auth::user()->role == 'user') {
+                return redirect()->route('welcome.index');
+            }
             DB::beginTransaction();
 
             $search = session('search_id', null);
@@ -134,9 +140,15 @@ class ProductsController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): View
+    public function create()
     {
         try {
+            if(!Auth::check()) {
+                return redirect()->route('login');
+            }
+            if(Auth::user()->role == 'user') {
+                return redirect()->route('welcome.index');
+            }
             DB::beginTransaction();
 
             $categories = Category::all();
@@ -196,9 +208,15 @@ class ProductsController extends Controller
         }
     }
 
-    public function edit(Product $product): View
+    public function edit(Product $product)
     {
         try {
+            if(!Auth::check()) {
+                return redirect()->route('login');
+            }
+            if(Auth::user()->role == 'user') {
+                return redirect()->route('welcome.index');
+            }
             DB::beginTransaction();
 
             $categories = Category::all();
@@ -239,6 +257,12 @@ class ProductsController extends Controller
     public function destroy(Product $product): RedirectResponse
     {
         try {
+            if(!Auth::check()) {
+                return redirect()->route('login');
+            }
+            if(Auth::user()->role == 'user') {
+                return redirect()->route('welcome.index');
+            }
             DB::beginTransaction();
 
             $product->categories()->detach();

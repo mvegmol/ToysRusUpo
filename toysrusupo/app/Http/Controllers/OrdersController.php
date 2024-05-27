@@ -26,7 +26,7 @@ class OrdersController extends Controller
 
             try {
                 // Check if the user is an admin
-                if (Auth::user()->rol === 'admin') {
+                if (Auth::user()->role === 'admin') {
                     $query = Order::query();
                 } else {
                     // If not an admin, retrieve only user's orders
@@ -42,7 +42,7 @@ class OrdersController extends Controller
 
                 // Get filter parameters
                 $orderType = $request->input('order_type', 'all');
-                $duration = $request->input('duration', 'this_week');
+                $duration = $request->input('duration');
 
                 if ($orderType !== 'all') {
                     $query->where('status', $orderType);
@@ -73,7 +73,7 @@ class OrdersController extends Controller
 
                 DB::commit();
 
-                $orders = $query->paginate(5);
+                $orders = $query->paginate(5)->appends(['order_type' => $orderType, 'duration' => $duration]);
                 return view('orders.index', compact('orders'));
 
             } catch (\Exception $e) {
@@ -212,7 +212,33 @@ class OrdersController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            if(!Auth::user()->role == 'admin'){
+                return redirect()->route('welcome.index');
+            }
+            DB::beginTransaction();
+
+            // Validar el request
+            $request->validate([
+                'status' => 'required|in:pending,accepted,in progress,delivered,cancelled',
+            ]);
+
+
+            // Encontrar la orden por ID
+            $order = Order::findOrFail($id);
+            $order->status = $request->status;
+
+            // Actualizar el estado de la orden
+
+            $order->save();
+
+            DB::commit();
+
+            return redirect()->route('orders.index')->with('success', 'Order status updated successfully');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('error', 'Failed to update order status: ' . $e->getMessage());
+        }
     }
 
     /**
