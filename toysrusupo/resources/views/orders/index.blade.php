@@ -62,45 +62,104 @@
                 <div class="mt-6 flow-root sm:mt-8">
                     <div class="divide-y divide-gray-200">
                         @foreach ($orders as $order)
-                            <div class="flex flex-wrap items-center gap-y-4 py-6">
-                                <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
-                                    <dt class="text-base font-medium text-gray-500">Order ID:</dt>
-                                    <dd class="mt-1.5 text-base font-semibold text-tertiary">
-                                        <a href="#" class="hover:underline">#{{ $order->id }}</a>
-                                    </dd>
-                                </dl>
+                            @if (Auth::user()->role == 'user')
+                                <div class="flex flex-wrap items-center gap-y-4 py-6">
+                                    <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
+                                        <dt class="text-base font-medium text-gray-500">Order ID:</dt>
+                                        <dd class="mt-1.5 text-base font-semibold text-tertiary">
+                                            <a href="#" class="hover:underline">#{{ $order->id }}</a>
+                                        </dd>
+                                    </dl>
 
-                                <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
-                                    <dt class="text-base font-medium text-gray-500">Date:</dt>
-                                    <dd class="mt-1.5 text-base font-semibold text-tertiary">
-                                        {{ $order->created_at->format('d.m.Y') }}</dd>
-                                </dl>
+                                    <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
+                                        <dt class="text-base font-medium text-gray-500">Date:</dt>
+                                        <dd class="mt-1.5 text-base font-semibold text-tertiary">
+                                            {{ $order->created_at->format('d.m.Y') }}</dd>
+                                    </dl>
 
-                                <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
-                                    <dt class="text-base font-medium text-gray-500">Price:</dt>
-                                    <dd class="mt-1.5 text-base font-semibold text-tertiary">
-                                        ${{ number_format($order->total_price, 2) }}</dd>
-                                </dl>
+                                    <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
+                                        <dt class="text-base font-medium text-gray-500">Price:</dt>
+                                        <dd class="mt-1.5 text-base font-semibold text-tertiary">
+                                            ${{ number_format($order->total_price, 2) }}</dd>
+                                    </dl>
 
-                                <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
-                                    <dt class="text-base font-medium text-gray-500">Status:</dt>
-                                    <dd class="mt-1.5 text-base font-semibold text-tertiary">
-                                        {{ ucfirst($order->status) }}
-                                    </dd>
-                                </dl>
+                                    <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
+                                        <dt class="text-base font-medium text-gray-500">Status:</dt>
+                                        <dd class="mt-1.5 text-base font-semibold text-tertiary">
+                                            {{ ucfirst($order->status) }}
+                                        </dd>
+                                    </dl>
 
-                                <div
-                                    class="w-full grid sm:grid-cols-2 lg:flex lg:w-64 lg:items-center lg:justify-end gap-4">
-                                    <button type="button"
-                                        class="w-full rounded-lg border bg-red-600 text-white border-red-600 px-3 py-2 text-center text-sm font-medium hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 lg:w-auto">
-                                        Cancel order
-                                    </button>
-                                    <a href="{{ route('orders.show', $order->id) }}"
-                                        class="w-full inline-flex justify-center rounded-lg border border-primary bg-white px-3 py-2 text-sm font-medium text-primary hover:bg-primary hover:text-white focus:z-10 focus:outline-none focus:ring-4 focus:ring-primary lg:w-auto">
-                                        View details
-                                    </a>
+                                    <div
+                                        class="w-full grid sm:grid-cols-2 lg:flex lg:w-64 lg:items-center lg:justify-end gap-4">
+                                        <button type="button"
+                                            class="w-full rounded-lg border bg-red-600 text-white border-red-600 px-3 py-2 text-center text-sm font-medium hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 lg:w-auto">
+                                            Cancel order
+                                        </button>
+                                        <a href="{{ route('orders.show', $order->id) }}"
+                                            class="w-full inline-flex justify-center rounded-lg border border-primary bg-white px-3 py-2 text-sm font-medium text-primary hover:bg-primary hover:text-white focus:z-10 focus:outline-none focus:ring-4 focus:ring-primary lg:w-auto">
+                                            View details
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
+                            @else
+                                <div class="flex flex-wrap items-center gap-y-4 py-6">
+                                    <dl class="w-full sm:w-1/2 lg:w-1/5">
+                                        <dt class="text-base font-medium text-gray-500">Order ID:</dt>
+                                        <dd class="mt-1.5 text-base font-semibold text-tertiary">
+                                            <a href="#" class="hover:underline">#{{ $order->id }}</a>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="w-full sm:w-1/2 lg:w-1/5">
+                                        <dt class="text-base font-medium text-gray-500">Date:</dt>
+                                        <dd class="mt-1.5 text-base font-semibold text-tertiary">
+                                            {{ $order->created_at->format('d.m.Y') }}
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="w-full sm:w-1/2 lg:w-1/5">
+                                        <dt class="text-base font-medium text-gray-500">Price:</dt>
+                                        <dd class="mt-1.5 text-base font-semibold text-tertiary">
+                                            ${{ number_format($order->total_price, 2) }}
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="w-full sm:w-1/2 lg:w-1/5">
+
+                                        <dd class="mt-1.5 text-base font-semibold text-tertiary flex items-center">
+                                            <form action="{{ route('orders.update', $order->id) }}" method="POST">
+                                                @csrf
+                                                @method('PUT')
+                                                <select id="status" name="status"
+                                                    class="mt-1.5 text-base font-semibold text-tertiary">
+                                                    <option value="pending"
+                                                        @if ($order->status == 'pending') selected @endif>Pending</option>
+                                                    <option value="accepted"
+                                                        @if ($order->status == 'accepted') selected @endif>Accepted</option>
+                                                    <option value="in progress"
+                                                        @if ($order->status == 'in progress') selected @endif>In Progress
+                                                    </option>
+                                                    <option value="delivered"
+                                                        @if ($order->status == 'delivered') selected @endif>Delivered</option>
+                                                    <option value="cancelled"
+                                                        @if ($order->status == 'cancelled') selected @endif>Cancelled</option>
+                                                </select>
+                                                <button type="submit"
+                                                    class="ml-2 rounded-lg border bg-primary text-white border-primary px-3 py-2 text-center text-sm font-medium hover:bg-primary hover:text-white focus:outline-none focus:ring-4 focus:ring-primary lg:w-auto">
+                                                    Update
+                                            </form>
+                                        </dd>
+                                    </dl>
+
+                                    <div class="w-full sm:w-1/2 lg:w-1/5 flex justify-end">
+                                        <a href="{{ route('orders.show', $order->id) }}"
+                                            class="inline-flex justify-center rounded-lg border border-primary bg-white px-3 py-2 text-sm font-medium text-primary hover:bg-primary hover:text-white focus:z-10 focus:outline-none focus:ring-4 focus:ring-primary lg:w-auto">
+                                            View details
+                                        </a>
+                                    </div>
+                                </div>
+                            @endif
                         @endforeach
                     </div>
                 </div>

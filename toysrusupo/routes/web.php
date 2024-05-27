@@ -70,9 +70,18 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::resource('/addresses', AddressesController::class);
 });
-Route::get('/likeProduct',[UsersController::class,"likeorUnlikeProduct"])->name('user.like');
+
 
 Route::get('lang/{lang}', [LanguageController::class, 'switchLang'])->name('lang.switch');
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/likeProduct',[UsersController::class,"likeorUnlikeProduct"])->name('user.like');
+    Route::get('/productsw/favourite', [ProductsController::class, 'productsLike'])->name('products.favourite');
+    Route::get('/products/{category}/toysFavourite', [ProductsController::class, 'categoryToysFavourite'])->name('products.categoryToysFavourite');
+});
+
+Route::get('/productsMoreLike', [ProductsController::class, 'productsMoreLike'])->name('products.moreLike');
 
 
+Route::get('/user/{id}',[UsersController::class,"edit"])->name('user.edit');
+Route::put('/user/update/{id}',[UsersController::class,"update"])->name('user.update');

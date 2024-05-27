@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -47,7 +48,7 @@ class ProductsController extends Controller
     public function toys(Request $request): View
     {
         $perPage = Config::get('app.toys_per_page');
-        $products = Product::with('categories')->paginate($perPage);        
+        $products = Product::with('categories')->paginate($perPage);
 
         $favorites = [];
         if (Auth::check()) {
@@ -61,7 +62,7 @@ class ProductsController extends Controller
 
     public function categoryToys(Request $request, $id): View
     {
-        $category = Category::with('products')->findOrFail($id);        
+        $category = Category::with('products')->findOrFail($id);
         $perPage = Config::get('app.per_page');
         $products = $category->products()->paginate($perPage);
 
@@ -75,9 +76,15 @@ class ProductsController extends Controller
         return view('products.toys', compact('category', 'products', 'favorites', 'categories'));
     }
 
-    public function index(Request $request): View
+    public function index(Request $request)
     {
         try {
+            if(!Auth::check()) {
+                return redirect()->route('login');
+            }
+            if(Auth::user()->role == 'user') {
+                return redirect()->route('welcome.index');
+            }
             DB::beginTransaction();
 
             $search = session('search_id', null);
@@ -115,9 +122,15 @@ class ProductsController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): View
+    public function create()
     {
         try {
+            if(!Auth::check()) {
+                return redirect()->route('login');
+            }
+            if(Auth::user()->role == 'user') {
+                return redirect()->route('welcome.index');
+            }
             DB::beginTransaction();
 
             $categories = Category::all();
@@ -177,9 +190,15 @@ class ProductsController extends Controller
         }
     }
 
-    public function edit(Product $product): View
+    public function edit(Product $product)
     {
         try {
+            if(!Auth::check()) {
+                return redirect()->route('login');
+            }
+            if(Auth::user()->role == 'user') {
+                return redirect()->route('welcome.index');
+            }
             DB::beginTransaction();
 
             $categories = Category::all();
@@ -220,6 +239,12 @@ class ProductsController extends Controller
     public function destroy(Product $product): RedirectResponse
     {
         try {
+            if(!Auth::check()) {
+                return redirect()->route('login');
+            }
+            if(Auth::user()->role == 'user') {
+                return redirect()->route('welcome.index');
+            }
             DB::beginTransaction();
 
             $product->categories()->detach();
@@ -299,4 +324,94 @@ class ProductsController extends Controller
         }
 
     }
+    public function productsLike()
+    {
+        if(!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        try {
+
+            DB::beginTransaction();
+
+
+            $cliente_id = Auth::user()->id;
+
+            $client = User::findOrFail($cliente_id);
+
+            $products = $client->favouriteProducts()->paginate(16);
+
+            $categories = Category::all();
+            $favorites = [];
+            $favorites = Auth::user()->favouriteProducts->pluck('id')->toArray();
+
+            DB::commit();
+
+            return view('products.favourite', compact('products', 'favorites', 'categories'));
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+            throw $e;
+        }
+    }
+
+    public function categoryToysFavourite(Request $request, $id): View
+    {
+        try {
+            DB::beginTransaction();
+            $category = Category::with('products')->findOrFail($id);
+
+            $cliente_id = Auth::user()->id;
+            $client = User::findOrFail($cliente_id);
+
+            $products = $client->favouriteProducts()
+                            ->whereHas('categories', function($query) use ($id) {
+                                $query->where('categories.id', $id);
+                            })
+                            ->paginate(16);
+
+            $favorites = Auth::user()->favouriteProducts->pluck('id')->toArray();
+
+            $categories = Category::all();
+
+            DB::commit();
+
+            return view('products.favourite', compact('category', 'products', 'favorites', 'categories'));
+
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
+
+
+    public function productsMoreLike()
+    {
+        try {
+            DB::beginTransaction();
+
+            $query = Product::orderByFavorites();
+
+            $products = $query->paginate(8);
+
+            // Cargar relaciones para cada producto
+            $products->load('categories');
+
+            foreach ($products as $product) {
+                $product->category_names = $product->categories->pluck('name')->join(', ');
+
+            }
+
+            DB::commit();
+
+            return view('products.favourite_ad', compact('products'));
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
+
+
 }

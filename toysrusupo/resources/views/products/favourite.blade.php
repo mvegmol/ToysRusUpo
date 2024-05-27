@@ -8,7 +8,7 @@
             <span class="text-primary">Toys</span>
         </nav>
         <div class="text-center max-w-3xl mx-auto">
-            <h1 class="text-4xl font-bold mb-6">TOYS</h1>
+            <h1 class="text-4xl font-bold mb-6">FAVOURITE TOYS</h1>
             <p class="text-base text-gray-600 leading-relaxed">
                 Playing to learn: the importance of toys and play. Toys are essential tools for children's development,
                 enhancing learning in all areas. Through play, children develop fine and gross motor skills, personal
@@ -23,7 +23,7 @@
         class="w-full max-w-full m-0 mx-auto mb-16 px-3 flex justify-center items-start flex-nowrap whitespace-nowrap text-center">
         <nav class="flex space-x-10 px-4 overflow-x-auto  scrollbar-hide">
             <div class="w-[170px] p-0 mx-[5px] mb-4 text-center border-0 rounded-none overflow-hidden flex-shrink-0 transition-all duration-150 ease-in-out">
-                <a href="{{ route('products.toys') }}"
+                <a href="{{ route('products.favourite') }}"
                     class="text-gray-500 hover:text-primary hover:font-semibold transition-all duration-150 ease-in-out">
                     <span class="text-sm">All</span>
                 </a>
@@ -31,7 +31,7 @@
             @foreach ($categories as $c)
                 <div
                     class="min-w-[170px] p-0 mx-[5px] text-center border-0 rounded-none overflow-hidden flex-shrink-0 transition-all duration-150 ease-in-out">
-                    <a href="{{ route('products.categoryToys', $c->id) }}"
+                    <a href="{{ route('products.categoryToysFavourite', $c->id) }}"
                         class="text-gray-500 hover:text-primary hover:font-semibold transition-all duration-150 ease-in-out">
                         <span class="text-sm">{{ $c->name }}</span>
                     </a>

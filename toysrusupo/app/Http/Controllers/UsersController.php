@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -51,7 +52,13 @@ class UsersController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        try {
+            $user = User::findOrFail($id);
+            return view('auth.update', compact('user'));
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error al cargar el usuario.');
+        }
+
     }
 
     /**
@@ -59,7 +66,22 @@ class UsersController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try{
+            $request->validate([
+                'name' => ['required', 'string', 'max:255'],
+                'phone' => ['required', 'string', 'max:255'],
+            ]);
+            DB::beginTransaction();
+            $user = User::findOrFail($id);
+            $user->name = $request->name;
+            $user->phone = $request->phone;
+            $user->save();
+            DB::commit();
+            return redirect()->route('welcome.index')->with('success', 'Tu perfil ha sido actualizado');
+
+        }catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error al actualizar el usuario.');
+        }
     }
 
     /**
@@ -123,5 +145,7 @@ class UsersController extends Controller
             throw $e;
         }
     }
+
+
 
 }

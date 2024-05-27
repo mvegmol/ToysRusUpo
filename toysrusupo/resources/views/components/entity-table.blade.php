@@ -23,9 +23,13 @@
                     {{ $header }}</th>
             @endforeach
             <th scope="col" class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-            @if ($isProductEntity)
-                <th scope="col" class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Añadir al
-                    Carrito</th>
+            @if (Auth::user()->role == 'admin')
+            @else
+                @if ($isProductEntity)
+                    <th scope="col" class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Añadir
+                        al
+                        Carrito</th>
+                @endif
             @endif
         </tr>
     </thead>
@@ -46,16 +50,19 @@
                             :category="$category" />
                     @endif
                 </td>
-                @if ($isProductEntity)
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        <form action="{{ route('cart.add') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="product_id" value="{{ $entity->id }}">
+                @if (Auth::user()->role == 'admin')
+                @else
+                    @if ($isProductEntity)
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <form action="{{ route('cart.add') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="product_id" value="{{ $entity->id }}">
 
-                            <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded">Añadir al
-                                Carrito</button>
-                        </form>
-                    </td>
+                                <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded">Añadir al
+                                    Carrito</button>
+                            </form>
+                        </td>
+                    @endif
                 @endif
             </tr>
         @empty
