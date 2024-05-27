@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 return [
 
     'per_page' => env('PAGINATION_PER_PAGE'),
+    'toys_per_page' => env('TOYS_PAGINATION_PER_PAGE'),
 
     /*
     |--------------------------------------------------------------------------

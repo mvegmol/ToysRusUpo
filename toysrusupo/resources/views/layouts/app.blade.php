@@ -69,13 +69,13 @@
                             </button>
                             <ul id="toysDropdownMenu" class="absolute hidden bg-white shadow-lg rounded-lg mt-2 w-44">
                                 <li class="border-b border-gray-200">
-                                    <a href="{{ route('products.index') }}"
+                                    <a href="{{ route('products.toys') }}"
                                         class="hover:bg-gray-100 text-gray-600 font-bold text-lg block px-4 py-2">
                                         @lang('messages.bestseller')
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('products.index') }}"
+                                    <a href="{{ route('products.toys') }}"
                                         class="hover:bg-gray-100 text-gray-600 font-bold text-lg block px-4 py-2">
                                         @lang('messages.morefollows')
                                     </a>
