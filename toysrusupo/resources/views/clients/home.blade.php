@@ -54,20 +54,20 @@
             currentIndex: 0,
             products: {{ json_encode($products) }}
         }" class="relative w-full max-w-full mx-auto bg-secondary p-6 rounded-3xl shadow-lg">
-            
+
             <button @click="currentIndex = (currentIndex - 1 + products.length) % products.length"
                     class="absolute -left-16 top-1/2 transform -translate-y-1/2 text-primary z-10 hover:text-tertiary transition-colors duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
                 </svg>
             </button>
-            
+
             <div class="flex overflow-hidden">
                 <!-- Debug: Print products in the console -->
                 <template x-init="console.log(products)">
                     <!-- Ensure that Alpine.js is receiving the products array correctly -->
                 </template>
-                
+
                 <template x-for="(product, index) in [...products, ...products].slice(currentIndex, currentIndex + 4)" :key="product.id">
                     <div class="w-1/4 px-4">
                         <div class="bg-white shadow-2xl rounded-2xl overflow-hidden group transition transform hover:-translate-y-1 hover:shadow-3xl">
@@ -113,7 +113,7 @@
                                 <a :href="'/products_clients/' + product.id" class="hover:underline hover:text-primary">
                                     <h4 class="font-medium text-base mb-1 text-gray-800 hover:text-primary transition" x-text="product.name"></h4>
                                 </a>
-                                <p class="text-lg text-primary font-semibold" x-text="'$' + product.price.toFixed(2)"></p>
+                                <p class="text-lg text-primary font-semibold" x-text=" product.price.toFixed(2)+'€'"></p>
                             </div>
                             <div class="mr-4 flex items-center">
                                 <form :action="'{{ route('user.like') }}'" method="GET" class="inline">
@@ -137,7 +137,7 @@
                     </div>
                 </template>
             </div>
-            
+
             <button @click="currentIndex = (currentIndex + 1) % products.length"
                     class="absolute -right-16 top-1/2 transform -translate-y-1/2 text-primary z-10 hover:text-tertiary transition-colors duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12">
@@ -146,11 +146,11 @@
             </button>
         </div>
     </div>
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
 @endsection

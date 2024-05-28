@@ -119,7 +119,7 @@
                                         {{ $product->name }}
                                     </h4>
                                 </a>
-                                <p class="text-lg text-primary font-semibold">${{ number_format($product->price, 2) }}</p>
+                                <p class="text-lg text-primary font-semibold">{{ number_format($product->price, 2) }}€</p>
                             </div>
                             <div class="mr-4 flex items-center">
                                 @if (in_array($product->id, $favorites))

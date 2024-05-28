@@ -29,7 +29,7 @@
                                             <h3 class="text-xl xl:text-2xl font-semibold leading-6 text-gray-800">
                                                 {{ $product->name }}</h3>
 
-                                            <p class="text-base flex-col xl:text-lg leading-5">Price: ${{ $product->price }}
+                                            <p class="text-base flex-col xl:text-lg leading-5">Price: {{ $product->price }} €
                                             </p>
                                             <p class="text-base flex-col xl:text-lg leading-6">Quantity:
                                                 {{ $product->pivot->quantity }}</p>
@@ -56,7 +56,7 @@
                             class="flex justify-center items-center w-full space-y-4 flex-col rounded-md border-gray-200 border-b pb-4">
                             <div class="flex justify-between w-full">
                                 <p class="text-base leading-4 text-gray-800">Subtotal</p>
-                                <p class="text-base leading-4 text-gray-600">${{ $subtotal }}</p>
+                                <p class="text-base leading-4 text-gray-600">{{ $subtotal }}€</p>
                             </div>
 
                             <div class="flex justify-between items-center w-full">
@@ -66,7 +66,7 @@
                         </div>
                         <div class="flex justify-between items-center w-full">
                             <p class="text-base font-semibold leading-4 text-gray-800">Total</p>
-                            <p class="text-base font-semibold leading-4 text-gray-600">${{ $order->total_price }}</p>
+                            <p class="text-base font-semibold leading-4 text-gray-600">{{ $order->total_price }}€</p>
                         </div>
                     </div>
                     <div class="flex flex-col justify-center px-4 py-6 md:p-6 xl:p-8 w-full bg-gray-50 space-y-6">

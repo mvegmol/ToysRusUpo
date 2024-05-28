@@ -15,7 +15,7 @@
                 <x-entity-details :details="[
                     ['label' => 'Name', 'value' => $product->name],
                     ['label' => 'Description', 'value' => $product->description],
-                    ['label' => 'Price ($)', 'value' => $product->price],
+                    ['label' => 'Price (€)', 'value' => $product->price],
                     ['label' => 'Stock', 'value' => $product->stock],
                     ['label' => 'Minimum age', 'value' => $product->min_age],
                     ['label' => 'Categories', 'value' => $product->category_names],

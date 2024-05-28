@@ -30,7 +30,7 @@
                     [
                         'id' => 'price',
                         'type' => 'number',
-                        'label' => 'Price ($)',
+                        'label' => 'Price (€)',
                         'name' => 'price',
                         'old' => 'price',
                         'attributes' => 'step=0.01 min=0 max=999999.99',

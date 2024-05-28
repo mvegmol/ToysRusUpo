@@ -22,7 +22,7 @@
                 </div>
             </div>
 
-            <x-entity-table :entities="$products" :headers="['Name', 'Description', 'Price ($)', 'Stock', 'Min age', 'Categories','Total Favourites']" :fields="['name', 'description', 'price', 'stock', 'min_age', 'category_names','total_favorites']" actionsRoute="products" entityName="Product"
+            <x-entity-table :entities="$products" :headers="['Name', 'Description', 'Price (€)', 'Stock', 'Min age', 'Categories','Total Favourites']" :fields="['name', 'description', 'price', 'stock', 'min_age', 'category_names','total_favorites']" actionsRoute="products" entityName="Product"
                 emptyMessage="No Products Found!" />
 
             @slot('footer')

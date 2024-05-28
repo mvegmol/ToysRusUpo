@@ -27,6 +27,6 @@ class LanguageController extends Controller
         if (array_key_exists($locale, config('app.languages'))) {
             Session::put('locale', $locale);
         }
-        return redirect()->back();
+        return redirect()->route('clients.profile')->with('success', 'Language changed successfully.');
     }
 }

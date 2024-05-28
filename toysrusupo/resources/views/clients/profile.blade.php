@@ -2,6 +2,8 @@
 
 @section('content')
     <div class="container mx-auto py-8 flex flex-col items-center">
+        @include('partials.messages')
+
         <h1 class="text-3xl font-bold mb-6 mt-0">Hello, {{ $client_name }}</h1>
         <div class="w-full border-t border-gray-300 mb-12"></div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -54,7 +56,7 @@
             <!-- Favorites -->
             <div
                 class="relative w-full md:w-96 h-64 p-6 bg-lightSecondary shadow-md rounded-2xl flex flex-col items-center text-center border-2 border-gray-300 hover:bg-lightSecondary-hover hover:cursor-pointer">
-                <a href="{{ route('addresses.index') }}" class="w-full h-full flex flex-col items-center justify-center">
+                <a href="{{ route('products.favourite') }}" class="w-full h-full flex flex-col items-center justify-center">
                     <div
                         class="w-20 h-20 rounded-full border-2 border-gray-300 shadow-md flex items-center justify-center bg-secondary hover:bg-secondary-hover absolute -top-6">
                         <img src="{{ asset('images/icons/favorites.png') }}" alt="Favorites" class="w-12 h-12">

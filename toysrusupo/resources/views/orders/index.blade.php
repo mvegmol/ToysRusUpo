@@ -62,6 +62,7 @@
                 <div class="mt-6 flow-root sm:mt-8">
                     <div class="divide-y divide-gray-200">
                         @foreach ($orders as $order)
+
                             @if (Auth::user()->role == 'user')
                                 <div class="flex flex-wrap items-center gap-y-4 py-6">
                                     <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
@@ -80,7 +81,7 @@
                                     <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
                                         <dt class="text-base font-medium text-gray-500">Price:</dt>
                                         <dd class="mt-1.5 text-base font-semibold text-tertiary">
-                                            ${{ number_format($order->total_price, 2) }}</dd>
+                                            {{ number_format($order->total_price, 2) }}€</dd>
                                     </dl>
 
                                     <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
@@ -121,7 +122,7 @@
                                     <dl class="w-full sm:w-1/2 lg:w-1/5">
                                         <dt class="text-base font-medium text-gray-500">Price:</dt>
                                         <dd class="mt-1.5 text-base font-semibold text-tertiary">
-                                            ${{ number_format($order->total_price, 2) }}
+                                            {{ number_format($order->total_price, 2) }}€
                                         </dd>
                                     </dl>
 

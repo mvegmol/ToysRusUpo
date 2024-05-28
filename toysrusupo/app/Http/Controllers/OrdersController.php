@@ -177,7 +177,7 @@ class OrdersController extends Controller
                 });
                 if(($order->total_price-5)<50)
                 {
-                    $shipping = "$5";
+                    $shipping = "5€";
                     $subtotal = $order->total_price-5;
 
                 }else{
