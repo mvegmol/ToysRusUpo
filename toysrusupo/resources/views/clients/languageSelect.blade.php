@@ -1,11 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="flex items-start justify-center min-h-screen bg-gray-100">
-        <div class="relative bg-white mt-10 p-12 rounded-lg shadow-lg w-full md:w-3/4 lg:w-1/2">
-            <div class="absolute top-4 right-4">
-                <x-back-button route="clients.profile">&larr; Back</x-button-link>
-            </div>
+    <div class="flex flex-col items-center justify-start min-h-screen bg-gray-100 pt-10">
+        <nav class="text-sm mb-4 w-full max-w-lg text-center">
+            <a href="{{ route('clients.profile') }}" class="text-gray-500 hover:text-primary hover:underline">My Account</a>
+            <span class="text-gray-500 mx-2">›</span>
+            <span class="text-primary">Language Settings</span>
+        </nav>
+        <hr class="my-2 w-1/2 border-t-2 border-gray-200">
+        <div class="relative bg-white mt-4 p-12 rounded-lg shadow-lg w-full max-w-lg">            
             <h1 class="text-4xl font-semibold mb-8 text-center text-gray-800">Configuración de idioma</h1>
             <p class="mb-10 text-center text-gray-600">Selecciona tu idioma preferido para navegar, comprar y recibir comunicaciones.</p>
             <form action="{{ route('lang.switchAle') }}" method="POST">
