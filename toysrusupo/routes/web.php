@@ -73,6 +73,8 @@ Route::middleware(['auth'])->group(function () {
 
 
 Route::get('lang/{lang}', [LanguageController::class, 'switchLang'])->name('lang.switch');
+Route::get('selectLang', [LanguageController::class, 'selectLang'])->name('lang.select');
+Route::post('lang/switch', [LanguageController::class, 'switchLangAle'])->name('lang.switchAle');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/likeProduct',[UsersController::class,"likeorUnlikeProduct"])->name('user.like');
