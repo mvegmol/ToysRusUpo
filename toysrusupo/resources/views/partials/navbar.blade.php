@@ -1,6 +1,6 @@
-<div class='border-b px-20 bg-secondary font-sans min-h-[60px] relative tracking-wide z-50 shadow-primary'>
+<div class='px-20 bg-secondary font-sans min-h-[60px] fixed top-0 w-full tracking-wide z-50 shadow-primary'>
     <div class='flex flex-wrap items-center max-lg:gap-y-6 max-sm:gap-x-4'>
-        <a href="javascript:void(0)"><img src="{{ asset('images/icons/toysrusupo.png') }}" alt="logo" class='w-28' />
+        <a href="javascript:void(0)"><img src="{{ asset('images/icons/toysrusupo.png') }}" alt="logo" class='w-24' />
         </a>
         @if (Auth::check() && Auth::user()->isAdmin())
             <div id="collapseMenu"
