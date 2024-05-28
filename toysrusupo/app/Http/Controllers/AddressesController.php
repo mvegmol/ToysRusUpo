@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
-
+use Illuminate\Support\Facades\Session;
 class AddressesController extends Controller
 {
     protected $countries;
@@ -68,6 +68,12 @@ class AddressesController extends Controller
 
             DB::commit();
 
+            $value = Session::get('redirect_to');
+            if($value){
+                //Eliminamos la variable de sesion creada
+                Session::forget('redirect_to');
+                return redirect($value)->with('success', 'Address created successfully.');
+            }
             return redirect()->route('addresses.index')->with('success', 'Address created successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
