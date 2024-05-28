@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
-
+use Illuminate\Support\Facades\Session;
 class ShoppingCartsController extends Controller
 {
     /**
@@ -403,6 +403,11 @@ class ShoppingCartsController extends Controller
     public function checkout()
     {
         try {
+            if (Auth::user()->address->isEmpty()) {
+                Session::put('redirect_to', url()->current());
+
+                return redirect()->route('addresses.create')->with('error', 'You must have an address to checkout');
+            }
 
             DB::beginTransaction();
 
