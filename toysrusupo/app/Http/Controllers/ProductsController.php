@@ -24,9 +24,8 @@ class ProductsController extends Controller
     {
         try {
             DB::beginTransaction();
-
-            $perPage = Config::get('app.toys_per_page');
-            $products = Product::with('categories')->paginate($perPage);
+            
+            $products = Product::bestSellingProducts()->with('categories')->take(12)->get();
 
             $favorites = [];
             if (Auth::check()) {
