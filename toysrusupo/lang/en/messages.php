@@ -13,5 +13,16 @@ return [
     'recommend'=>'RECOMENDED FOR YOU',
     'addCart'=>'Add to cart',
     'user'=>'User',
+    'all_products'=>"All Products",
+    'favourite_toys'=>"My Favorite Toys",
+    'profile'=>"Profile",
+    'Logout'=>"Logout",
+    "topCategories"=>"Top Selling Categories",
+    "topToys"=>"Top Selling Toys",
+    "languagesSetting"=>"Language Settings",
+    "lanMes"=>"Select your preferred language for browsing, shopping, and receiving communications.",
+    "cancel"=>"Cancel",
+    "guarCam"=>"Save Changes",
+
 
 ];

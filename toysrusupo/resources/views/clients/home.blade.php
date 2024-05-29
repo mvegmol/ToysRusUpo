@@ -30,7 +30,7 @@
 
     <!-- CATEGORÍAS FAVORITAS -->
     <div class="container mx-auto mt-10 py-10">
-        <h2 class="text-3xl font-extrabold text-center text-gray-700 mb-8 tracking-wide">Top Selling Categories</h2>
+        <h2 class="text-3xl font-extrabold text-center text-gray-700 mb-8 tracking-wide">@lang("messages.topCategories")</h2>
         <div class="flex justify-center mb-10">
             <div class="w-1/4 border-t border-gray-300"></div>
         </div>
@@ -46,7 +46,7 @@
 
     <!-- PRODUCTOS RECOMENDADOS -->
     <div class="container mx-auto mt-20 py-8 w-4/5 max-w-full">
-        <h2 class="text-3xl font-extrabold text-center text-gray-700 mb-8 tracking-wide">Top Selling Products</h2>
+        <h2 class="text-3xl font-extrabold text-center text-gray-700 mb-8 tracking-wide">@lang("messages.topToys")</h2>
         <div class="flex justify-center mb-10">
             <div class="w-1/4 border-t border-gray-300"></div>
         </div>
@@ -103,7 +103,7 @@
                                     <input type="hidden" name="product_id" :value="product.id">
                                     <button type="submit" class="w-full py-3 text-center bg-primary text-white text-lg rounded-full flex items-center justify-center hover:bg-tertiary transition">
                                         <img src="{{ asset('images/icons/shoppingCart.png') }}" alt="Add to Cart" class="inline-block mr-1" width="24" height="24" style="filter: invert(1); position: relative; top: -1px;">
-                                        <span class="ml-1">Add to Cart</span>
+                                        <span class="ml-1">@lang("messages.addCart")</span>
                                     </button>
                                 </form>
                             </div>

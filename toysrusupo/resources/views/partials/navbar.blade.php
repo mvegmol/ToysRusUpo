@@ -54,7 +54,7 @@
                             <li>
                                 <a href="{{ route('products.index') }}"
                                     class="hover:bg-secondary-hover hover:text-primary text-gray-600 font-bold text-lg block px-4 py-2">
-                                    All Products
+                                   @lang("messages.all_products")
                                 </a>
                             </li>
                         </ul>
@@ -83,7 +83,7 @@
                         </a>
                     </li>
                     <li class='max-lg:border-b max-lg:py-3'><a href="{{ route('welcome.index') }}"
-                            class='hover:text-primary text-lg text-primary block font-bold'>Home</a></li>
+                            class='hover:text-primary text-lg text-primary block font-bold'>@lang("messages.home")</a></li>
 
 
 
@@ -117,13 +117,13 @@
                             <li>
                                 <a href="{{ route('products.favourite') }}"
                                     class="hover:bg-secondary-hover hover:text-primary text-gray-600 font-bold text-lg block px-4 py-2">
-                                    Mis Juguetes Favoritos
+                                    @lang("messages.favourite_toys")
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ route('products.toys') }}"
                                     class="hover:bg-secondary-hover hover:text-primary text-gray-600 font-bold text-lg block px-4 py-2">
-                                    Todos los Productos
+                                    @lang("messages.all_products")
                                 </a>
                             </li>
                         </ul>
@@ -175,14 +175,14 @@
                             <li class="border-b border-gray-200">
                                 <a href="{{ route('clients.profile') }}"
                                     class="hover:bg-secondary-hover hover:text-primary text-gray-600 font-bold text-lg block px-4 py-2">
-                                    Profile
+                                    @lang("messages.profile")
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ route('logout') }}"
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                                     class="hover:bg-secondary-hover hover:text-primary text-gray-600 font-bold text-lg block px-4 py-2">
-                                    {{ __('Logout') }}
+                                    {{ __('messages.Logout') }}
                                 </a>
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                     @csrf
