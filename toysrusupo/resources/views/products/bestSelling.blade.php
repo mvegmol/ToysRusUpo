@@ -3,14 +3,15 @@
 @section('content')
     <div class="flex justify-center items-center flex-col pb-8">
         <nav class="text-sm mt-4 mb-10">
-            <a href="{{ route('welcome.index') }}" class="text-gray-500 hover:text-primary hover:underline">@lang("messages.home")</a>
+            <a href="{{ route('welcome.index') }}"
+                class="text-gray-500 hover:text-primary hover:underline">@lang('messages.home')</a>
             <span class="text-gray-500 mx-2">›</span>
-            <span class="text-primary">@lang("messages.toys")</span>
+            <span class="text-primary">@lang('messages.toys')</span>
         </nav>
         <div class="text-center max-w-3xl mx-auto">
-            <h1 class="text-4xl font-bold mb-6">@lang("messages.bestSelling")</h1>
+            <h1 class="text-4xl font-bold mb-6">@lang('messages.bestSelling')</h1>
             <p class="text-base text-gray-600 leading-relaxed">
-                @lang("messages.desc")
+                @lang('messages.desc')
             </p>
         </div>
     </div>
@@ -20,10 +21,11 @@
     <div
         class="w-full max-w-full m-0 mx-auto mb-16 px-3 flex justify-center items-start flex-nowrap whitespace-nowrap text-center">
         <nav class="flex space-x-10 px-4 overflow-x-auto  scrollbar-hide">
-            <div class="w-[170px] p-0 mx-[5px] mb-4 text-center border-0 rounded-none overflow-hidden flex-shrink-0 transition-all duration-150 ease-in-out">
+            <div
+                class="w-[170px] p-0 mx-[5px] mb-4 text-center border-0 rounded-none overflow-hidden flex-shrink-0 transition-all duration-150 ease-in-out">
                 <a href="{{ route('products.bestSelling') }}"
                     class="text-gray-500 hover:text-primary hover:font-semibold transition-all duration-150 ease-in-out">
-                    <span class="text-sm">@lang("messages.all")</span>
+                    <span class="text-sm">@lang('messages.all')</span>
                 </a>
             </div>
             @foreach ($categories as $c)
@@ -51,19 +53,11 @@
                         <div
                             class="bg-white shadow-2xl rounded-2xl overflow-hidden group transition transform hover:-translate-y-1 hover:shadow-3xl">
                             <div class="relative w-[400px] h-[400px]">
-                                <img src="{{ asset('images/products/product1.jpg') }}"
-                                    alt="product 1" class="w-full h-full object-cover">
+                                <img src="{{ asset('images/products/product1.jpg') }}" alt="product 1"
+                                    class="w-full h-full object-cover">
                                 <div
                                     class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition">
-                                    <a href="{{ route('products_clients.show', $product->id) }}"
-                                        class="text-lg w-12 h-12 rounded-full text-white bg-primary flex items-center justify-center hover:bg-tertiary transition"
-                                        title="View Product">
-                                        <svg xmlns="http://www.w3.org/5000/svg" width="20" height="20"
-                                            fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                            <path
-                                                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-                                        </svg>
-                                    </a>
+
                                     @if (in_array($product->id, $favorites))
                                         <form action="{{ route('user.like') }}" method="GET" class="inline">
                                             @csrf
@@ -105,14 +99,15 @@
                                         <img src="{{ asset('images/icons/shoppingCart.png') }}" alt="Add to Cart"
                                             class="inline-block mr-1" width="24" height="24"
                                             style="filter: invert(1); position: relative; top: -1px;">
-                                        <span class="ml-1">@lang("messages.addCart")</span>
+                                        <span class="ml-1">@lang('messages.addCart')</span>
                                     </button>
                                 </form>
                             </div>
                         </div>
                         <div class="mt-4 flex items-center justify-between">
                             <div class="flex-1">
-                                <a href="#" class="hover:underline hover:text-primary">
+                                <a href="{{ route('products_clients.show', $product->id) }}"
+                                    class="hover:underline hover:text-primary">
                                     <h4 class="font-medium text-base mb-1 text-gray-800 hover:text-primary transition">
                                         {{ $product->name }}
                                     </h4>
@@ -152,7 +147,7 @@
                     </div>
                 @empty
                     <div class="w-full">
-                        <p class="text-gray-700">@lang("messages.notFound")</p>
+                        <p class="text-gray-700">@lang('messages.notFound')</p>
                     </div>
                 @endforelse
             </div>
