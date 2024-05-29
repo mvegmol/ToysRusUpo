@@ -5,7 +5,7 @@
         <div class="flex justify-center">
             <div class="w-full md:w-2/3 lg:w-1/2">
                 <div class="bg-white shadow-md rounded-lg">
-                    <div class="bg-gray-200 px-6 py-3 rounded-t-lg font-semibold">
+                    <div class="bg-primary text-white px-6 py-3 rounded-t-lg font-semibold">
                         {{ __('Update Profile') }}
                     </div>
 
@@ -68,16 +68,16 @@
 
                             <div class="flex justify-between items-center my-2">
                                 <button type="submit"
-                                    class="bg-primary hover:bg-grey-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                                    class="bg-primary hover:bg-tertiary text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                                     {{ __('Update Profile') }}
                                 </button>
                                 <div>
-                                    @if (Route::has('password.request'))
-                                        <a class="inline-block align-baseline font-bold text-sm text-primary hover:text-primary"
-                                            href="{{ route('password.request') }}">
-                                            {{ __('Forgot Your Password?') }}
-                                        </a>
-                                    @endif
+
+                                    <a class="inline-block align-baseline font-bold text-sm text-primary hover:text-tertiary"
+                                        href="{{ route('profile.changepass') }}">
+                                        {{ __('Change Your Password?') }}
+                                    </a>
+
                                 </div>
                             </div>
                         </form>
