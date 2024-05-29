@@ -6,7 +6,7 @@
         <div class="w-full lg:w-1/2 flex justify-center">
             <div class="w-full lg:w-3/4">
                 <!-- Dynamic image field using 'image_url' attribute -->
-                <img src="https://www.toyplanet.com/dw/image/v2/BDHG_PRD/on/demandware.static/-/Sites-toyplanet_master_catalog/default/dwe3179f9f/images/hi-res/TPVTC030922_1.JPG?sw=1000&sh=1000"
+                <img src="{{ asset('images/products/product1.jpg') }}"
                     alt="{{ $product->name }}" class="w-full h-auto object-cover rounded-xl border" />
             </div>
 
