@@ -71,5 +71,14 @@ return [
     "week"=>"this week",
     "all_order"=>"All orders",
 
-    "from"=>"Desde"
+    "from"=>"Desde",
+    "checkout"=>"Checkout",
+    "select_a"=>"Select a Shipping Address",
+    "total_amount"=>"Total Amount",
+    "pay"=>"Proceed to Payment",
+    "your"=>"Your Order",
+    "phone"=>"Phone number",
+    "s_cart"=>"Shopping Cart",
+    "free"=>"Free",
+    "iva"=>"including VAT"
 ];

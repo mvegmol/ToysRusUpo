@@ -70,7 +70,14 @@ return [
     "mont"=>"este mes",
     "week"=>"esta semana",
     "all_order"=>"todos los pedidos",
-    "from"=>"Desde"
-
-
+    "from"=>"Desde",
+    "checkout"=>"Pagar",
+    "select_a"=>"Selecciona una dirección de envío",
+    "total_amount"=>"Monto total",
+    "pay"=>"Continuar al pago",
+    "your"=>"Tu Pedido",
+    "phone"=>"Número de Teléfono",
+    "s_cart"=>"Carrito de la Compra",
+    "free"=>"Gratis",
+    "iva"=>"incluye IVA"
 ];

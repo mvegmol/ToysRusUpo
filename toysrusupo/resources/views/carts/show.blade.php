@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="h-screen bg-gray-100 pt-20">
-        <h1 class="mb-10 text-center text-2xl font-bold">Shopping Cart</h1>
+        <h1 class="mb-10 text-center text-2xl font-bold">@lang("messages.s_cart")</h1>
         <div class="mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
             <div class="rounded-lg md:w-2/3">
                 <div id="mensaje"></div>
@@ -51,10 +51,10 @@
                 </div>
                 <div class="flex justify-between">
                     @if ($carrito->total_price >=50)
-                        <p class="text-gray-700">Shipping</p>
-                        <p class="text-gray-700">Free</p>
+                        <p class="text-gray-700">@lang("messages.envio")</p>
+                        <p class="text-gray-700">@lang("messages.free")</p>
                     @else
-                        <p class="text-gray-700">Shipping</p>
+                        <p class="text-gray-700">@lang("messages.envio")</p>
                         <p class="text-gray-700">5€</p>
                     @endif
                 </div>
@@ -64,19 +64,19 @@
                     <div class="">
                         @if ($carrito->total_price >=50)
                             <p class="mb-1 text-lg font-bold">{{$carrito->total_price}}€</p>
-                            <p class="text-sm text-gray-700">including VAT</p>
+                            <p class="text-sm text-gray-700">@lang("messages.iva")</p>
                         @else
                             @php
                                 $total = $carrito->total_price + 5;
                             @endphp
                             <p class="mb-1 text-lg font-bold">{{$total}}€</p>
-                            <p class="text-sm text-gray-700">including VAT</p>
+                            <p class="text-sm text-gray-700">@lang("messages.iva")</p>
                         @endif
                     </div>
                 </div>
                 <form method="GET" action="{{ route('cart.checkout') }}">
-                    <button type="submit" class="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">
-                        Check out
+                    <button type="submit" class="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600 bg-primary">
+                        @lang("messages.checkout")
                     </button>
                 </form>
             </div>
