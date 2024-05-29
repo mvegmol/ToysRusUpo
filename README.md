@@ -43,3 +43,7 @@ Miguel Vega Molina, Carlos Vega Molina, Alejandro Vázquez Rodríguez
 
 Correo: mvegmol@alu.upo.es
 Password: 123456
+
+##Cuenta administrado de la APP
+correo: admin@admin.com
+Password:admin
