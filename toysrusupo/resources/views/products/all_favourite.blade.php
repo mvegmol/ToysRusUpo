@@ -50,8 +50,8 @@
                     <div>
                         <div
                             class="bg-white shadow-2xl rounded-2xl overflow-hidden group transition transform hover:-translate-y-1 hover:shadow-3xl">
-                            <div class="relative">
-                                <img src="https://www.toysrus.es/medias/?context=bWFzdGVyfHByb2R1Y3RfaW1hZ2VzfDM3MTA5fGltYWdlL2pwZWd8YUdVeEwyaGtOeTh4TVRjd01ESTFOekE1TlRjeE1BfDE1NzE4NDQ2ZWQ2NDZlYTRlMWI3YTIzMTYyZmQ2OWI0YjEzZjE2MDY4YTAxNzRiMGZjNzdmZTlmODUwY2RmN2M"
+                            <div class="relative w-[400px] h-[400px]">
+                                <img src="{{ asset('images/products/product1.jpg') }}"
                                     alt="product 1" class="w-full h-full object-cover">
                                 <div
                                     class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition">
