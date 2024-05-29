@@ -4,7 +4,7 @@
     <div class="container mx-auto py-8 flex flex-col items-center">
         @include('partials.messages')
 
-        <h1 class="text-3xl font-bold mb-6 mt-0">Hello, {{ $client_name }}</h1>
+        <h1 class="text-3xl font-bold mb-6 mt-0">@lang("messages.wel"), {{ $client_name }}</h1>
         <div class="w-full border-t border-gray-300 mb-12"></div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <!-- My Data -->
@@ -18,8 +18,8 @@
                     </div>
 
                     <div class="mt-0">
-                        <h3 class="text-xl font-bold mb-2 font-serif text-gray-700">My Data</h3>
-                        <p class="text-sm text-gray-600">Edit personal information such as name, email, and phone.</p>
+                        <h3 class="text-xl font-bold mb-2 font-serif text-gray-700">@lang("messages.data")</h3>
+                        <p class="text-sm text-gray-600">@lang("messages.data_inf")</p>
                     </div>
                 </a>
             </div>
@@ -35,8 +35,8 @@
                         </div>
 
                         <div class="mt-0">
-                            <h3 class="text-xl font-bold mb-2 font-serif text-gray-700">Orders</h3>
-                            <p class="text-sm text-gray-600">Track, return, cancel an order, and view purchase history.</p>
+                            <h3 class="text-xl font-bold mb-2 font-serif text-gray-700">@lang("messages.orders")</h3>
+                            <p class="text-sm text-gray-600">@lang("messages.order_inf")</p>
                         </div>
                     </a>
                 </div>
@@ -51,8 +51,8 @@
                         </div>
 
                         <div class="mt-0">
-                            <h3 class="text-xl font-bold mb-2 font-serif text-gray-700">Addresses</h3>
-                            <p class="text-sm text-gray-600">Add, edit, or delete shipping addresses.</p>
+                            <h3 class="text-xl font-bold mb-2 font-serif text-gray-700">@lang("messages.address")</h3>
+                            <p class="text-sm text-gray-600">@lang("messages.address_inf")</p>
                         </div>
                     </a>
                 </div>
@@ -68,8 +68,8 @@
                         </div>
 
                         <div class="mt-0">
-                            <h3 class="text-xl font-bold mb-2 font-serif text-gray-700">Favorites</h3>
-                            <p class="text-sm text-gray-600">View, add, or remove products from your favorites list.</p>
+                            <h3 class="text-xl font-bold mb-2 font-serif text-gray-700">@lang("messages.favourite")</h3>
+                            <p class="text-sm text-gray-600">@lang("messages.favourite_inf")</p>
                         </div>
                     </a>
                 </div>
@@ -83,8 +83,8 @@
                         <img src="{{ asset('images/icons/globe.png') }}" alt="Language" class="w-12 h-12">
                     </div>
                     <div class="mt-0">
-                        <h3 class="text-xl font-bold mb-2 font-serif text-gray-700">Language</h3>
-                        <p class="text-sm text-gray-600">Select your preferred language.</p>
+                        <h3 class="text-xl font-bold mb-2 font-serif text-gray-700">@lang("messages.language")</h3>
+                        <p class="text-sm text-gray-600">@lang("messages.lang_sel")</p>
                     </div>
                 </a>
             </div>
@@ -102,8 +102,8 @@
                     </div>
 
                     <div class="mt-0">
-                        <h3 class="text-xl font-bold mb-2 font-serif text-gray-700">Logout</h3>
-                        <p class="text-sm text-gray-600">Log out of your account on all devices.</p>
+                        <h3 class="text-xl font-bold mb-2 font-serif text-gray-700">@lang("messages.Logout")</h3>
+                        <p class="text-sm text-gray-600">@lang("messages.log_inf")</p></p>
                     </div>
                 </a>
             </div>

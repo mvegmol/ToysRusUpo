@@ -23,6 +23,24 @@ return [
     "lanMes"=>"Select your preferred language for browsing, shopping, and receiving communications.",
     "cancel"=>"Cancel",
     "guarCam"=>"Save Changes",
-
-
+    "wel"=>"Hello",
+    "data"=>"My Data",
+    "data_inf"=>"Edit personal information such as name, email, and phone.",
+    "order_inf"=>"Track, return, cancel an order, and view purchase history.",
+    "address"=>"Addresses",
+    "address_inf"=>"Add, edit, or delete shipping addresses.",
+    "favourite"=>"Favorites",
+    "favourite_inf"=>"View, add, or remove products from your favorites list.",
+    "log_inf"=>"Log out of your account on all devices.",
+    "language"=>"Language",
+    "lang_sel"=>"Select your preferred language.",
+    "most_liked"=>"Most Liked Toys",
+    "back"=>"Back",
+    "desc"=>"Playing to learn: the importance of toys and play. Toys are essential tools for children's development,
+    enhancing learning in all areas. Through play, children develop fine and gross motor skills, personal
+    preferences, social abilities, manual skills, coordination, expression, and creativity.",
+    "all"=>"All",
+    "notFound"=>"No se encontraron productos",
+    "bestSelling"=>"Best Selling Toys",
+    "toys_li"=>"Most Liked Toys"
 ];

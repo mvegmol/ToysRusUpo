@@ -23,4 +23,24 @@ return [
     "lanMes"=>"Selecciona tu idioma preferido para navegar, comprar y recibir comunicaciones.",
     "cancel"=>"Cancelar",
     "guarCam"=>"Guardar cambios",
+    "wel"=>"Hola",
+    "data"=>"Mis Datos",
+    "data_inf"=>"Editar información personal como nombre, correo electrónico y teléfono.",
+    "order_inf"=>"Seguir, devolver, cancelar un pedido y ver el historial de compras.",
+
+    "address"=>"Direcciones",
+    "address_inf"=>"Agregar, editar o eliminar direcciones de envío.",
+    "favourite"=>"Favoritos",
+    "favourite_inf"=>"Ver, agregar o eliminar productos de tu lista de favoritos.",
+    "log_inf"=>"Cerrar sesión de tu cuenta en todos los dispositivos.",
+    "language"=>"Idioma",
+    "lang_sel"=>"Selecciona tu idioma preferido.",
+    "most_liked"=>"Juguetes Más Gustados",
+    "back"=>"Volver",
+
+    "desc"=>"Jugar para aprender: la importancia de los juguetes y el juego. Los juguetes son herramientas esenciales para el desarrollo de los niños, mejorando el aprendizaje en todas las áreas. A través del juego, los niños desarrollan habilidades motoras finas y gruesas, preferencias personales, habilidades sociales, destrezas manuales, coordinación, expresión y creatividad.",
+    "all"=>"Todos",
+    "notFound"=>"No se encontraron productos",
+    "bestSelling"=>"Juguetes Más Vendidos",
+
 ];

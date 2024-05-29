@@ -3,16 +3,14 @@
 @section('content')
     <div class="flex justify-center items-center flex-col pb-8">
         <nav class="text-sm mt-4 mb-10">
-            <a href="{{ route('welcome.index') }}" class="text-gray-500 hover:text-primary hover:underline">Home</a>
+            <a href="{{ route('welcome.index') }}" class="text-gray-500 hover:text-primary hover:underline">@lang("messages.home")</a>
             <span class="text-gray-500 mx-2">›</span>
-            <span class="text-primary">Toys</span>
+            <span class="text-primary">@lang("messages.toys")</span>
         </nav>
         <div class="text-center max-w-3xl mx-auto">
-            <h1 class="text-4xl font-bold mb-6">Most Liked Products</h1>
+            <h1 class="text-4xl font-bold mb-6">@lang("messages.toys_li")</h1>
             <p class="text-base text-gray-600 leading-relaxed">
-                Playing to learn: the importance of toys and play. Toys are essential tools for children's development,
-                enhancing learning in all areas. Through play, children develop fine and gross motor skills, personal
-                preferences, social abilities, manual skills, coordination, expression, and creativity.
+                @lang("messages.desc")
             </p>
         </div>
     </div>
@@ -25,7 +23,7 @@
             <div class="w-[170px] p-0 mx-[5px] mb-4 text-center border-0 rounded-none overflow-hidden flex-shrink-0 transition-all duration-150 ease-in-out">
                 <a href="{{ route('products.favourites') }}"
                     class="text-gray-500 hover:text-primary hover:font-semibold transition-all duration-150 ease-in-out">
-                    <span class="text-sm">All</span>
+                    <span class="text-sm">@lang("messages.all")</span>
                 </a>
             </div>
             @foreach ($categories as $c)
@@ -154,7 +152,7 @@
                     </div>
                 @empty
                     <div class="w-full">
-                        <p class="text-gray-700">No se encontraron productos</p>
+                        <p class="text-gray-700">@lang("messages.notFound")</p>
                     </div>
                 @endforelse
             </div>
