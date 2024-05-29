@@ -32,6 +32,33 @@
                     <li class='max-lg:border-b max-lg:py-3'><a href="{{ route('categories.index') }}"
                             class='hover:text-primary text-gray-600 font-bold text-lg block'>@lang('messages.categories')</a>
                     </li>
+                    <li class="group max-lg:border-b max-lg:py-3 relative">
+                        <button id="toysDropdownButton"
+                            class="text-gray-600 font-bold text-lg hover:text-primary focus:outline-none block">
+                            @lang('messages.toys')
+                            <svg class="w-4 h-4 inline ml-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 4 4 4-4" />
+                            </svg>
+                        </button>
+                        <ul id="toysDropdownMenu" class="absolute hidden bg-secondary shadow-lg rounded-lg mt-2 w-44">
+
+                            <li>
+                                <a href="{{ route('products.moreLike') }}"
+                                    class="hover:bg-secondary-hover hover:text-primary text-gray-600 font-bold text-lg block px-4 py-2">
+                                    @lang('messages.morefollows')
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{{ route('products.index') }}"
+                                    class="hover:bg-secondary-hover hover:text-primary text-gray-600 font-bold text-lg block px-4 py-2">
+                                    All Products
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         @else
@@ -136,8 +163,8 @@
                         <button id="logoutDropdownButton"
                             class="text-gray-600 font-bold text-lg hover:text-primary focus:outline-none block flex items-center">
                             {{ Auth::user()->name }}
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                stroke="currentColor" class="size-8 inline ml-2 align-middle">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="size-8 inline ml-2 align-middle">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                             </svg>
@@ -169,13 +196,14 @@
             @else
                 <a href="{{ Auth::check() ? route('products.favourite') : route('login') }}">
                     <span class="relative">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="#4A5568" class="size-8 cursor-pointer hover:stroke-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="1.5" stroke="#4A5568" class="size-8 cursor-pointer hover:stroke-primary">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
                         </svg>
 
-                        <span class="absolute left-auto -ml-1 -top-1 rounded-full bg-primary px-1 py-0 text-xs text-white">
+                        <span
+                            class="absolute left-auto -ml-1 -top-1 rounded-full bg-primary px-1 py-0 text-xs text-white">
                             @if (Auth::check() && Auth::user()->favouriteProducts())
                                 {{ Auth::user()->favoriteQuantity() }}
                             @else
@@ -187,7 +215,6 @@
             @endif
             @if (Auth::check() && Auth::user()->isAdmin())
             @else
-
                 <a href="{{ Auth::check() ? route('carts.show_products') : route('login') }}">
                     <span class="relative">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
