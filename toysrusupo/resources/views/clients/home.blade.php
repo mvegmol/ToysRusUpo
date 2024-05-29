@@ -71,8 +71,8 @@
                 <template x-for="(product, index) in [...products, ...products].slice(currentIndex, currentIndex + 4)" :key="product.id">
                     <div class="w-1/4 px-4">
                         <div class="bg-white shadow-2xl rounded-2xl overflow-hidden group transition transform hover:-translate-y-1 hover:shadow-3xl">
-                            <div class="relative">
-                                <img src="https://www.toysrus.es/medias/?context=bWFzdGVyfHByb2R1Y3RfaW1hZ2VzfDM3MTA5fGltYWdlL2pwZWd8YUdVeEwyaGtOeTh4TVRjd01ESTFOekE1TlRjeE1BfDE1NzE4NDQ2ZWQ2NDZlYTRlMWI3YTIzMTYyZmQ2OWI0YjEzZjE2MDY4YTAxNzRiMGZjNzdmZTlmODUwY2RmN2M" alt="product image" class="w-full h-full object-cover">
+                            <div class="relative w-[400px] h-[400px]">
+                                <img src="{{ asset('images/products/product1.jpg') }}" alt="product image" class="w-full h-full object-cover">
                                 <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition">
                                     <a :href="'/products_clients/' + product.id" class="text-lg w-12 h-12 rounded-full text-white bg-primary flex items-center justify-center hover:bg-tertiary transition" title="View Product">
                                         <svg xmlns="http://www.w3.org/5000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
