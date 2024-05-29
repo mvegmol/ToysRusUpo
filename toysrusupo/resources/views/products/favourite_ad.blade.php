@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="mx-4 mt-3">
+    <div class="mx-4 mt-16">
         @include('partials.messages')
 
         @component('components.card')
