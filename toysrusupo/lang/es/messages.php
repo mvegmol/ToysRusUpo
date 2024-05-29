@@ -73,7 +73,7 @@ return [
     "from"=>"Desde",
     "checkout"=>"Pagar",
     "select_a"=>"Selecciona una dirección de envío",
-    "total_amount"=>"Monto total",
+    "total_amount"=>"Precio total",
     "pay"=>"Continuar al pago",
     "your"=>"Tu Pedido",
     "phone"=>"Número de Teléfono",
