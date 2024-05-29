@@ -91,3 +91,4 @@ Route::get('/productsMoreLike', [ProductsController::class, 'productsMoreLike'])
 
 Route::get('/user/{id}',[UsersController::class,"edit"])->name('user.edit');
 Route::put('/user/update/{id}',[UsersController::class,"update"])->name('user.update');
+Route::view('/profile/password', 'profile.password')->name('profile.changepass')->middleware('auth');

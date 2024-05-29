@@ -24,14 +24,20 @@
                         </a>
                     </li>
 
-
-                    <li class='max-lg:border-b max-lg:py-3'><a href="{{ route('orders.index') }}"
-                            class='hover:text-primary text-gray-600 font-bold text-lg block'>@lang('messages.orders')</a>
+                    <li class='max-lg:border-b max-lg:py-3'>
+                        <a href="{{ route('orders.index') }}"
+                            class='hover:text-primary {{ request()->routeIs('orders.index') ? 'text-primary' : 'text-gray-600' }} font-bold text-lg block'>
+                            @lang('messages.orders')
+                        </a>
                     </li>
 
-                    <li class='max-lg:border-b max-lg:py-3'><a href="{{ route('categories.index') }}"
-                            class='hover:text-primary text-gray-600 font-bold text-lg block'>@lang('messages.categories')</a>
+                    <li class='max-lg:border-b max-lg:py-3'>
+                        <a href="{{ route('categories.index') }}"
+                            class='hover:text-primary {{ request()->routeIs('categories.index') ? 'text-primary' : 'text-gray-600' }} font-bold text-lg block'>
+                            @lang('messages.categories')
+                        </a>
                     </li>
+
                     <li class="group max-lg:border-b max-lg:py-3 relative">
                         <button id="toysDropdownButton"
                             class="text-gray-600 font-bold text-lg hover:text-primary focus:outline-none block">
@@ -46,15 +52,15 @@
 
                             <li>
                                 <a href="{{ route('products.moreLike') }}"
-                                    class="hover:bg-secondary-hover hover:text-primary text-gray-600 font-bold text-lg block px-4 py-2">
+                                    class="hover:bg-secondary-hover hover:text-primary {{ request()->routeIs('products.moreLike') ? 'text-primary' : 'text-gray-600' }} font-bold text-lg block px-4 py-2">
                                     @lang('messages.morefollows')
                                 </a>
                             </li>
 
                             <li>
                                 <a href="{{ route('products.index') }}"
-                                    class="hover:bg-secondary-hover hover:text-primary text-gray-600 font-bold text-lg block px-4 py-2">
-                                   @lang("messages.all_products")
+                                    class="hover:bg-secondary-hover hover:text-primary {{ request()->routeIs('products.index') ? 'text-primary' : 'text-gray-600' }} font-bold text-lg block px-4 py-2">
+                                    @lang('messages.all_products')
                                 </a>
                             </li>
                         </ul>
@@ -82,13 +88,18 @@
                                 alt="logo" class='w-36' />
                         </a>
                     </li>
-                    <li class='max-lg:border-b max-lg:py-3'><a href="{{ route('welcome.index') }}"
-                            class='hover:text-primary text-lg text-primary block font-bold'>@lang("messages.home")</a></li>
+                    <li class='max-lg:border-b max-lg:py-3'>
+                        <a href="{{ route('welcome.index') }}"
+                            class='hover:text-primary {{ request()->routeIs('welcome.index') ? 'text-primary' : 'text-gray-600' }} text-lg block font-bold'>
+                            @lang('messages.home')
+                        </a>
+                    </li>
 
-
-
-                    <li class='max-lg:border-b max-lg:py-3'><a href="{{ route('orders.index') }}"
-                            class='hover:text-primary text-gray-600 font-bold text-lg block'>@lang('messages.orders')</a>
+                    <li class='max-lg:border-b max-lg:py-3'>
+                        <a href="{{ route('orders.index') }}"
+                            class='hover:text-primary {{ request()->routeIs('orders.index') ? 'text-primary' : 'text-gray-600' }} font-bold text-lg block'>
+                            @lang('messages.orders')
+                        </a>
                     </li>
 
                     <li class="group max-lg:border-b max-lg:py-3 relative">
@@ -104,26 +115,26 @@
                         <ul id="toysDropdownMenu" class="absolute hidden bg-secondary shadow-lg rounded-lg mt-2 w-44">
                             <li class="border-b border-gray-200">
                                 <a href="{{ route('products.bestSelling') }}"
-                                    class="hover:bg-secondary-hover hover:text-primary text-gray-600 font-bold text-lg block px-4 py-2">
+                                    class="hover:bg-secondary-hover hover:text-primary {{ request()->routeIs('products.bestSelling') ? 'text-primary' : 'text-gray-600' }} font-bold text-lg block px-4 py-2">
                                     @lang('messages.bestseller')
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ route('products.favourites') }}"
-                                    class="hover:bg-secondary-hover hover:text-primary text-gray-600 font-bold text-lg block px-4 py-2">
+                                    class="hover:bg-secondary-hover hover:text-primary {{ request()->routeIs('products.favourites') ? 'text-primary' : 'text-gray-600' }} font-bold text-lg block px-4 py-2">
                                     @lang('messages.morefollows')
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ route('products.favourite') }}"
-                                    class="hover:bg-secondary-hover hover:text-primary text-gray-600 font-bold text-lg block px-4 py-2">
-                                    @lang("messages.favourite_toys")
+                                    class="hover:bg-secondary-hover hover:text-primary {{ request()->routeIs('products.favourite') ? 'text-primary' : 'text-gray-600' }} font-bold text-lg block px-4 py-2">
+                                    @lang('messages.favourite_toys')
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ route('products.toys') }}"
-                                    class="hover:bg-secondary-hover hover:text-primary text-gray-600 font-bold text-lg block px-4 py-2">
-                                    @lang("messages.all_products")
+                                    class="hover:bg-secondary-hover hover:text-primary {{ request()->routeIs('products.toys') ? 'text-primary' : 'text-gray-600' }} font-bold text-lg block px-4 py-2">
+                                    @lang('messages.all_products')
                                 </a>
                             </li>
                         </ul>
@@ -174,14 +185,14 @@
                         <ul id="logoutDropdownMenu" class="absolute hidden bg-secondary shadow-lg rounded-lg mt-2 w-44">
                             <li class="border-b border-gray-200">
                                 <a href="{{ route('clients.profile') }}"
-                                    class="hover:bg-secondary-hover hover:text-primary text-gray-600 font-bold text-lg block px-4 py-2">
-                                    @lang("messages.profile")
+                                    class="hover:bg-secondary-hover hover:text-primary {{ request()->routeIs('clients.profile') ? 'text-primary' : 'text-gray-600' }} font-bold text-lg block px-4 py-2">
+                                    @lang('messages.profile')
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ route('logout') }}"
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                                    class="hover:bg-secondary-hover hover:text-primary text-gray-600 font-bold text-lg block px-4 py-2">
+                                    class="hover:bg-secondary-hover hover:text-primary {{ request()->routeIs('logout') ? 'text-primary' : 'text-gray-600' }} font-bold text-lg block px-4 py-2">
                                     {{ __('messages.Logout') }}
                                 </a>
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

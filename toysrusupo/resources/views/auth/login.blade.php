@@ -5,7 +5,7 @@
         <div class="flex justify-center">
             <div class="w-full md:w-2/3 lg:w-1/2">
                 <div class="bg-white shadow-md rounded-lg">
-                    <h2 class="bg-primary px-6 py-3 rounded-t-lg font-semibold text-center text-xl text-gray-500	">
+                    <h2 class="bg-primary px-6 py-3 rounded-t-lg font-semibold text-center text-xl text-white	">
                         {{ __('Login') }}
                     </h2>
 
@@ -57,7 +57,7 @@
 
                             <div class="flex items-center justify-between">
                                 <button type="submit"
-                                    class="bg-primary hover:bg-grey-400  font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                                    class="bg-primary text-white hover:bg-tertiary font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                                     {{ __('Login') }}
                                 </button>
 
