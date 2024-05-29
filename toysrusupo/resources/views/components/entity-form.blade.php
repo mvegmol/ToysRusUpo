@@ -22,6 +22,15 @@
             @if ($field['type'] === 'textarea')
                 <textarea class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-green-500 focus:shadow-lg @error($field['old']) border-red-500 @enderror"
                     id="{{ $field['id'] }}" name="{{ $field['name'] }}" placeholder="{{ $field['placeholder'] ?? '' }}" {!! $field['attributes'] ?? '' !!}>{{ old($field['old'], $field['value'] ?? '') }}</textarea>
+            @elseif ($field['type'] === 'select' && isset($field['multiple']) && $field['multiple'])
+                <select class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-green-500 focus:shadow-lg @error($field['old']) border-red-500 @enderror"
+                    id="{{ $field['id'] }}" name="{{ $field['name'] }}" multiple {!! $field['attributes'] ?? '' !!}>
+                    @foreach ($field['options'] as $option)
+                        <option value="{{ $option->id }}"
+                            {{ in_array($option->id, old($field['old'], $field['selected'] ?? [])) ? 'selected' : '' }}>
+                            {{ $option->name }}</option>
+                    @endforeach
+                </select>
             @elseif ($field['type'] === 'select')
                 <select class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-green-500 focus:shadow-lg @error($field['old']) border-red-500 @enderror"
                     id="{{ $field['id'] }}" name="{{ $field['name'] }}" {!! $field['attributes'] ?? '' !!}>
@@ -32,15 +41,6 @@
                         <option value="{{ $option }}" {{ old($field['old'], $field['value'] ?? '') == $option ? 'selected' : '' }}>
                             {{ $option }}
                         </option>
-                    @endforeach
-                </select>
-            @elseif ($field['type'] === 'select' && isset($field['multiple']) && $field['multiple'])
-                <select class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-green-500 focus:shadow-lg @error($field['old']) border-red-500 @enderror"
-                    id="{{ $field['id'] }}" name="{{ $field['name'] }}" multiple {!! $field['attributes'] ?? '' !!}>
-                    @foreach ($field['options'] as $option)
-                        <option value="{{ $option->id }}"
-                            {{ in_array($option->id, old($field['old'], $field['selected'] ?? [])) ? 'selected' : '' }}>
-                            {{ $option->name }}</option>
                     @endforeach
                 </select>
             @else
