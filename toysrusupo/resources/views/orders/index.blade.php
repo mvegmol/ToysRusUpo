@@ -6,7 +6,7 @@
             <a href="{{ route('welcome.index') }}"
                 class="text-gray-500 hover:text-primary hover:underline">@lang('messages.home')</a>
             <span class="text-gray-500 mx-2">›</span>
-            <span class="text-primary">Pedidos</span>
+            <span class="text-primary">@lang('messages.orders')</span>
         </nav>
         <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
             <div class="mx-auto max-w-5xl bg-white p-6 rounded-lg shadow-lg">
